@@ -1,0 +1,304 @@
+{
+  "html_attributions" : [],
+  "result" : {
+    "address_components" : [
+      {
+        "long_name" : "11",
+        "short_name" : "11",
+        "types" : [ "street_number" ]
+      },
+      {
+        "long_name" : "New Arbat Avenue",
+        "short_name" : "New Arbat Ave",
+        "types" : [ "route" ]
+      },
+      {
+        "long_name" : "Tsentralnyy administrativnyy okrug",
+        "short_name" : "Tsentralnyy administrativnyy okrug",
+        "types" : [ "sublocality_level_1", "sublocality", "political" ]
+      },
+      {
+        "long_name" : "Moskva",
+        "short_name" : "Moskva",
+        "types" : [ "locality", "political" ]
+      },
+      {
+        "long_name" : "Moskva",
+        "short_name" : "Moskva",
+        "types" : [ "administrative_area_level_2", "political" ]
+      },
+      {
+        "long_name" : "Moscow",
+        "short_name" : "Moscow",
+        "types" : [ "administrative_area_level_1", "political" ]
+      },
+      {
+        "long_name" : "Russia",
+        "short_name" : "RU",
+        "types" : [ "country", "political" ]
+      },
+      {
+        "long_name" : "111141",
+        "short_name" : "111141",
+        "types" : [ "postal_code" ]
+      }
+    ],
+    "adr_address" : "\u003cspan class=\"street-address\"\u003eNew Arbat Ave, 11\u003c/span\u003e, \u003cspan class=\"locality\"\u003eMoskva\u003c/span\u003e, \u003cspan class=\"country-name\"\u003eRussia\u003c/span\u003e, \u003cspan class=\"postal-code\"\u003e111141\u003c/span\u003e",
+    "formatted_address" : "New Arbat Ave, 11, Moskva, Russia, 111141",
+    "formatted_phone_number" : "8 (495) 646-61-55",
+    "geometry" : {
+      "location" : {
+        "lat" : 55.7521942,
+        "lng" : 37.5960691
+      },
+      "viewport" : {
+        "northeast" : {
+          "lat" : 55.7538332802915,
+          "lng" : 37.5973748802915
+        },
+        "southwest" : {
+          "lat" : 55.75113531970851,
+          "lng" : 37.5946769197085
+        }
+      }
+    },
+    "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/shopping-71.png",
+    "id" : "fb50eafeb431fc86525d9d809c6e4e7be1c7f509",
+    "international_phone_number" : "+7 495 646-61-55",
+    "name" : "Doctorhead",
+    "opening_hours" : {
+      "open_now" : true,
+      "periods" : [
+        {
+          "close" : {
+            "day" : 0,
+            "time" : "2200"
+          },
+          "open" : {
+            "day" : 0,
+            "time" : "1000"
+          }
+        },
+        {
+          "close" : {
+            "day" : 1,
+            "time" : "2200"
+          },
+          "open" : {
+            "day" : 1,
+            "time" : "1000"
+          }
+        },
+        {
+          "close" : {
+            "day" : 2,
+            "time" : "2200"
+          },
+          "open" : {
+            "day" : 2,
+            "time" : "1000"
+          }
+        },
+        {
+          "close" : {
+            "day" : 3,
+            "time" : "2200"
+          },
+          "open" : {
+            "day" : 3,
+            "time" : "1000"
+          }
+        },
+        {
+          "close" : {
+            "day" : 4,
+            "time" : "2200"
+          },
+          "open" : {
+            "day" : 4,
+            "time" : "1000"
+          }
+        },
+        {
+          "close" : {
+            "day" : 5,
+            "time" : "2200"
+          },
+          "open" : {
+            "day" : 5,
+            "time" : "1000"
+          }
+        },
+        {
+          "close" : {
+            "day" : 6,
+            "time" : "2200"
+          },
+          "open" : {
+            "day" : 6,
+            "time" : "1000"
+          }
+        }
+      ],
+      "weekday_text" : [
+        "Monday: 10:00 AM – 10:00 PM",
+        "Tuesday: 10:00 AM – 10:00 PM",
+        "Wednesday: 10:00 AM – 10:00 PM",
+        "Thursday: 10:00 AM – 10:00 PM",
+        "Friday: 10:00 AM – 10:00 PM",
+        "Saturday: 10:00 AM – 10:00 PM",
+        "Sunday: 10:00 AM – 10:00 PM"
+      ]
+    },
+    "photos" : [
+      {
+        "height" : 3464,
+        "html_attributions" : [
+          "\u003ca href=\"https://maps.google.com/maps/contrib/112224808794482636494/photos\"\u003eDoctorhead\u003c/a\u003e"
+        ],
+        "photo_reference" : "CmRaAAAA6sYpUHJQgS1_ZZva6yswih4Jgvsphj-QMHaVOu90-QMyl5InFW5chhmQuvKzKEfSRFw4XRIJzUfiQC48h0NRURTFIxNcj_0lG9JemCD7JDaW6mGLnDd2_GbG972B4uZZEhBPPgwlOOEPMsZZH2oGVIzOGhRmy1T4ttokBK8g9zRYVYqhJqyOvw",
+        "width" : 4618
+      },
+      {
+        "height" : 2752,
+        "html_attributions" : [
+          "\u003ca href=\"https://maps.google.com/maps/contrib/114139174405317364566/photos\"\u003eСергей Агафонов\u003c/a\u003e"
+        ],
+        "photo_reference" : "CmRaAAAA8GcVnGp83sKWjHSOeS86bcVz70U_aJAYfz1GuXWiv-rFtnPN1NhyzM6u8-HXamcWrZeZOD_zODREfrSIAvmiCpCJR0FobtibiFAyYA9e0RTmdFDrfY6y3rBaNTX3qkIfEhAN1MXY-lL1W08NfePZVP0vGhR-Uiku4Q-sVumaB_af5ZyeYigMZg",
+        "width" : 4896
+      },
+      {
+        "height" : 300,
+        "html_attributions" : [
+          "\u003ca href=\"https://maps.google.com/maps/contrib/112224808794482636494/photos\"\u003eDoctorhead\u003c/a\u003e"
+        ],
+        "photo_reference" : "CmRaAAAAKM1wTFAMK0IAy8Y5iNaKQREAYVD__z77VEtbbl4S97w6e8cWQYktsxXo-VXxUzFyHvOi6JilHZiVwxKA2pXpekCNf7h6uZLq366ZbZwhQpF7GanAlqfrZ3aPYgiyLcb3EhAJYJA48z8rNiKfARBKIkNhGhSzxBSuxx0pdwNZbAMTY0Cmq4SLTQ",
+        "width" : 300
+      },
+      {
+        "height" : 3464,
+        "html_attributions" : [
+          "\u003ca href=\"https://maps.google.com/maps/contrib/112224808794482636494/photos\"\u003eDoctorhead\u003c/a\u003e"
+        ],
+        "photo_reference" : "CmRaAAAAwN7_5vxxr-RLFj8F-jxrpSOCOq927fmHsXG9n2yKfsvlCMtwLpibKD39QVi1SmYjFPXcKKorC3R7ysZMIHez33BFQ0UK6K3K0dQUxNKyYYgfKF-zlLVPqzpiLCNTb0CSEhCgtPaFhqoIsF38Fc5qgsliGhSiuVsNfAZsDSMWDm6yr5VIlBuWNw",
+        "width" : 4618
+      },
+      {
+        "height" : 3984,
+        "html_attributions" : [
+          "\u003ca href=\"https://maps.google.com/maps/contrib/112224808794482636494/photos\"\u003eDoctorhead\u003c/a\u003e"
+        ],
+        "photo_reference" : "CmRaAAAAAinm5qcnvEIPaHXiYwfXLY4s4eNYT8WwtVkCT7kyisUxOwdhmE9L3vCxz9jKZAsvaSwcw8B34kgc-PZy0wucLZ7LbvABo9a5y90vKZPrpHpz5bCJEprWRK9Y4DE6pEECEhCds0MmY5TP3VlpSBlUqx6gGhSmh_0VO7MTOMKoFdT1AbiLp-2aAg",
+        "width" : 5312
+      },
+      {
+        "height" : 3464,
+        "html_attributions" : [
+          "\u003ca href=\"https://maps.google.com/maps/contrib/112224808794482636494/photos\"\u003eDoctorhead\u003c/a\u003e"
+        ],
+        "photo_reference" : "CmRaAAAAfA3BVFwbPFI_w2YhK1NxsALqcGI5qY8foNuoo6Dn-mdsVeIplnkMnX9rPduShCKOwX3r3CzxQFS95PnhJT0iy8MIbWMp6wmj2UKmVBPjBEfKPBOGa4c84rhlrLhPc7naEhDf1NigB6z9c87hImPyF3sAGhRIirLP0T2NgnZKTh3bE5q8rMNDkw",
+        "width" : 4618
+      },
+      {
+        "height" : 3464,
+        "html_attributions" : [
+          "\u003ca href=\"https://maps.google.com/maps/contrib/112224808794482636494/photos\"\u003eDoctorhead\u003c/a\u003e"
+        ],
+        "photo_reference" : "CmRaAAAArGkSCCvHtp3axa2PuKNzoA8inL1PMpE7zZSs-Rk8QYTTI4nZmE3D4LEh-a-uoXKbaXcI5WivAeuqP47TWhBTQOh-hznCM4fiun1V1_cO3JmVoFu_0_ZJZGadVSZkbLVcEhDcpdeyaTWAIZS5PfSGJdDAGhQ357eMtIUNnN-FAHdGKmokvmzWIw",
+        "width" : 4618
+      },
+      {
+        "height" : 3464,
+        "html_attributions" : [
+          "\u003ca href=\"https://maps.google.com/maps/contrib/112224808794482636494/photos\"\u003eDoctorhead\u003c/a\u003e"
+        ],
+        "photo_reference" : "CmRaAAAAxLTg9TLoXEcxVEbEDQsachMYdEQ_MVvC8V2bDMyEVmRuCAjWmudBIeRGESctJKlZPXx6bnIL5-5NUqnugvMm5qzhiupMSLorH2iU03aEFkT2Y0d475wA4xbjVMkUnRTFEhCtTu_e4hY0E8vymrbfrxpCGhR5s1tx54yr092LJUZUFDknDlhExA",
+        "width" : 4618
+      },
+      {
+        "height" : 5248,
+        "html_attributions" : [
+          "\u003ca href=\"https://maps.google.com/maps/contrib/112969578472292193084/photos\"\u003eStupin Kir\u003c/a\u003e"
+        ],
+        "photo_reference" : "CmRaAAAAyPDrLOKRosPF5rLJgH72jmEhRHKeEcMcWgLR616RY5-JBs1AQOQrom0e2yf9yVmoncWEQp4rOjH1hMtq0QAdHICcuaqD-PB-JZ5mLxbAXFu6GLuXE2VhR3n0ksYGllB_EhAm7ZChApWMYC3v1_RwYu08GhSbeVpszk1JzSKDvKqcxWLmVHnBNw",
+        "width" : 3936
+      },
+      {
+        "height" : 3464,
+        "html_attributions" : [
+          "\u003ca href=\"https://maps.google.com/maps/contrib/112224808794482636494/photos\"\u003eDoctorhead\u003c/a\u003e"
+        ],
+        "photo_reference" : "CmRaAAAAdv3bWx4AlSTUQLVHlml3wsUqEUAMvgjibpCy3dwJw2L8HTf25faR_YhymQiT7E_jYtAsUnIJ_Cdx3fGMIRsziPOvx2kYCqpWZroYudDbJy3US7_FLvuZOHFjlRwbtcGfEhDUjIkjah2Ujcu_pviRdTcvGhRK4Ld3RO3w8qexXTDys_Dht_nOVA",
+        "width" : 4618
+      }
+    ],
+    "place_id" : "ChIJnRA0CKTKSkERJTPfmWwSYeU",
+    "rating" : 4.3,
+    "reference" : "CmRSAAAAitRt1yLcCOhWF3TRwdivGRvSLK7IUINvftaYqEij3ZTklA6GgthFZxSP-bmzYF2d66fkzINoAco3Z3aSt7RL5dwtAa6ELJmJRmzgZWlckPhglHpYMot7NK8gZ2RxfcXaEhDV30scPbdfKSGhS2KCPXkcGhQbl3F02xsBhxQphJajCk-FZPr_HA",
+    "reviews" : [
+      {
+        "author_name" : "A P",
+        "author_url" : "https://www.google.com/maps/contrib/114831430476606323559/reviews",
+        "language" : "en",
+        "profile_photo_url" : "https://lh4.googleusercontent.com/-h8hhn8ZuAig/AAAAAAAAAAI/AAAAAAAANkg/D9pjpJnSzZA/s128-c0x00000000-cc-rp-mo-ba1/photo.jpg",
+        "rating" : 4,
+        "relative_time_description" : "2 months ago",
+        "text" : "best place to buy headphones",
+        "time" : 1491155168
+      },
+      {
+        "author_name" : "Никита Сизых",
+        "author_url" : "https://www.google.com/maps/contrib/116695427118739788397/reviews",
+        "language" : "en",
+        "profile_photo_url" : "https://lh5.googleusercontent.com/-V6OWW6ocj5c/AAAAAAAAAAI/AAAAAAAAG40/nxmFvkmcB6E/s128-c0x00000000-cc-rp-mo/photo.jpg",
+        "rating" : 5,
+        "relative_time_description" : "in the last week",
+        "text" : "Хороший выбор и приятные консультанты",
+        "time" : 1496763711
+      },
+      {
+        "author_name" : "Rond Rond",
+        "author_url" : "https://www.google.com/maps/contrib/107914573563143648503/reviews",
+        "language" : "ru",
+        "profile_photo_url" : "https://lh5.googleusercontent.com/-nXDZqmKi5wA/AAAAAAAAAAI/AAAAAAAAAAA/AAyYBF4FtCDJHIvlDrr5HOx9qUEsay_i9g/s128-c0x00000000-cc-rp-mo/photo.jpg",
+        "rating" : 1,
+        "relative_time_description" : "3 weeks ago",
+        "text" : "Сдавал наушники в платный ремонт, замена штекера стоила ~1300р, через два дня этот штекер разболтался и стал пропадать звук в левом ухе, пришлось снова ехать в магазин, во второй раз штекер поменяли уже по гарантии. Тем не менее через пару недель использования он так же развалился. За такие деньги ожидал качественной работы, а не как в палатке у дяди Васи.",
+        "time" : 1495058873
+      },
+      {
+        "author_name" : "Andrew Klepikov",
+        "author_url" : "https://www.google.com/maps/contrib/101422262213430901057/reviews",
+        "language" : "ru",
+        "profile_photo_url" : "https://lh6.googleusercontent.com/-dpHIXkJJWL8/AAAAAAAAAAI/AAAAAAAAAAA/AAyYBF7gYztm9QstuIHXK4izd70lrGJXug/s128-c0x00000000-cc-rp-mo/photo.jpg",
+        "rating" : 5,
+        "relative_time_description" : "4 weeks ago",
+        "text" : "Очень большой выбор наушников. Грамотный, общительный персонал. Можно попробовать как звучат различные наушники и выбрать лучшие под себя.",
+        "time" : 1494509485
+      },
+      {
+        "author_name" : "Евгений Рожко",
+        "author_url" : "https://www.google.com/maps/contrib/100083994628951043031/reviews",
+        "language" : "ru",
+        "profile_photo_url" : "https://lh4.googleusercontent.com/-e5KviGc3bZk/AAAAAAAAAAI/AAAAAAAAANA/EMmPCXykUz8/s128-c0x00000000-cc-rp-mo/photo.jpg",
+        "rating" : 5,
+        "relative_time_description" : "in the last week",
+        "text" : "В плане портативного аудио есть все. И самое главное, все это можно послушать. Ценник не самый низкий, но вполне средний по рынку. Ну и не стоит забывать об официальной гарантии. ",
+        "time" : 1496734021
+      }
+    ],
+    "scope" : "GOOGLE",
+    "types" : [
+      "electronics_store",
+      "home_goods_store",
+      "store",
+      "point_of_interest",
+      "establishment"
+    ],
+    "url" : "https://maps.google.com/?cid=16528512365073740581",
+    "utc_offset" : 180,
+    "vicinity" : "New Arbat Avenue, 11, Moscow",
+    "website" : "http://www.doctorhead.ru"
+  },
+  "status" : "OK"
+}

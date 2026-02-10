@@ -1,0 +1,51 @@
+{
+  "html_attributions" : [],
+  "results" : [
+    {
+      "formatted_address" : "New Arbat Ave, 11, Moscow, Russia, 111141",
+      "geometry" : {
+        "location" : {
+          "lat" : 55.7521942,
+          "lng" : 37.5960691
+        },
+        "viewport" : {
+          "northeast" : {
+            "lat" : 55.7538332802915,
+            "lng" : 37.5973748802915
+          },
+          "southwest" : {
+            "lat" : 55.75113531970851,
+            "lng" : 37.5946769197085
+          }
+        }
+      },
+      "icon" : "https://maps.gstatic.com/mapfiles/place_api/icons/shopping-71.png",
+      "id" : "fb50eafeb431fc86525d9d809c6e4e7be1c7f509",
+      "name" : "Doctorhead",
+      "opening_hours" : {
+        "open_now" : true,
+        "weekday_text" : []
+      },
+      "photos" : [
+        {
+          "height" : 3464,
+          "html_attributions" : [
+            "\u003ca href=\"https://maps.google.com/maps/contrib/112224808794482636494/photos\"\u003eDoctorhead\u003c/a\u003e"
+          ],
+          "photo_reference" : "CmRaAAAAtYNbDalUfaV5I_S9ULU6iOaq6_BohsQQqwnBmMOXWxlV2fb1WorNyRZV7kSjqAiosEjE_b5AHwIAaPosqKY_zc9KetKcQR9U9Bsh4nzFzdqTd3RT87x1k0UDyGCItfEjEhDLE7Kqjvc0kmEyafY5q7F5GhTYDb19vSWPBgrliyOxvq6zSrBR_Q",
+          "width" : 4618
+        }
+      ],
+      "place_id" : "ChIJnRA0CKTKSkERJTPfmWwSYeU",
+      "reference" : "CmRSAAAAlTSfFNpQKINRkCSRBWH8Bi2LIOpmnDZvyxm3Fes3r-RToleaQ1cGNrLhihJaHxFYw8AlrE419DyM5p0y_7YdtMl2xkJYi-InCGEWemN_iWbY8xTLi9mtBZwzhapGsASmEhBq5_9BXTTVAf_Y1tqegyOMGhS04d24kILG_W9v0T3adP2-QYBxCQ",
+      "types" : [
+        "electronics_store",
+        "home_goods_store",
+        "store",
+        "point_of_interest",
+        "establishment"
+      ]
+    }
+  ],
+  "status" : "OK"
+}

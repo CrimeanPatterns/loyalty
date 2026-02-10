@@ -1,0 +1,34 @@
+{
+  "providerDetails": {
+    "confirmationNumber": "9988776655",
+    "confirmationNumbers": [
+      "9988776655"
+    ],
+    "status": "Confirmed",
+    "name": "OpenTable.com",
+    "code": "opentable"
+  },
+  "totalPrice": {},
+  "eventName": "Club A Steakhouse",
+  "address": {
+    "text": "240 East 58th StreetNew York, NY 10022",
+    "addressLine": "240 East 58th Street",
+    "city": "New York",
+    "stateName": "New York",
+    "countryName": "United States",
+    "postalCode": "10022",
+    "lat": "40.7600624",
+    "lng": "-73.9655663",
+    "timezone": "-18000"
+  },
+  "startDateTime": "2017-02-28T19:00:00",
+  "phone": "(212) 688-4190",
+  "guests": [
+    {
+      "fullName": "JOHN SMITH"
+    }
+  ],
+  "guestCount": 2,
+  "eventType": 1,
+  "type": "event"
+}

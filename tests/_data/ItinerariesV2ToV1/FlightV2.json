@@ -1,0 +1,149 @@
+{
+  "type": "flight",
+  "travelers": [
+    {
+      "name": "JOHN SMITH"
+    }
+  ],
+  "issuingCarrier": {
+    "airline": {
+      "name": "United Airlines",
+      "iata": "UA",
+      "icao": "UAL"
+    },
+    "confirmationNumber": "ABCDEF",
+    "phoneNumbers": [
+      {
+        "description": null,
+        "number": "+1-800-421-4655"
+      }
+    ],
+    "ticketNumbers": [
+      {
+        "number": "0161122334455"
+      },
+      {
+        "number": "0165544332211"
+      }
+    ]
+  },
+  "segments": [
+    {
+      "departure": {
+        "airportCode": "EWR",
+        "terminal": null,
+        "name": "New York/Newark, NJ, US",
+        "localDateTime": "2016-02-16T20:15:00",
+        "address": {
+          "text": "Newark (Newark Liberty International Airport), NJ",
+          "addressLine": "3 Brewster Road",
+          "city": "Newark",
+          "stateName": "New Jersey",
+          "countryName": "United States",
+          "postalCode": "07114",
+          "lat": 40.6895314,
+          "lng": -74.1744624,
+          "timezone": -14400
+        }
+      },
+      "arrival": {
+        "airportCode": "BOM",
+        "terminal": null,
+        "name": "Mumbai, IN",
+        "localDateTime": "2016-02-17T21:40:00",
+        "address": {
+          "text": "Mumbai (Chhatrapati Shivaji International Airport), India",
+          "addressLine": "Vile Parle East Vile Parle",
+          "city": "Mumbai",
+          "stateName": "",
+          "countryName": "India",
+          "postalCode": "400099",
+          "lat": 19.0895595,
+          "lng": 72.8656144,
+          "timezone": 19800
+        }
+      },
+      "marketingCarrier": {
+        "airline": {
+          "name": "United Airlines",
+          "iata": "UA",
+          "icao": "UAL"
+        },
+        "flightNumber": "48",
+        "confirmationNumber": "ABCDEF",
+        "phoneNumbers": [
+          {
+            "description": null,
+            "number": "+1-800-421-4655"
+          }
+        ],
+        "isCodeshare": true
+      },
+      "operatingCarrier": {
+        "airline": {
+          "name": "Lufthansa",
+          "iata": "LH",
+          "icao": "DLH"
+        },
+        "flightNumber": "4456",
+        "confirmationNumber": null,
+        "phoneNumbers": [
+          {
+            "description": null,
+            "number": "+1-866-266-5588"
+          }
+        ]
+      },
+      "wetleaseCarrier": {
+        "name": "Lufthansa CityLine",
+        "iata": "CL",
+        "icao": "CLH"
+      },
+      "seats": [
+        "25D"
+      ],
+      "aircraft": {
+        "iataCode": 228,
+        "name": "Boeing 777-200",
+        "turboProp": false,
+        "jet": true,
+        "wideBody": true,
+        "regional": false
+      },
+      "traveledMiles": "7,806 m",
+      "cabin": "United Economy",
+      "bookingCode": "K",
+      "duration": "14 hr 55 mn",
+      "meal": "Dinner",
+      "smoking": null,
+      "stops": null
+    }
+  ],
+  "travelAgency": null,
+  "pricingInfo": {
+    "total": "1248.46",
+    "cost": "1118.96",
+    "tax": "129.50",
+    "discount": null,
+    "spentAwards": null,
+    "currencyCode": "USD",
+    "fees": [
+
+    ]
+  },
+  "status": "confirmed",
+  "reservationDate": "2017-06-15T00:00:00",
+  "providerInfo": {
+    "code": "mileageplus",
+    "name": "United Airlines",
+    "accountNumbers": [
+      {
+        "number": "12345678"
+      },
+      {
+        "number": "87654321"
+      }
+    ],
+    "earnedRewards": null
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "type": "carRental",
+  "confirmationNumbers": [
+    {
+      "number": "5566778899",
+      "description": null
+    }
+  ],
+  "pickup": {
+    "address": {
+      "text": "PORT CANAVERAL, FL, CC5 8401 ASTRONAUT BOULEVARD, PORT CANAVERAL SHUTTLE SHIPS PORT CANAVERAL, FL 32920 US",
+      "addressLine": "8401 Astronaut Boulevard",
+      "city": "Port Canaveral",
+      "stateName": "Florida",
+      "countryName": "United States",
+      "postalCode": "32920",
+      "lat": 28.3921171,
+      "lng": -80.6090809,
+      "timezone": -18000
+    },
+    "localDateTime": "2018-02-19T08:00:00",
+    "openingHours": "Sun 0800 - 1600; Mon - Fri 0800 - 1800; Sat 0800 - 1600",
+    "phone": "321-784-0634",
+    "fax": null
+  },
+  "dropoff": {
+    "address": {
+      "text": "ORLANDO FL APO, MCO 1 JEFF FUQUA BLVD, TERM A & B, ORLANDO INTERNATIONAL AIRPORT ORLANDO, FL 32827 US",
+      "addressLine": "1 Jeff Fuqua Boulevard",
+      "city": "Orlando",
+      "stateName": "Florida",
+      "countryName": "United States",
+      "postalCode": "32827",
+      "lat": 28.4311577,
+      "lng": -81.308083,
+      "timezone": -18000
+    },
+    "localDateTime": "2018-02-19T20:00:00",
+    "openingHours": "Sun - Sat open 24 hrs",
+    "phone": "407-825-1700",
+    "fax": null
+  },
+  "car": {
+    "type": "Standard Features, Automatic Transmission, Power Steering, Air Conditioning, Air Bags, Anti-Lock Brakes",
+    "model": "Ford Fusion Fwd or similar or similar",
+    "imageUrl": "https://www.budget.com//budgetWeb/images/common/fleet/2006/2016-ford-fusion-se-sedan-white.png"
+  },
+  "discounts": [
+    {
+      "name": "AMEX PLATINUM EMEA",
+      "code": "CDP Name"
+    },
+    {
+      "name": "Your rate has been discounted by 15 %",
+      "code": "CDP Rate"
+    }
+  ],
+  "driver": {
+    "name": "John Smith"
+  },
+  "pricedEquipment": [
+
+  ],
+  "rentalCompany": "Budget",
+  "travelAgency": null,
+  "pricingInfo": {
+    "total": 83.89,
+    "cost": null,
+    "tax": 5.49,
+    "discount": null,
+    "spentAwards": null,
+    "currencyCode": "USD",
+    "fees": [
+
+    ]
+  },
+  "status": "reserved",
+  "reservationDate": null,
+  "providerInfo": {
+    "code": "perfectdrive",
+    "name": "Budget",
+    "accountNumbers": null,
+    "earnedRewards": null
+  }
+}

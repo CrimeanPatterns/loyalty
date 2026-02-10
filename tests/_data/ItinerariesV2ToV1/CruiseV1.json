@@ -1,0 +1,68 @@
+{
+  "providerDetails": {
+    "confirmationNumber": "123ABCD",
+    "confirmationNumbers": [
+      "123ABCD"
+    ],
+    "name": "Carnival",
+    "code": "carnival"
+  },
+  "totalPrice": {
+    "total": 1698.7,
+    "cost": 1488,
+    "currencyCode": "USD",
+    "fees": [
+      {
+        "name": "tax",
+        "charge": 210.7
+      }
+    ]
+  },
+  "segments": [
+    {
+      "departure": {
+        "name": "Ft Lauderdale (Pt Evrglds), FL",
+        "localDateTime": "2017-07-10T16:00:00",
+        "address": {
+          "text": "Ft Lauderdale (Pt Evrglds), FL",
+          "addressLine": "2550 Eisenhower Boulevard",
+          "city": "Fort Lauderdale",
+          "stateName": "Florida",
+          "countryName": "United States",
+          "postalCode": "33316",
+          "lat": "26.0856125",
+          "lng": "-80.1179426",
+          "timezone": "-18000"
+        }
+      },
+      "arrival": {
+        "name": "Ocho Rios, Jamaica",
+        "localDateTime": "2017-07-12T10:00:00",
+        "address": {
+          "text": "Ocho Rios, Jamaica",
+          "city": "Ocho Rios",
+          "stateName": "St. Ann Parish",
+          "countryName": "Jamaica",
+          "lat": "18.4073894",
+          "lng": "-77.1031345",
+          "timezone": "-18000"
+        }
+      }
+    }
+  ],
+  "travelers": [
+    {
+      "fullName": "JEFF SMITH"
+    },
+    {
+      "fullName": "JENNIFER SMITH"
+    }
+  ],
+  "type": "cruise",
+  "cruiseDetails": {
+    "description": "5 Day WESTERN CARIBBEAN",
+    "class": "4J INTERIOR",
+    "room": "7777",
+    "ship": "CARNIVAL CONQUEST"
+  }
+}

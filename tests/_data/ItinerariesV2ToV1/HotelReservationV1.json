@@ -1,0 +1,50 @@
+{
+  "providerDetails": {
+    "status": "booked",
+    "confirmationNumber": "87654321",
+    "confirmationNumbers": [
+      "87654321"
+    ],
+    "name": "Marriott",
+    "code": "marriott"
+  },
+  "totalPrice": {
+    "total": 721.7,
+    "currencyCode": "USD",
+    "fees": [
+      {
+        "name": "tax",
+        "charge": 25.9
+      }
+    ]
+  },
+  "hotelName": "Courtyard Santa Clarita Valencia",
+  "checkInDate": "2017-07-09T15:00:00",
+  "checkOutDate": "2017-07-12T12:00:00",
+  "address": {
+    "text": "28523 Westinghouse Place Valencia California 91355 USA",
+    "addressLine": "28523 Westinghouse Place",
+    "city": "Santa Clarita",
+    "stateName": "California",
+    "countryName": "United States",
+    "postalCode": "91355",
+    "lat": "34.443049",
+    "lng": "-118.601668",
+    "timezone": "-28800"
+  },
+  "phone": "+1-661-257-3220",
+  "guests": [
+    {
+      "fullName": "MRS Jennifer Smith"
+    }
+  ],
+  "guestCount": 1,
+  "rooms": [
+    {
+      "type": "1 KING BED NONSMOKING"
+    }
+  ],
+  "roomsCount": 1,
+  "cancellationPolicy": "Please note that a change in the length or dates may result in a rate change...",
+  "type": "hotelReservation"
+}

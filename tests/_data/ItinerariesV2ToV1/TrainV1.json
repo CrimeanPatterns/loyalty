@@ -1,0 +1,60 @@
+{
+  "providerDetails": {
+    "confirmationNumber": "E1200021",
+    "confirmationNumbers": [
+      "E1200021"
+    ],
+    "accountNumbers": "12345678, 87654321",
+    "name": "Amtrak",
+    "code": "amtrak"
+  },
+  "totalPrice": {
+    "total": 406.8,
+    "currencyCode": "USD",
+    "fees": []
+  },
+  "segments": [
+    {
+      "scheduleNumber": "2255",
+      "cabin": "Business Cl Seats",
+      "departure": {
+        "stationCode": "STM",
+        "name": "STAMFORD",
+        "localDateTime": "2017-07-16T15:58:00",
+        "address": {
+          "text": "STAMFORD",
+          "city": "Stamford",
+          "stateName": "Connecticut",
+          "countryName": "United States",
+          "lat": "41.0534302",
+          "lng": "-73.5387341",
+          "timezone": "-18000"
+        }
+      },
+      "arrival": {
+        "stationCode": "WAS",
+        "name": "WASHINGTON",
+        "localDateTime": "2017-07-16T19:57:00",
+        "address": {
+          "text": "WASHINGTON",
+          "addressLine": "Washington",
+          "city": "Washington",
+          "stateName": "Washington",
+          "countryName": "United States",
+          "lat": "47.7510741",
+          "lng": "-120.7401385",
+          "timezone": "-28800"
+        }
+      }
+    }
+  ],
+  "travelers": [
+    {
+      "fullName": "SMITH, MARK"
+    },
+    {
+      "fullName": "SMITH, JENNIFER"
+    }
+  ],
+  "type": "transportation"
+}

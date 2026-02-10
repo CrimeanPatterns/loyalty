@@ -1,0 +1,54 @@
+{
+  "AllocationStrategy": "lowestPrice",
+  "OnDemandAllocationStrategy": "lowestPrice",
+  "SpotMaintenanceStrategies": {
+    "CapacityRebalance": {
+      "ReplacementStrategy": "launch-before-terminate",
+      "TerminationDelay": 180
+    }
+  },
+  "ExcessCapacityTerminationPolicy": "Default",
+  "IamFleetRole": "arn:aws:iam::718278292471:role/aws-ec2-spot-fleet-tagging-role",
+  "LaunchTemplateConfigs": [
+    {
+      "LaunchTemplateSpecification": {
+        "LaunchTemplateId": "lt-0ca26496ed00927aa",
+        "Version": "$Default"
+      },
+      "Overrides": [
+        {
+          "InstanceType": "c5.xlarge",
+          "SubnetId": "subnet-5e800917",
+          "WeightedCapacity": 1.0
+        },
+        {
+          "InstanceType": "c5d.xlarge",
+          "SubnetId": "subnet-5e800917",
+          "WeightedCapacity": 1.0
+        },
+        {
+          "InstanceType": "c5a.xlarge",
+          "SubnetId": "subnet-5e800917",
+          "WeightedCapacity": 1.0
+        },
+        {
+          "InstanceType": "c5ad.xlarge",
+          "SubnetId": "subnet-5e800917",
+          "WeightedCapacity": 1.0
+        },
+        {
+          "InstanceType": "c5n.xlarge",
+          "SubnetId": "subnet-5e800917",
+          "WeightedCapacity": 1.0
+        }
+      ]
+    }
+  ],
+  "TargetCapacity": 8,
+  "OnDemandTargetCapacity": 0,
+  "TerminateInstancesWithExpiration": false,
+  "Type": "maintain",
+  "ReplaceUnhealthyInstances": true,
+  "InstanceInterruptionBehavior": "terminate",
+  "InstancePoolsToUseCount": 1
+}

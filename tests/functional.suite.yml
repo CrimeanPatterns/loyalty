@@ -1,0 +1,9 @@
+class_name: FunctionalTester
+modules:
+    enabled:
+        - Filesystem
+        - Asserts
+        - Symfony
+        - REST
+        - \Helper\Aw
+        - \Helper\CustomDb

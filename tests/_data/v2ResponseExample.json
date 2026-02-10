@@ -1,0 +1,177 @@
+{
+  "requestId": "5cf8e139cd98e90a9c23fd02",
+  "userData": "{\"accountId\":4668581,\"priority\":7,\"source\":2,\"checkIts\":true}",
+  "debugInfo": "",
+  "state": 1,
+  "message": "",
+  "errorReason": "",
+  "checkDate": "2019-06-06T09:48:16+00:00",
+  "requestDate": "2019-06-06T09:47:37+00:00",
+  "itineraries": [
+    {
+      "pricingInfo": {
+        "total": 29.49,
+        "spentAwards": "Milhas 21.000",
+        "currencyCode": "BRL",
+        "fees": [
+          {
+            "name": "Tax",
+            "charge": 29.49
+          }
+        ]
+      },
+      "providerInfo": {
+        "code": "golair",
+        "name": "Gol Airlines"
+      },
+      "segments": [
+        {
+          "departure": {
+            "airportCode": "BSB",
+            "name": "Brasilia International Airport",
+            "localDateTime": "2019-07-26T21:20:00",
+            "address": {
+              "text": "BSB",
+              "addressLine": "Lago Sul",
+              "city": "Brasilia",
+              "countryName": "Brazil",
+              "postalCode": "71608-900",
+              "lat": -15.8697369,
+              "lng": -47.9172348,
+              "timezone": -10800
+            }
+          },
+          "arrival": {
+            "airportCode": "MAO",
+            "name": "Eduardo Gomes International Airport",
+            "localDateTime": "2019-07-26T23:15:00",
+            "address": {
+              "text": "MAO",
+              "addressLine": "1350 Av. Santos Dumont",
+              "city": "Manaus",
+              "countryName": "Brazil",
+              "postalCode": "69041-000",
+              "lat": -3.0358474,
+              "lng": -60.0463249,
+              "timezone": -14400
+            }
+          },
+          "marketingCarrier": {
+            "flightNumber": "9740"
+          },
+          "cabin": "Econ\u00f4mica",
+          "flightStatsMethodUsed": "ScheduleByRoute"
+        },
+        {
+          "departure": {
+            "airportCode": "MAO",
+            "name": "Eduardo Gomes International Airport",
+            "localDateTime": "2019-07-26T01:30:00",
+            "address": {
+              "text": "MAO",
+              "addressLine": "1350 Av. Santos Dumont",
+              "city": "Manaus",
+              "countryName": "Brazil",
+              "postalCode": "69041-000",
+              "lat": -3.0358474,
+              "lng": -60.0463249,
+              "timezone": -14400
+            }
+          },
+          "arrival": {
+            "airportCode": "PVH",
+            "name": "Porto Velho International Airport",
+            "localDateTime": "2019-07-26T03:00:00",
+            "address": {
+              "text": "PVH",
+              "addressLine": "S\/N Avenida Governador Jorge Teixeira",
+              "city": "Porto Velho",
+              "countryName": "Brazil",
+              "postalCode": "76803-970",
+              "lat": -8.714311,
+              "lng": -63.898307,
+              "timezone": -14400
+            }
+          },
+          "marketingCarrier": {
+            "airline": {
+              "name": "Gol",
+              "iata": "G3",
+              "icao": "GLO"
+            },
+            "flightNumber": "1896",
+            "confirmationNumber": "GFTZRY"
+          },
+          "aircraft": {
+            "iataCode": "738",
+            "name": "Boeing 737-800 Passenger",
+            "turboProp": false,
+            "jet": true,
+            "wideBody": false,
+            "regional": false
+          },
+          "cabin": "Econ\u00f4mica",
+          "flightStatsMethodUsed": "ScheduleByRoute"
+        }
+      ],
+      "issuingCarrier": {
+        "airline": {
+          "name": "Gol",
+          "iata": "G3",
+          "icao": "GLO"
+        },
+        "confirmationNumber": "GFTZRY"
+      },
+      "type": "flight"
+    }
+  ],
+  "login": "09776786448",
+  "login2": "Brazil",
+  "balance": 1500,
+  "expirationDate": "2029-05-25",
+  "properties": [
+    {
+      "code": "Name",
+      "name": "Name",
+      "kind": "12",
+      "value": "John Snow"
+    },
+    {
+      "code": "AccountNumber",
+      "name": "Smiles number",
+      "kind": "1",
+      "value": "999999999"
+    },
+    {
+      "code": "MemberSince",
+      "name": "Member since",
+      "kind": "5",
+      "value": "01\/12\/2018"
+    },
+    {
+      "code": "Category",
+      "name": "Category",
+      "kind": "3",
+      "value": "Smiles"
+    },
+    {
+      "code": "StatusExpiration",
+      "name": "Status expiration",
+      "kind": "15",
+      "value": "31\/03\/2050"
+    },
+    {
+      "code": "MilesToNextLevel",
+      "name": "Miles to next level",
+      "kind": "10",
+      "value": "10000"
+    },
+    {
+      "code": "MilesToExpire",
+      "name": "Miles to expire",
+      "kind": "6",
+      "value": "1.500"
+    }
+  ],
+  "noItineraries": false
+}

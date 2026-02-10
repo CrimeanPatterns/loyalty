@@ -1,0 +1,142 @@
+{
+  "request": {
+    "carrier": {
+      "requestedCode": "DL",
+      "fsCode": "DL"
+    },
+    "codeType": {},
+    "flightNumber": {
+      "requested": "3660",
+      "interpreted": "3660"
+    },
+    "departing": true,
+    "date": {
+      "year": "2017",
+      "month": "6",
+      "day": "15",
+      "interpreted": "2017-06-15"
+    },
+    "url": "https://api.flightstats.com/flex/schedules/rest/v1/json/flight/DL/3660/departing/2017/06/15"
+  },
+  "scheduledFlights": [
+    {
+      "carrierFsCode": "DL",
+      "flightNumber": "3660",
+      "departureAirportFsCode": "LGA",
+      "arrivalAirportFsCode": "YUL",
+      "stops": 0,
+      "departureTerminal": "D",
+      "departureTime": "2017-06-15T14:45:00.000",
+      "arrivalTime": "2017-06-15T16:34:00.000",
+      "flightEquipmentIataCode": "CR9",
+      "isCodeshare": false,
+      "isWetlease": true,
+      "serviceType": "J",
+      "serviceClasses": [
+        "F",
+        "Y"
+      ],
+      "trafficRestrictions": [],
+      "codeshares": [
+        {
+          "carrierFsCode": "WS",
+          "flightNumber": "6441",
+          "serviceType": "J",
+          "serviceClasses": [
+            "F",
+            "J",
+            "Y"
+          ],
+          "trafficRestrictions": [],
+          "referenceCode": 2101636
+        }
+      ],
+      "wetleaseOperatorFsCode": "9E",
+      "referenceCode": "89-2101975--"
+    }
+  ],
+  "appendix": {
+    "airlines": [
+      {
+        "fs": "DL",
+        "iata": "DL",
+        "icao": "DAL",
+        "name": "Delta Air Lines",
+        "phoneNumber": "1-800-221-1212",
+        "active": true
+      },
+      {
+        "fs": "9E",
+        "iata": "9E",
+        "icao": "EDV",
+        "name": "Endeavor Air",
+        "active": true
+      },
+      {
+        "fs": "WS",
+        "iata": "WS",
+        "icao": "WJA",
+        "name": "WestJet",
+        "phoneNumber": "1-888-937-8538",
+        "active": true
+      }
+    ],
+    "airports": [
+      {
+        "fs": "LGA",
+        "iata": "LGA",
+        "icao": "KLGA",
+        "faa": "LGA",
+        "name": "LaGuardia Airport",
+        "street1": "Hangar 7 Center",
+        "city": "New York",
+        "cityCode": "NYC",
+        "stateCode": "NY",
+        "postalCode": "11371",
+        "countryCode": "US",
+        "countryName": "United States",
+        "regionName": "North America",
+        "timeZoneRegionName": "America/New_York",
+        "weatherZone": "NYZ176",
+        "localTime": "2017-04-11T07:59:55.478",
+        "utcOffsetHours": -4,
+        "latitude": 40.774252,
+        "longitude": -73.871617,
+        "elevationFeet": 22,
+        "classification": 1,
+        "active": true
+      },
+      {
+        "fs": "YUL",
+        "iata": "YUL",
+        "icao": "CYUL",
+        "name": "Montreal-Pierre Elliott Trudeau International Airport",
+        "street1": "975 Romeo Vachon Street North",
+        "city": "Montreal",
+        "cityCode": "YMQ",
+        "stateCode": "QC",
+        "countryCode": "CA",
+        "countryName": "Canada",
+        "regionName": "North America",
+        "timeZoneRegionName": "America/Toronto",
+        "localTime": "2017-04-11T07:59:55.478",
+        "utcOffsetHours": -4,
+        "latitude": 45.457715,
+        "longitude": -73.749906,
+        "elevationFeet": 117,
+        "classification": 1,
+        "active": true
+      }
+    ],
+    "equipments": [
+      {
+        "iata": "CR9",
+        "name": "Canadair (Bombardier) Regional Jet 900 and Challenger 890",
+        "turboProp": false,
+        "jet": true,
+        "widebody": false,
+        "regional": true
+      }
+    ]
+  }
+}

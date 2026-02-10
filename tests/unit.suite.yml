@@ -1,0 +1,8 @@
+class_name: UnitTester
+modules:
+    enabled:
+      - Asserts
+      - \Helper\CustomDb
+      - \Helper\Aw
+      - Symfony
+error_level: "E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED"

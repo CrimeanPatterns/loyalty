@@ -1,0 +1,22 @@
+<html>
+
+<body>
+<p>
+    Cookies test page
+</p>
+<p id="test-result"></p>
+
+<script type="text/javascript">
+
+    var cookies = document.cookie;
+    var result = 'saved cookie not found';
+    if (cookies.indexOf('someSavedCookie') >= 0) {
+        result = 'saved cookie found';
+    }
+    document.getElementById('test-result').innerText = result;
+    document.cookie = 'someSavedCookie=true; expires=Fri, 31 Dec 9999 23:59:59 GMT';
+
+</script>
+</body>
+
+</html>

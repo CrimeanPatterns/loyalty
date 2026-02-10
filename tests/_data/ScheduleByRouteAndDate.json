@@ -1,0 +1,442 @@
+{
+  "request": {
+    "departureAirport": {
+      "requestedCode": "PHX",
+      "fsCode": "PHX"
+    },
+    "arrivalAirport": {
+      "requestedCode": "LAS",
+      "fsCode": "LAS"
+    },
+    "codeType": {},
+    "departing": true,
+    "date": {
+      "year": "2017",
+      "month": "3",
+      "day": "11",
+      "interpreted": "2017-03-11"
+    },
+    "url": "https://api.flightstats.com/flex/schedules/rest/v1/json/from/PHX/to/LAS/departing/2017/3/11"
+  },
+  "scheduledFlights": [
+    {
+      "carrierFsCode": "AA",
+      "flightNumber": "1646",
+      "departureAirportFsCode": "PHX",
+      "arrivalAirportFsCode": "LAS",
+      "stops": 0,
+      "departureTerminal": "4",
+      "arrivalTerminal": "1",
+      "departureTime": "2017-03-11T11:30:00.000",
+      "arrivalTime": "2017-03-11T11:51:00.000",
+      "flightEquipmentIataCode": "321",
+      "isCodeshare": false,
+      "isWetlease": false,
+      "serviceType": "J",
+      "serviceClasses": [
+        "R",
+        "J",
+        "Y"
+      ],
+      "trafficRestrictions": [],
+      "codeshares": [],
+      "referenceCode": "54-3108365--"
+    },
+    {
+      "carrierFsCode": "AA",
+      "flightNumber": "1826",
+      "departureAirportFsCode": "PHX",
+      "arrivalAirportFsCode": "LAS",
+      "stops": 0,
+      "departureTerminal": "4",
+      "arrivalTerminal": "1",
+      "departureTime": "2017-03-11T15:07:00.000",
+      "arrivalTime": "2017-03-11T15:18:00.000",
+      "flightEquipmentIataCode": "321",
+      "isCodeshare": false,
+      "isWetlease": false,
+      "serviceType": "J",
+      "serviceClasses": [
+        "R",
+        "J",
+        "Y"
+      ],
+      "trafficRestrictions": [],
+      "codeshares": [],
+      "referenceCode": "54-3108679--"
+    },
+    {
+      "carrierFsCode": "AA",
+      "flightNumber": "626",
+      "departureAirportFsCode": "PHX",
+      "arrivalAirportFsCode": "LAS",
+      "stops": 0,
+      "departureTerminal": "4",
+      "arrivalTerminal": "1",
+      "departureTime": "2017-03-11T21:26:00.000",
+      "arrivalTime": "2017-03-11T21:40:00.000",
+      "flightEquipmentIataCode": "321",
+      "isCodeshare": false,
+      "isWetlease": false,
+      "serviceType": "J",
+      "serviceClasses": [
+        "R",
+        "J",
+        "Y"
+      ],
+      "trafficRestrictions": [],
+      "codeshares": [],
+      "referenceCode": "54-3108644--"
+    },
+    {
+      "carrierFsCode": "AA",
+      "flightNumber": "1107",
+      "departureAirportFsCode": "PHX",
+      "arrivalAirportFsCode": "LAS",
+      "stops": 0,
+      "departureTerminal": "4",
+      "arrivalTerminal": "1",
+      "departureTime": "2017-03-11T08:50:00.000",
+      "arrivalTime": "2017-03-11T09:03:00.000",
+      "flightEquipmentIataCode": "73H",
+      "isCodeshare": false,
+      "isWetlease": false,
+      "serviceType": "J",
+      "serviceClasses": [
+        "R",
+        "J",
+        "Y"
+      ],
+      "trafficRestrictions": [],
+      "codeshares": [],
+      "referenceCode": "54-3108658--"
+    },
+    {
+      "carrierFsCode": "WN",
+      "flightNumber": "2171",
+      "departureAirportFsCode": "PHX",
+      "arrivalAirportFsCode": "LAS",
+      "stops": 0,
+      "departureTerminal": "4",
+      "arrivalTerminal": "1",
+      "departureTime": "2017-03-11T08:20:00.000",
+      "arrivalTime": "2017-03-11T08:25:00.000",
+      "flightEquipmentIataCode": "73W",
+      "isCodeshare": false,
+      "isWetlease": false,
+      "serviceType": "J",
+      "serviceClasses": [
+        "R",
+        "Y"
+      ],
+      "trafficRestrictions": [
+        "F"
+      ],
+      "codeshares": [],
+      "referenceCode": "54-3108758--"
+    },
+    {
+      "carrierFsCode": "WN",
+      "flightNumber": "2227",
+      "departureAirportFsCode": "PHX",
+      "arrivalAirportFsCode": "LAS",
+      "stops": 0,
+      "departureTerminal": "4",
+      "arrivalTerminal": "1",
+      "departureTime": "2017-03-11T10:00:00.000",
+      "arrivalTime": "2017-03-11T10:05:00.000",
+      "flightEquipmentIataCode": "73C",
+      "isCodeshare": false,
+      "isWetlease": false,
+      "serviceType": "J",
+      "serviceClasses": [
+        "R",
+        "Y"
+      ],
+      "trafficRestrictions": [
+        "F"
+      ],
+      "codeshares": [],
+      "referenceCode": "54-3108599--"
+    },
+    {
+      "carrierFsCode": "WN",
+      "flightNumber": "5134",
+      "departureAirportFsCode": "PHX",
+      "arrivalAirportFsCode": "LAS",
+      "stops": 0,
+      "departureTerminal": "4",
+      "arrivalTerminal": "1",
+      "departureTime": "2017-03-11T12:25:00.000",
+      "arrivalTime": "2017-03-11T12:30:00.000",
+      "flightEquipmentIataCode": "73W",
+      "isCodeshare": false,
+      "isWetlease": false,
+      "serviceType": "J",
+      "serviceClasses": [
+        "R",
+        "Y"
+      ],
+      "trafficRestrictions": [
+        "F"
+      ],
+      "codeshares": [],
+      "referenceCode": "54-3108402--"
+    },
+    {
+      "carrierFsCode": "WN",
+      "flightNumber": "2671",
+      "departureAirportFsCode": "PHX",
+      "arrivalAirportFsCode": "LAS",
+      "stops": 0,
+      "departureTerminal": "4",
+      "arrivalTerminal": "1",
+      "departureTime": "2017-03-11T13:05:00.000",
+      "arrivalTime": "2017-03-11T13:10:00.000",
+      "flightEquipmentIataCode": "73H",
+      "isCodeshare": false,
+      "isWetlease": false,
+      "serviceType": "J",
+      "serviceClasses": [
+        "R",
+        "Y"
+      ],
+      "trafficRestrictions": [
+        "F"
+      ],
+      "codeshares": [],
+      "referenceCode": "54-3108746--"
+    },
+    {
+      "carrierFsCode": "WN",
+      "flightNumber": "5146",
+      "departureAirportFsCode": "PHX",
+      "arrivalAirportFsCode": "LAS",
+      "stops": 0,
+      "departureTerminal": "4",
+      "arrivalTerminal": "1",
+      "departureTime": "2017-03-11T15:10:00.000",
+      "arrivalTime": "2017-03-11T15:10:00.000",
+      "flightEquipmentIataCode": "73H",
+      "isCodeshare": false,
+      "isWetlease": false,
+      "serviceType": "J",
+      "serviceClasses": [
+        "R",
+        "Y"
+      ],
+      "trafficRestrictions": [
+        "F"
+      ],
+      "codeshares": [],
+      "referenceCode": "54-3108405--"
+    },
+    {
+      "carrierFsCode": "WN",
+      "flightNumber": "1963",
+      "departureAirportFsCode": "PHX",
+      "arrivalAirportFsCode": "LAS",
+      "stops": 0,
+      "departureTerminal": "4",
+      "arrivalTerminal": "1",
+      "departureTime": "2017-03-11T16:45:00.000",
+      "arrivalTime": "2017-03-11T16:50:00.000",
+      "flightEquipmentIataCode": "73H",
+      "isCodeshare": false,
+      "isWetlease": false,
+      "serviceType": "J",
+      "serviceClasses": [
+        "R",
+        "Y"
+      ],
+      "trafficRestrictions": [
+        "F"
+      ],
+      "codeshares": [],
+      "referenceCode": "54-3108472--"
+    },
+    {
+      "carrierFsCode": "WN",
+      "flightNumber": "388",
+      "departureAirportFsCode": "PHX",
+      "arrivalAirportFsCode": "LAS",
+      "stops": 0,
+      "departureTerminal": "4",
+      "arrivalTerminal": "1",
+      "departureTime": "2017-03-11T17:25:00.000",
+      "arrivalTime": "2017-03-11T17:30:00.000",
+      "flightEquipmentIataCode": "73H",
+      "isCodeshare": false,
+      "isWetlease": false,
+      "serviceType": "J",
+      "serviceClasses": [
+        "R",
+        "Y"
+      ],
+      "trafficRestrictions": [
+        "F"
+      ],
+      "codeshares": [],
+      "referenceCode": "54-3108784--"
+    },
+    {
+      "carrierFsCode": "WN",
+      "flightNumber": "2182",
+      "departureAirportFsCode": "PHX",
+      "arrivalAirportFsCode": "LAS",
+      "stops": 0,
+      "departureTerminal": "4",
+      "arrivalTerminal": "1",
+      "departureTime": "2017-03-11T18:10:00.000",
+      "arrivalTime": "2017-03-11T18:10:00.000",
+      "flightEquipmentIataCode": "73H",
+      "isCodeshare": false,
+      "isWetlease": false,
+      "serviceType": "J",
+      "serviceClasses": [
+        "R",
+        "Y"
+      ],
+      "trafficRestrictions": [
+        "F"
+      ],
+      "codeshares": [],
+      "referenceCode": "54-3108594--"
+    },
+    {
+      "carrierFsCode": "AA",
+      "flightNumber": "636",
+      "departureAirportFsCode": "PHX",
+      "arrivalAirportFsCode": "LAS",
+      "stops": 0,
+      "departureTerminal": "4",
+      "arrivalTerminal": "1",
+      "departureTime": "2017-03-11T18:20:00.000",
+      "arrivalTime": "2017-03-11T18:30:00.000",
+      "flightEquipmentIataCode": "320",
+      "isCodeshare": false,
+      "isWetlease": false,
+      "serviceType": "J",
+      "serviceClasses": [
+        "R",
+        "J",
+        "Y"
+      ],
+      "trafficRestrictions": [],
+      "codeshares": [],
+      "referenceCode": "54-3108637--"
+    }
+  ],
+  "appendix": {
+    "airlines": [
+      {
+        "fs": "AA",
+        "iata": "AA",
+        "icao": "AAL",
+        "name": "American Airlines",
+        "phoneNumber": "08457-567-567",
+        "active": true
+      },
+      {
+        "fs": "WN",
+        "iata": "WN",
+        "icao": "SWA",
+        "name": "Southwest Airlines",
+        "phoneNumber": "1-800-435-9792",
+        "active": true
+      }
+    ],
+    "airports": [
+      {
+        "fs": "PHX",
+        "iata": "PHX",
+        "icao": "KPHX",
+        "faa": "PHX",
+        "name": "Phoenix Sky Harbor International Airport",
+        "street1": "3400 Sky Harbor Boulevard",
+        "city": "Phoenix",
+        "cityCode": "PHX",
+        "stateCode": "AZ",
+        "postalCode": "85034",
+        "countryCode": "US",
+        "countryName": "United States",
+        "regionName": "North America",
+        "timeZoneRegionName": "America/Phoenix",
+        "weatherZone": "AZZ023",
+        "localTime": "2017-03-07T20:12:16.551",
+        "utcOffsetHours": -7,
+        "latitude": 33.435036,
+        "longitude": -112.000164,
+        "elevationFeet": 1135,
+        "classification": 1,
+        "active": true
+      },
+      {
+        "fs": "LAS",
+        "iata": "LAS",
+        "icao": "KLAS",
+        "faa": "LAS",
+        "name": "McCarran International Airport",
+        "street1": "5757 Wayne Newton Boulevard",
+        "city": "Las Vegas",
+        "cityCode": "LAS",
+        "stateCode": "NV",
+        "postalCode": "89119",
+        "countryCode": "US",
+        "countryName": "United States",
+        "regionName": "North America",
+        "timeZoneRegionName": "America/Los_Angeles",
+        "weatherZone": "NVZ020",
+        "localTime": "2017-03-07T19:12:16.551",
+        "utcOffsetHours": -8,
+        "latitude": 36.081,
+        "longitude": -115.147599,
+        "elevationFeet": 2095,
+        "classification": 1,
+        "active": true
+      }
+    ],
+    "equipments": [
+      {
+        "iata": "73C",
+        "name": "Boeing 737-300 (winglets) Passenger",
+        "turboProp": false,
+        "jet": true,
+        "widebody": false,
+        "regional": false
+      },
+      {
+        "iata": "73H",
+        "name": "Boeing 737-800 (winglets) Passenger/BBJ2",
+        "turboProp": false,
+        "jet": true,
+        "widebody": false,
+        "regional": false
+      },
+      {
+        "iata": "320",
+        "name": "Airbus A320",
+        "turboProp": false,
+        "jet": true,
+        "widebody": false,
+        "regional": false
+      },
+      {
+        "iata": "321",
+        "name": "Airbus A321",
+        "turboProp": false,
+        "jet": true,
+        "widebody": false,
+        "regional": false
+      },
+      {
+        "iata": "73W",
+        "name": "Boeing 737-700 (winglets) Passenger/BBJ1",
+        "turboProp": false,
+        "jet": true,
+        "widebody": false,
+        "regional": false
+      }
+    ]
+  }
+}
