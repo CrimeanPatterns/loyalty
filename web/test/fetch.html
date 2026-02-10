@@ -1,0 +1,16 @@
+<html>
+<body>
+Fetch test
+<script>
+    setTimeout(function() {
+        fetch('data.json')
+            .then((response) => response.json())
+            .then((data) => document.getElementById('output-fetch').innerHTML = JSON.stringify(data));
+
+    }, 5000)
+</script>
+<pre id="output-fetch">
+
+</pre>
+</body>
+</html>

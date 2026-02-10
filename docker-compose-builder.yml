@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  php:
+      image: aw-loyalty-builder
+      volumes:
+          - /var/lib/jenkins/workspace/deploy-engine:/www/loyalty/current/src/AppBundle/Engine
+  fluent:
+      restart: always
+      image: docker.awardwallet.com/service/fluent:latest
+      environment:
+        - DETECT_AWS_IP=1
+  mail:
+      restart: always
+      image: docker.awardwallet.com/service/postfix:latest
+

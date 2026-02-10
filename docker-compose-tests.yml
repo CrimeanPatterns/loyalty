@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  php:
+    volumes:
+      - ./docker/dev/empty.conf:/etc/supervisor/conf.d/supervisor_fpm.conf
+      - ./docker/dev/.npmrc:/home/user/.npmrc:ro
+    environment:
+      - GITHUB_ACCESS_TOKEN
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  mail:
+    image: docker.awardwallet.com/mail-forwarder

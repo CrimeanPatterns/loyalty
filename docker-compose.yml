@@ -1,0 +1,121 @@
+version: '3.8'
+
+services:
+  nginx:
+      image: nginx
+      environment:
+          - VIRTUAL_PORT=80
+          - VIRTUAL_HOST=loyalty.docker,ra-loyalty.docker
+      volumes:
+          - ./web:/www/loyalty/web
+          - ./docker/dev/nginx-dev.conf:/etc/nginx/conf.d/default.conf
+      networks:
+          default:
+              aliases:
+                  - loyalty.docker
+                  - ra-loyalty.docker
+          awardwallet:
+              aliases:
+                  - loyalty.docker
+                  - ra-loyalty.docker
+  php:
+      image: docker.awardwallet.com/php/loyalty-php7.4-debug-multiarch-amd64-v3
+      volumes:
+          - ./:/www/loyalty
+          - ./docker/home:/home/user
+#          - composer-cache:/var/www/.composer
+          - ~/.ssh:/home/user/.ssh:ro
+#          - ./docker/dev/supervisor_fpm.conf:/etc/supervisor/conf.d/supervisor_fpm.conf
+#          - ./docker/home/.bashrc:/home/user/.bashrc
+          - ./docker/dev/keys:/usr/keys
+      user: "${LOCAL_USER_ID}:4" # adm group
+      environment:
+        - PHP_IDE_CONFIG=serverName=loyalty.docker
+        - TERM=${TERM:-xterm}
+      hostname: loyalty
+      working_dir: /www/loyalty
+#      command: ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
+      networks:
+          default:
+              aliases:
+                  - php.loyalty.docker
+          awardwallet:
+  mail:
+    image: maildev/maildev:2.0.2
+    environment:
+      - "MAILDEV_SMTP_PORT=25"
+      - "VIRTUAL_HOST=mail.loyalty.docker"
+      - "VIRTUAL_PORT=1080"
+  mysql:
+      image: mysql/mysql-server:8.0.32
+      environment:
+          - MYSQL_ALLOW_EMPTY_PASSWORD=1
+          - MYSQL_USER=wsdlawardwallet
+          - MYSQL_PASSWORD=wsdlawardwallet
+          - MYSQL_DATABASE=wsdlawardwallet
+      volumes:
+          - ./docker/dev/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
+          - mysql-data:/var/lib/mysql
+      depends_on:
+          - mysql-data
+  mysql-data:
+      image: docker.awardwallet.com/mysql-data/loyalty
+      volumes:
+        - mysql-data:/var/lib/mysql
+  rabbitmq:
+      image: docker.awardwallet.com/service/rabbitmq-multiarch
+      environment:
+        - "VIRTUAL_HOST=rabbitmq.loyalty.docker"
+        - "VIRTUAL_PORT=15672"
+        - "RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit collect_statistics_interval 1000000 lazy_queue_explicit_gc_run_operation_threshold 1000000 queue_explicit_gc_run_operation_threshold 1000000 memory_monitor_interval 1000000 background_gc_target_interval 1000000"
+  mongo:
+      image: docker.awardwallet.com/service/mongo-multiarch:master
+      volumes:
+          - mongo-data:/data/db
+
+  memcached:
+      image: memcached
+      entrypoint: ["memcached", "-m", "32"]
+  selenium:
+    # that image is multiarch
+    image: docker.awardwallet.com/selenium-puppeteer-seleniarm-121-master-v1.0
+    shm_size: 2g
+    environment:
+      - SE_NODE_MAX_SESSIONS=10
+      - SE_NODE_SESSION_TIMEOUT=30
+      - SE_VNC_NO_PASSWORD=1
+  web:
+    image: docker.awardwallet.com/php/ubuntu18.04-php7.2-debug
+    volumes:
+      - ./tests/web:/web
+    entrypoint: ["/usr/bin/php", "-S", "0.0.0.0:80", "-t", "/web"]
+    environment:
+      - VIRTUAL_PORT=80
+      - VIRTUAL_HOST=web.tests.loyalty.docker
+    networks:
+      default:
+        aliases:
+          - awardwallet-browser-control.s3.amazonaws.com
+          - web-http.docker
+  centrifugo:
+    image: centrifugo/centrifugo:v5
+    volumes:
+      - ./docker/centrifugo/config.json:/centrifugo/config.json
+    command: centrifugo -c config.json
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535
+    networks:
+      default:
+      awardwallet:
+        aliases:
+          - centrifugo.loyalty.docker
+volumes:
+  mongo-data: {}
+#  composer-cache: {}
+  mysql-data:
+
+networks:
+  awardwallet:
+      external: true

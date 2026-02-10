@@ -1,0 +1,12 @@
+version: "2"
+
+options:
+  verbose: true
+  compose-dev-file-path: 'docker-compose-sync.yml'
+syncs:
+  #IMPORTANT: ensure this name is unique and does not match your other application container name
+  loyalty-unison-sync: # tip: add -sync and you keep consistent names als a convention
+    src: '.'
+    sync_excludes: ['Path .git', 'Name .ssh', 'Name .idea', 'Name var/cache/dev/profiler', 'Name var/cache/dev/jms_diextra', 'Name var/cache/codeception/jms_diextra', 'Name var/cache/dev/assetic', 'Name var/cache/test/assetic', 'Name var/cache/test/profiler', 'Name var/cache/dev/annotations', 'Name var/cache/codeception/annotations', 'Name var/cache/test/annotations', 'Name var/cache/codeception/jms_security', 'Name var/cache/staging/jms_security', 'Name var/cache/dev/jms_security', 'Name var/cache/codeception/sessions', 'Name docker-sync.yml']
+    sync_excludes_type: 'none'
+    sync_userid: ${LOCAL_USER_ID}

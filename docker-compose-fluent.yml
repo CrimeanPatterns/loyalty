@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  nginx:
+    links:
+      - fluent:fluent
+  fluent:
+      image: fluent/fluent-bit:1.6.10
+      volumes:
+        - ./docker/prod/fluentbit/fluent-bit.conf:/fluent-bit/etc/fluent-bit.conf
+        - ./docker/prod/fluentbit/awardwallet_parsers.conf:/fluent-bit/etc/awardwallet_parsers.conf
+        - ./docker/prod/fluentbit/override_timestamp.lua:/fluent-bit/etc/override_timestamp.lua

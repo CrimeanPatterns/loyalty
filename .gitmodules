@@ -1,0 +1,10 @@
+[submodule "src/AppBundle/Engine"]
+	path = src/AppBundle/Engine
+	url = https://github.com/AwardWallet/engine.git
+	branch = master
+	ignore = all
+[submodule "src/AppBundle/Lib"]
+	path = src/AppBundle/Lib
+	url = https://github.com/AwardWallet/lib.git
+	branch = master
+	ignore = all

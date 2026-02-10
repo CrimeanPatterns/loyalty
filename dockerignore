@@ -1,0 +1,5 @@
+src/AppBundle/engine
+var/logs
+var/sessions
+**/.git
+.*

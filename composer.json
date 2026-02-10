@@ -1,0 +1,155 @@
+{
+    "name": "awardwallet/loyalty",
+    "license": "proprietary",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "": "src/",
+            "AwardWallet\\Engine\\": "src/AppBundle/Engine"
+        },
+        "classmap": [
+            "app/AppKernel.php",
+            "app/AppCache.php",
+            "src/AppBundle/Lib/classes/",
+            "src/AppBundle/Lib/3dParty/plancake/"
+        ],
+        "files": [
+            "vendor/awardwallet/service/old/constants.php",
+            "vendor/awardwallet/service/old/functions.php"
+        ]
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/AwardWallet/service.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/AwardWallet/webdriver-client.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/AwardWallet/schema",
+            "no-api": true
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/tobiasmuehl/fluent-logger-php.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/AwardWallet/ssm-env-var-processor.git"
+        },
+        {
+            "type": "package",
+            "package": {
+                "name": "facebook/webdriver-old",
+                "version": "0.6.0",
+                "source": {
+                    "url": "https://github.com/facebook/php-webdriver.git",
+                    "type": "git",
+                    "reference": "v0.6.0"
+                },
+                "autoload": {
+                    "classmap": [
+                        "lib/"
+                    ]
+                }
+            }
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/AwardWallet/extension-worker.git"
+        }
+    ],
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Unit\\": "tests/unit",
+            "Tests\\Functional\\": "tests/functional"
+        }
+    },
+    "require": {
+        "php": "^7.4.0",
+        "ext-gd": "*",
+        "ext-imagick": "*",
+        "ext-memcached": "*",
+        "ext-tidy": "*",
+        "ext-openssl": "*",
+        "ext-pcntl": "*",
+        "symfony/symfony": "^4.4",
+        "doctrine/orm": "^2.5",
+        "doctrine/mongodb": "dev-master#535f72f8371e8f9484f18616e81d7234727b7913 as 1.4.0",
+        "doctrine/doctrine-bundle": "^2.0",
+        "doctrine/doctrine-cache-bundle": "^1.2",
+        "fluent/logger": "dev-master#0bb54c934f5e31b63ca3185004fb383fba955cbb",
+        "php-amqplib/rabbitmq-bundle": "^1.8",
+        "doctrine/mongodb-odm": "^1.2.0",
+        "doctrine/mongodb-odm-bundle": "3.*",
+        "aws/aws-sdk-php": "^3.3",
+        "lifo/php-ipc": "dev-master",
+        "facile-it/doctrine-mysql-come-back": "^1.6",
+        "ezyang/htmlpurifier": "^4.8",
+        "ruflin/elastica": ">=0.90 <3.0",
+        "alcaeus/mongo-php-adapter": "^1.1",
+        "roave/security-advisories": "dev-master",
+        "awardwallet/service": "dev-master",
+        "awardwallet/schema": "dev-master",
+        "phpseclib/mcrypt_compat": "^1.0",
+        "ocramius/proxy-manager": "^2.2",
+        "symfony/swiftmailer-bundle": "^3.4",
+        "symfony/monolog-bundle": "^3.5",
+        "jms/serializer-bundle": "^3.5",
+        "justinrainbow/json-schema": "^5.2",
+        "sensio/framework-extra-bundle": "^5.5",
+        "incenteev/composer-parameter-handler": "^2.1",
+        "sinergi/browser-detector": "^6.1",
+        "rybakit/msgpack": "^0.9.0",
+        "awardwallet/webdriver-client": "^1.0",
+        "fzaninotto/faker": "^1.9",
+        "awardwallet/ssm-env-var-processor": "^1.1",
+        "mailslurp/mailslurp-client-php": "^15.17",
+        "awardwallet/extension-worker": "dev-master",
+        "ext-json": "*"
+    },
+    "require-dev": {
+        "symfony/phpunit-bridge": "~3",
+        "codeception/verify": "^0.3.3",
+        "codeception/specify": "^0.4.6",
+        "codeception/codeception": "^4.1",
+        "codeception/module-filesystem": "^1.0",
+        "codeception/module-asserts": "^1.1",
+        "codeception/module-symfony": "^1.0",
+        "codeception/module-rest": "^1.2",
+        "codeception/module-db": "^1.0",
+        "phpspec/prophecy-phpunit": "^2.1"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters",
+            "npm i",
+            "AwardWallet\\Common\\Selenium\\Puppeteer\\Installer::install"
+        ],
+        "post-update-cmd": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ],
+        "post-deploy": [
+            "Incenteev\\ParameterHandler\\ScriptHandler::buildParameters"
+        ]
+    },
+    "extra": {
+        "symfony-app-dir": "app",
+        "symfony-bin-dir": "bin",
+        "symfony-var-dir": "var",
+        "symfony-web-dir": "web",
+        "symfony-tests-dir": "tests",
+        "symfony-assets-install": "relative",
+        "incenteev-parameters": {
+            "file": "app/config/parameters.yml"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "ocramius/package-versions": true
+        }
+    }
+}

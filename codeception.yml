@@ -1,0 +1,32 @@
+bootstrap: _bootstrap.php
+actor: Tester
+paths:
+    tests: tests
+    log: tests/_output
+    data: tests/_data
+    support: tests/_support
+    envs: tests/_envs
+settings:
+    colors: true
+    memory_limit: 1024M
+    backup_globals: false
+extensions:
+    enabled:
+        - Codeception\Extension\RunFailed
+modules:
+    config:
+        REST:
+            depends: Symfony
+        Symfony:
+            var_path: '/var'
+            app_path: '/app'
+coverage:
+    enabled: true
+    include:
+        - src/*
+    exclude:
+        - var/cache/*
+        - src/AppBundle/Engine/*
+        - src/AppBundle/Lib/*
+        - src/AppBundle/AppBundle.php
+
