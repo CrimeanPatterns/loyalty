@@ -4,7 +4,7 @@ loyalty
 --------
 Парсинг сайтов программ лояльности 
 
-YOU MUST UNPACK  src/AppBundle/Engine/Engine packed.zip
+***YOU MUST UNPACK  src/AppBundle/Engine/Engine packed.zip***
 
 Запуск в докер
 --------------
