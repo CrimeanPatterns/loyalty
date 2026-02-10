@@ -1,0 +1,68 @@
+imports:
+    - { resource: config.yml }
+    - { resource: '../../vendor/awardwallet/ssm-env-var-processor/src/services.yml'}
+
+parameters:
+    ssm_path: '/loyalty/prod/unused'
+
+#framework:
+#    validation:
+#        cache: validator.mapping.cache.apc
+#    serializer:
+#        cache: serializer.mapping.cache.apc
+
+#doctrine:
+#    orm:
+#        metadata_cache_driver: apc
+#        result_cache_driver: apc
+#        query_cache_driver: apc
+
+monolog:
+    handlers:
+        console:
+            type:  console
+            level: info
+        dev_notification:
+            type:         fingers_crossed
+            activation_strategy: 'AwardWallet\Common\Monolog\ActivationStrategy\DevNotificationActivationStrategy'
+            handler:      swift
+            buffer_size:  1
+            stop_buffering: false
+        swift:
+            type:       swift_mailer
+            level:      debug
+            formatter:  aw.extension.monolog.formatter.awardwallet
+            email_prototype:
+              id: 'AwardWallet\Common\Monolog\EmailPrototype'
+              method: 'buildMessage'
+        fluent:
+            type: service
+            id: aw.monolog.handler.fluent
+
+services:
+    aw.monolog.handler.fluent:
+        class: AwardWallet\Common\Monolog\Handler\FluentHandler
+        arguments:
+            - null
+            - "fluent"
+            - 24224
+            - !php/const Monolog\Logger::INFO
+            - true
+            - true
+
+    aw.selenium_finder:
+        public: true
+        class: SeleniumConsulFinder
+        arguments:
+            - '%selenium_consul_address%'
+            - '@logger'
+            - '@aw.curl_driver'
+
+    Aws\Ssm\SsmClient:
+        public: true
+        class: Aws\Ssm\SsmClient
+        lazy: true
+        arguments:
+            -
+                region: '%env(AWS_REGION)%'
+                version: '2014-11-06'

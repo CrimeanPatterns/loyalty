@@ -1,0 +1,6 @@
+# Play:   run_role.yml
+# Usage:  ansible-playbook -i ~/ansible/invs ~/ansible/run_role.yml -e "role=<role>"
+
+- hosts: all
+  roles:
+    - { role: '{{role}}' }

@@ -1,0 +1,3 @@
+GET {{endpoint}}/admin/log/{{filename}}
+X-Authentication: {{apiKey}}
+

@@ -1,0 +1,2964 @@
+swagger: '2.0'
+info:
+  title: 'AwardWallet Web Parsing API'
+  description: |
+    AwardWallet Web Parsing API supports retrieval of the following information from online loyalty accounts&#58; 
+
+    - Loyalty information (e.g. account balance, expiration, elite level, etc.)
+    - Travel itineraries listed under user’s profile
+    - Account activity history
+
+    This is a restful API and is designed to work asynchronously.
+  version: 1.0.0
+host: loyalty.awardwallet.com
+schemes:
+  - https
+securityDefinitions:
+  Authentication:
+    type: apiKey
+    name: X-Authentication
+    in: header
+    description: |
+      Every API call needs to be authenticated with an API authntiction token. This token is passed in the "X-Authentication" field with the https request header. The token is formed by concatinating the API username and API password with a ":" symbol. You need to [contact us](https://awardwallet.com/contact) to get your API credentials.
+
+      <code class="prettyprint">X-Authentication: YourUserName:YourPassword</code>
+
+      <aside class="success">Obviously you need to replace <code>YourUserName:YourPassword</code> with your personal credentials.</aside>
+
+basePath: /
+produces:
+  - application/json
+paths:
+  x-router: swagger_v1.controller
+  '/admin/{method}/{requestId}':
+    x-router-controller: swagger.controller.admin
+    get:
+      security:
+        - Authentication: []
+      operationId: getFullMongoRow
+      summary: 'Full MongoDB row'
+      description: ""
+      parameters:
+        -
+          name: method
+          in: path
+          required: true
+          type: string
+          enum:
+            - account
+            - confirmation
+          description: 'Cheking method ("account" or "confirmation")'
+        -
+          name: requestId
+          in: path
+          required: true
+          type: string
+          description: 'Request ID'
+      tags:
+        - admin
+      responses:
+        200:
+          description: 'Full mongo row'
+          schema:
+            $ref: '#/definitions/ProviderInfoResponse'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/responses/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/responses/InputError'
+  /admin/logs:
+    x-router-controller: swagger.controller.admin
+    post:
+      security:
+        - Authentication: []
+      operationId: getLogs
+      parameters:
+        -
+          name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AdminLogsRequest'
+      tags:
+        - admin
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: '#/definitions/AdminLogsResponse'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/responses/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/responses/InputError'
+  /admin/log/{filename}:
+    x-router-controller: swagger.controller.admin
+    get:
+      security:
+        - Authentication: []
+      operationId: getLog
+      parameters:
+        -
+          name: filename
+          in: path
+          required: true
+          type: string
+      tags:
+        - admin
+      responses:
+        200:
+          description: "zip file"
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/responses/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/responses/InputError'
+  /admin/statistic:
+    x-router-controller: swagger.controller.admin
+    post:
+      security:
+        - Authentication: []
+      operationId: getStatistic
+      parameters:
+        -
+          name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AdminStatisticRequest'
+      tags:
+        - admin
+      responses:
+        200:
+          description: ""
+          schema:
+            $ref: '#/definitions/AdminStatisticResponse'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/responses/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/responses/InputError'
+  /providers/list:
+    get:
+      security:
+        - Authentication: []
+      operationId: providersList
+      summary: 'List providers'
+      description: |
+          The `providers/list` method gives you all the providers that we support at any given point in time under this API. This list will change over time, so you need to periodically call this method to get any changes.
+
+          <aside class="notice">
+            Please note that AwardWallet supports different providers under different APIs, for instance, the ListProviders method under our Email Parsing API will return a different list of providers.
+          </aside>
+      tags:
+        - providers
+      responses:
+        200:
+          description: 'Supported providers information'
+          schema:
+            $ref: '#/definitions/ProvidersListItem'
+          examples:
+            application/json: |
+                [
+                    {
+                        "code": "aa",
+                        "displayName": "American Airlines (AAdvantage)",
+                        "kind": 1
+                    },
+                    {
+                        "code": "hhonors",
+                        "displayName": "Hilton (HHonors)",
+                        "kind": 2
+                    }
+                ]
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/responses/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/responses/InputError'
+  '/providers/{code}':
+    get:
+      security:
+        - Authentication: []
+      operationId: providerInfo
+      summary: 'Provider info'
+      description: "This method gives you all the details that you need to know about a given provider. For instance, this method will tell you what information you need to request from your users in order to update a given account and it also tells you what to expect in return once that account is updated. It tells you what features are supported for a given provider, such as if we support retrieving account history or travel reservations from that provider."
+      parameters:
+        -
+          name: code
+          in: path
+          required: true
+          type: string
+          description: 'Alpha-numeric value with no spaces that uniquely identifies any given provider. Can be retrieved from the [`/providers/list`](#method-providers_1) method.'
+      tags:
+        - providers
+      responses:
+        200:
+          description: 'Supported provider definition'
+          schema:
+            $ref: '#/definitions/ProviderInfoResponse'
+          examples:
+            application/json: |
+                {
+                    "kind": 2,
+                    "code": "marriott",
+                    "displayName": "Marriott Rewards",
+                    "providerName": "Marriott",
+                    "programName": "Marriott Rewards, Ritz-Carlton",
+                    "login": {
+                        "code": "Login",
+                        "title": "Email or Rewards No.",
+                        "options": [],
+                        "required": true,
+                        "defaultValue": ""
+                    },
+                    "login2": {
+                        "code": "Login2",
+                        "title": "Hotel",
+                        "options": [
+                            {
+                                "code": "",
+                                "name": "Select your hotel",
+                                "kind": "0"
+                            },
+                            {
+                                "code": "marriott",
+                                "name": "Marriott",
+                                "kind": "0"
+                            },
+                            {
+                                "code": "ritz",
+                                "name": "Ritz-Carlton",
+                                "kind": "0"
+                            }
+                        ],
+                        "required": true,
+                        "defaultValue": ""
+                    },
+                    "login3": {
+                        "code": "Login3",
+                        "options": [],
+                        "required": false,
+                        "defaultValue": ""
+                    },
+                        "password": {
+                        "code": "Password",
+                        "options": [],
+                        "required": true,
+                        "defaultValue": ""
+                    },
+                    "properties": [
+                        {
+                            "code": "Name",
+                            "name": "Name",
+                            "kind": "12"
+                        },
+                        {
+                            "code": "Number",
+                            "name": "Rewards #",
+                            "kind": "1"
+                        },
+                        {
+                            "code": "Level",
+                            "name": "Membership Level",
+                            "kind": "3"
+                        },
+                        {
+                            "code": "Nights",
+                            "name": "Nights this year",
+                            "kind": "8"
+                        },
+                        {
+                            "code": "LastActivity",
+                            "name": "Last qualifying activity",
+                            "kind": "13"
+                        },
+                        {
+                            "code": "YearBegins",
+                            "name": "Beginning of the Year",
+                            "kind": "0"
+                        },
+                        {
+                            "code": "PointsValue",
+                            "name": "Points Value",
+                            "kind": "0"
+                        },
+                        {
+                            "code": "ExpirationDate",
+                            "name": "Expiration Date",
+                            "kind": "2"
+                        }
+                    ],
+                    "autoLogin": true,
+                    "deepLinking": true,
+                    "canCheckConfirmation": true,
+                    "canCheckItinerary": true,
+                    "canCheckPastItinerary": false,
+                    "canCheckExpiration": 1,
+                    "confirmationNumberFields": [
+                        {
+                            "code": "RecordLocator",
+                            "title": "Confirmation #",
+                            "required": true,
+                            "defaultValue": ""
+                        },
+                        {
+                            "code": "FirstName",
+                            "title": "First Name",
+                            "required": true,
+                            "defaultValue": ""
+                        },
+                        {
+                            "code": "LastName",
+                            "title": "Last Name",
+                            "required": true,
+                            "defaultValue": ""
+                        },
+                        {
+                            "code": "CheckInDate",
+                            "title": "Check In Date",
+                            "required": true,
+                            "defaultValue": ""
+                        }
+                    ],
+                    "historyColumns": [
+                        {
+                            "code": "Info",
+                            "name": "Type",
+                            "kind": "0"
+                        },
+                        {
+                            "code": "PostingDate",
+                            "name": "Date Posted",
+                            "kind": "0"
+                        },
+                        {
+                            "code": "Description",
+                            "name": "Description",
+                            "kind": "0"
+                        },
+                        {
+                            "code": "Miles",
+                            "name": "Points earned",
+                            "kind": "0"
+                        },
+                        {
+                            "code": "Info",
+                            "name": "Actions",
+                            "kind": "0"
+                        },
+                        {
+                            "code": "Bonus",
+                            "name": "Bonus points earned",
+                            "kind": "0"
+                        }
+                    ],
+                    "eliteLevelsCount": 4,
+                    "canParseHistory": true,
+                    "canParseFiles": false
+                }
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/responses/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/responses/InputError'
+  /autologin:
+    post:
+      security:
+        - Authentication: []
+      summary: 'Autologin method'
+      description: |
+        Unfortunately, the auto-login method is not very reliable, many modern websites won’t allow users to login in this manner. Also, in some rare scenarios, the auto-login method may work for some browsers but not work for others. You can tell which providers support the auto-login method using the [`/providers/{code}`](#method-providers_2) method ("autoLogin" should be set to “true”)
+      parameters:
+        -
+          name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AutoLoginRequest'
+      examples:
+        application/json: |
+          {
+            "provider": "czech",
+            "login": "12345678",
+            "password": "password",
+            "userId": "1",
+            "userData": "blah",
+            "targetUrl": "https://okplus.csa.cz/en/okp_my_profilee.htm",
+            "supportedProtocols": [
+              "http",
+              "https"
+            ]
+          }
+      tags:
+        - autologin
+      responses:
+        200:
+          description: 'AutoLogin results'
+          schema:
+            $ref: '#/definitions/AutoLoginResponse'
+          examples:
+            application/json: |
+              {
+                "response": "&lt;!DOCTYPE html PUBLIC....",
+                "userData": "blah"
+              }
+          default:
+            description: 'Unexpected error'
+            schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/responses/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/responses/InputError'
+  /account/check:
+    post:
+      security:
+        - Authentication: []
+      summary: 'Update one account'
+      description: |
+        This method allows you to place a single loyalty account into a queue for data to be retrieved.
+      parameters:
+        -
+          name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/CheckAccountRequest'
+      examples:
+        application/json: |
+          {
+              "provider": "spg",
+              "login": "JSMith",
+              "login2": "USA",
+              "password": "password",
+              "userId": "123",
+              "userData": "4321",
+              "browserState": "v1:YZFsNRWtg7...",
+              "priority": 9,
+              "timeout": 300,
+              "callbackUrl": "http://hostname/callback",
+              "userData": "blah",
+              "retries": 2,
+              "parseItineraries": true,
+              "answers": [
+                  {
+                      "question": "What is your verbal password?",
+                      "answer": "verbalpassword"
+                  }
+              ],
+              "history": {
+                  "range": "incremental",
+                  "state": "q0CoctQQ5yqbsEJFs2C+W9pUcRnyvBk\/8xraBg=="
+              }
+          }
+      tags:
+        - loyalty_accounts
+      responses:
+        200:
+          description: 'Loyalty program information and itineraries'
+          schema:
+            $ref: '#/definitions/PostCheckResponse'
+          examples:
+            application/json: |
+              {
+                  "requestId": "580d54da7s34d8ee39e29584"
+              }
+          default:
+            description: 'Unexpected error'
+            schema:
+              $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/responses/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/responses/InputError'
+  /account/check/package:
+    post:
+      security:
+        - Authentication: []
+      operationId: checkPackageAccounts
+      summary: 'Update multiple accounts'
+      description: |
+        This method allows you to group account requests into a package (array) and send them with a single request. So if you need to update 300 accounts instead of making 300 requests you can make one request that has all 300 accounts. Here is what a sample request would look like:
+      parameters:
+        -
+          name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/CheckAccountPackageRequest'
+      examples:
+        application/json: |
+          {
+              "package": [
+                  {
+                      "provider": "marriott",
+                      "login": "9988776655",
+                      "login2": "marriott",
+                      "password": "password1234",
+                      "userId": "1",
+                      "priority": 9
+                  },
+                  {
+                      "provider": "spg",
+                      "login": "JSmith",
+                      "login2": "USA",
+                      "password": "password1234",
+                      "userId": "123",
+                      "userData": "4321",
+                      "priority": 9,
+                      "userData": "blah",
+                      "retries": 4
+                  }
+              ]
+          }
+      tags:
+        - loyalty_accounts
+      responses:
+        200:
+          description: 'Loyalty program information and itineraries'
+          schema:
+            $ref: '#/definitions/PostCheckPackageResponse'
+          examples:
+            application/json: |
+                {
+                    "package": [
+                        {
+                            "requestId": "58e7ea288296d8d296d53d5ac"
+                        },
+                        {
+                            "requestId": "5296d8d296d53d5829d53d5ad"
+                        }
+                    ]
+                }
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/responses/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/responses/InputError'
+  '/account/check/{id}':
+    get:
+      security:
+        - Authentication: []
+      summary: 'Get account results'
+      description: |
+        This method allows you to pull the results of the account information retrieval from AwardWallet. Typically, AwardWallet will have this data cached for up to two hours after you send your request.
+      parameters:
+        -
+          name: id
+          in: path
+          required: true
+          type: string
+          description: '`requestId` that you got from the [`/account/check`](#method-loyalty_accounts_1) or the [`/account/check/package`](#method-loyalty_accounts_2) methods.'
+      tags:
+        - loyalty_accounts
+      responses:
+        200:
+          description: 'Account information'
+          schema:
+            $ref: '#/definitions/CheckAccountResponse'
+          examples:
+            application/json: |
+                {
+                  "requestId": "57d6884c312adced79a213c8",
+                  "debugInfo": "",
+                  "state": 1,
+                  "message": "",
+                  "errorReason": "",
+                  "checkDate": "2016-09-12T16:50:59+00:00",
+                  "requestDate": "2016-09-12T16:50:53+00:00",
+                  "login": "995883915",
+                  "login2": "marriott",
+                  "balance": 22816,
+                  "expirationDate": "2018-01-13",
+                  "warnings": [
+                    "At the moment we don't support gathering of itineraries from this provider's online accounts, if you believe it is possible, please contact our support and we may develop this functionality."
+                  ],
+                  "properties": [
+                      {
+                          "code": "Name",
+                          "name": "Name",
+                          "kind": "12",
+                          "value": "John Smith"
+                      },
+                      {
+                          "code": "Number",
+                          "name": "Rewards #",
+                          "kind": "1",
+                          "value": "1122334455"
+                      },
+                      {
+                          "code": "Level",
+                          "name": "Membership Level",
+                          "kind": "3",
+                          "value": "Member"
+                      },
+                      {
+                          "code": "Nights",
+                          "name": "Nights this year",
+                          "kind": "8",
+                          "value": "8"
+                      },
+                      {
+                          "code": "LastActivity",
+                          "name": "Last qualifying activity",
+                          "kind": "13",
+                          "value": "01/13/16"
+                      },
+                      {
+                          "code": "YearBegins",
+                          "name": "Beginning of the Year",
+                          "value": "1451606400"
+                      }
+                  ],
+                  "history": {
+                    "range": "complete",
+                    "state": "q0CCioctQQ5yqbsEkIWfe3vCzoFV6lw==",
+                    "rows": [
+                      {
+                        "fields": [
+                          {
+                            "code": "PostingDate",
+                            "name": "Post Date",
+                            "value": "1445904000"
+                          },
+                          {
+                            "code": "Info",
+                            "name": "Type",
+                            "value": "Stay"
+                          },
+                          {
+                            "code": "Miles",
+                            "name": "Points earned",
+                            "value": "+8,508"
+                          },
+                          {
+                            "code": "Description",
+                            "name": "Description",
+                            "value": "Nashville Airport Marriott 09/13/15 - 09/18/15"
+                          }
+                        ]
+                      }
+                    ],
+                    "subAccounts": [
+                      {
+                        "code": "SubAcc1",
+                        "rows": [
+                          {
+                            "fields": [
+                              {
+                                "code": "PostingDate",
+                                "name": "Post Date",
+                                "value": "1445904000"
+                              },
+                              {
+                                "code": "Info",
+                                "name": "Type",
+                                "value": "Bonus"
+                              },
+                              {
+                                "code": "Miles",
+                                "name": "Points earned",
+                                "value": "+2,500"
+                              },
+                              {
+                                "code": "Description",
+                                "name": "Description",
+                                "value": "POINTS PURCHASE - 2015"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/responses/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/responses/InputError'
+  /account/queue:
+    get:
+      security:
+        - Authentication: []
+      summary: 'Get account queue size'
+      description: 'If you ever need to do troubleshooting, you can always check how many of your account update requests are sitting in our queue using this method.'
+      operationId: 'queueInfo'
+      tags:
+        - loyalty_accounts
+      responses:
+        200:
+          description: 'Check account queue state'
+          schema:
+            $ref: '#/definitions/QueueInfoResponse'
+          examples:
+            application/json: |
+                {
+                  "queues": [
+                    {
+                      "provider": "spg",
+                      "itemsCount": 3
+                    },
+                    {
+                      "provider": "turkish",
+                      "itemsCount": 1
+                    },
+                    {
+                      "provider": "amtrak",
+                      "itemsCount": 5
+                    }
+                  ]
+                }
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/responses/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/responses/InputError'
+  /confirmation/check:
+    post:
+      security:
+        - Authentication: []
+      summary: 'Get reservation by conf #'
+      description: |
+        This method allows you to pull reservations from providers’ websites using a confirmation number without having to login using user credentials. Typically, you have to supply confirmation number and the traveler’s last name in order to retrieve a reservation but each website is different so requests will vary from provider to provider.
+      parameters:
+        -
+          name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/CheckConfirmationRequest'
+      tags:
+        - Reservations_via_conf#
+      examples:
+        application/json: |
+          {
+              "provider": "alaskaair",
+              "userId": "123",
+              "userData": "blah",
+              "priority": 9,
+              "fields": [
+                  {
+                      "code": "ConfNo",
+                      "value": "ABC123"
+                  },
+                  {
+                      "code": "LastName",
+                      "value": "Smith"
+                  }
+              ]
+          }
+      responses:
+        200:
+          description: 'Loyalty program information and itineraries'
+          schema:
+            $ref: '#/definitions/PostCheckConfirmationResponse'
+          examples:
+            application/json: |
+              {
+                  "requestId": "580d54da9d44d8ee39e29584"
+              }
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/responses/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/responses/InputError'
+  '/confirmation/check/{id}':
+    get:
+      security:
+        - Authentication: []
+      summary: 'Get reservation results'
+      description: 'If you are not using a `callbackUrl` you can get the results of your [`/confirmation/check`](#method-Reservations_via_conf#_1) request using the `requestId` that you got from that request.'
+      parameters:
+        -
+          name: id
+          in: path
+          required: true
+          type: string
+          description: 'The ID that uniquely identifies this request that you got from the [`/confirmation/check`](#method-Reservations_via_conf#_1) method'
+      tags:
+        - Reservations_via_conf#
+      responses:
+        200:
+          description: 'Confirmation information'
+          schema:
+            $ref: '#/definitions/CheckConfirmationResponse'
+          examples:
+            application/json: |
+                {
+                    "requestId": "580d54da9d44d8ee39e29584",
+                    "userData": "blah",
+                    "state": 1,
+                    "message": "",
+                    "checkDate": "2016-11-15T15:50:19+00:00",
+                    "requestDate": "2016-11-15T15:50:07+00:00",
+                    "itineraries": [
+                        {
+                          "requestId": "580d54da9d44d8ee39e29584",
+                          "userData": "blah",
+                          "state": 1,
+                          "message": "",
+                          "checkDate": "2017-01-07T20:14:23+00:00",
+                          "requestDate": "2017-01-07T20:14:15+00:00",
+                          "itineraries": [
+                            {
+                              "providerDetails": {
+                                "confirmationNumber": "ABC321",
+                                "accountNumbers": "43214321, 56785678",
+                                "name": "Alaska Air",
+                                "code": "alaskaair"
+                              },
+                              "totalPrice": {
+                                "total": 316.25,
+                                "currencyCode": "USD",
+                                "tax": 27.17
+                              },
+                              "type": "flight",
+                              "segments": [
+                                {
+                                  "departure": {
+                                    "airportCode": "SEA",
+                                    "name": "Seattle ",
+                                    "localDateTime": "2017-01-21T06:15:00",
+                                    "address": {
+                                      "text": "Seattle ",
+                                      "addressLine": "17801 International Boulevard",
+                                      "city": "Seattle",
+                                      "stateName": "Washington",
+                                      "countryName": "United States",
+                                      "postalCode": "98158",
+                                      "lat": "47.4502499",
+                                      "lng": "-122.3088165",
+                                      "timezone": "-28800"
+                                    }
+                                  },
+                                  "arrival": {
+                                    "airportCode": "LAX",
+                                    "name": "Los Angeles, CA ",
+                                    "localDateTime": "2017-01-21T08:49:00",
+                                    "address": {
+                                      "text": "Los Angeles, CA ",
+                                      "addressLine": "1 World Way",
+                                      "city": "Los Angeles",
+                                      "stateName": "California",
+                                      "countryName": "United States",
+                                      "postalCode": "90045",
+                                      "lat": "33.9415889",
+                                      "lng": "-118.40853",
+                                      "timezone": "-28800"
+                                    }
+                                  },
+                                  "seats": [
+                                    "2A",
+                                    "2B"
+                                  ],
+                                  "flightNumber": "446",
+                                  "airlineName": "Alaska",
+                                  "aircraft": "Boeing 737-900",
+                                  "traveledMiles": "954",
+                                  "cabin": "Main",
+                                  "bookingClass": "R",
+                                  "duration": "2h 34m",
+                                  "meal": "Food for Purchase"
+                                }
+                              ],
+                              "travelers": [
+                                {
+                                  "fullName": "John Smith"
+                                },
+                                {
+                                  "fullName": "Jennifer Smith"
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                    ]
+                }
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/responses/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/responses/InputError'
+  /confirmation/queue:
+    get:
+      security:
+        - Authentication: []
+      summary: 'Get reservation queue size'
+      description: 'If you ever need to do troubleshooting, you can always check how many of your [`/confirmation/check`](#method-Reservations_via_conf#_1) requests are sitting in our queue using this method.'
+      operationId: 'queueInfo'
+      tags:
+        - Reservations_via_conf#
+      responses:
+        200:
+          description: 'Check confirmation queue state'
+          schema:
+            $ref: '#/definitions/QueueInfoResponse'
+          examples:
+            application/json: |
+                {
+                  "queues": [
+                    {
+                      "provider": "spg",
+                      "itemsCount": 3
+                    },
+                    {
+                      "provider": "turkish",
+                      "itemsCount": 1
+                    },
+                    {
+                      "provider": "amtrak",
+                      "itemsCount": 5
+                    }
+                  ]
+                }
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/responses/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/responses/InputError'
+definitions:
+  AdminLogsRequest:
+    type: object
+    properties:
+      partner:
+        type: string
+      method:
+        type: string
+      provider:
+        type: string
+      userData:
+        type: string
+      requestId:
+        type: string
+      login:
+        type: string
+      login2:
+        type: string
+      login3:
+        type: string
+    required:
+      - partner
+      - method
+  AdminLogsResponse:
+    type: object
+    properties:
+      files:
+        type: array
+        items:
+          $ref: '#/definitions/LogItem'
+      bucket:
+        type: string
+  LogItem:
+    type: object
+    properties:
+      updateDate:
+        type: string
+      fileName:
+        type: string
+  AdminStatisticRequest:
+    type: object
+    properties:
+      partner:
+        type: string
+  AdminStatisticResponse:
+    type: object
+    properties:
+      result:
+        type: string
+  ProvidersListItem:
+    type: object
+    properties:
+      code:
+        type: string
+        description: 'Alpha-numeric value with no spaces that uniquely identifies any given provider. This code can be used to query all the details of that provider as follows: [`/providers/{code}`](#method-providers_2)'
+      displayName:
+        type: string
+        description: 'User friendly display name of the provider. Typically includes both the company name and the name of the loyalty program, i.e. American Airlines (AAdvantage).'
+      kind:
+        type: integer
+        description: |
+            Type of the provider. The possible values are&#58;
+
+            **1** - Airline
+
+            **2** - Hotel
+
+            **3** - Car rental
+
+            **4** - Train
+
+            **5** - Other
+
+            **6** - Credit card
+
+            **7** - Shopping
+
+            **8** - Dining
+
+            **9** - Survey
+        minimum: 1
+        maximum: 9
+    required:
+      - code
+      - displayName
+      - kind
+  ProviderInfoResponse:
+    type: object
+    properties:
+      kind:
+        type: integer
+        description: |
+            Type of the provider. The possible values are&#58;
+
+            **1** - Airline
+
+            **2** - Hotel
+
+            **3** - Car rental
+
+            **4** - Train
+
+            **5** - Other
+
+            **6** - Credit card
+
+            **7** - Shopping
+
+            **8** - Dining
+
+            **9** - Survey
+        minimum: 1
+        maximum: 9
+      code:
+        type: string
+        description: 'Alpha-numeric value with no spaces that uniquely identifies any given provider.'
+      displayName:
+        type: string
+        description: 'User friendly display name of the provider. Typically includes both the company name and the name of the loyalty program, i.e. American Airlines (AAdvantage).'
+      providerName:
+        type: string
+        description: Provider company name, i.e. "American Airlines".
+      programName:
+        type: string
+        description: Loyalty program name, i.e. "AAdvantage".
+      login:
+        description: An array describing the login field of that provider. You can use this data to build your UI. For example, `login.title` gives you the caption that you need to provide in your interface.
+        $ref: '#/definitions/Input'
+      login2:
+        description: An array describing the login2 field of that provider (whenever applicable). A common example would be a drop down list of countries that we support. For example, for BestBuy we may support the USA and the Canada regions (completely different websites). `login2` would describe that.
+        $ref: '#/definitions/Input'
+      login3:
+        description: Similar in concept to `login2`, needed when an extra piece of input data is required from the user.
+        $ref: '#/definitions/Input'
+      password:
+        description: The password field caption you can use in your interface, i.e. Password, PIN, etc.
+        $ref: '#/definitions/Input'
+      'properties':
+        type: array
+        description: The array of account properties (secondary attributes) that we may gather from the account on top of the account balance.
+        items:
+          $ref: '#/definitions/PropertyInfo'
+      autoLogin:
+        type: boolean
+        description: Tells you if our server-side auto login is supported for this provider. Unfortunately, you can’t rely on this attribute 100% as first of all it may change without us detecting it and second it may work in some browsers but not in others.
+      deepLinking:
+        type: boolean
+        description: Deep linking is an auto-login to a specific URL on the provider’s website. Similarly, to the `autoLogin` attribute it is not very reliable for the same reasons.
+      canCheckConfirmation:
+        type: boolean
+        description: Tells you if we are able to retrieve travel itineraries from this provider using a confirmation number
+      canCheckItinerary:
+        type: boolean
+        description: Tells you if we support retrieving travel reservations from this provider.
+      canCheckPastItinerary:
+        type: boolean
+        description: Tells you if a provider is capable of retrieving past reservations from the online account.
+      canCheckExpiration:
+        type: integer
+        description: |
+            Tells you if we support retrieving the expiration dates for accounts that belong to this provider. Possible values are&#58;
+
+            **0** - No
+
+            **1** - Yes
+
+            **2** - Balance never expires
+        minimum: 0
+        maximum: 2
+      confirmationNumberFields:
+        type: array
+        description: Array of fields that are required to retrieve itineraries by confirmation number
+        items:
+          $ref: '#/definitions/Input'
+      historyColumns:
+        type: array
+        description: Array of columns that you can expect in return for account history. Empty, if provider does not support history parsing.
+        items:
+          $ref: '#/definitions/PropertyInfo'
+      eliteLevelsCount:
+        type: integer
+        description: The total number of elite statuses this provider has. Can be used in calculating elite status progress to the highest level.
+      canParseHistory:
+        type: boolean
+        description: Tells you if we support retrieving historical account transactions for accounts belonging to this provider.
+      canParseFiles:
+        type: boolean
+        description: Tells you if we support retrieving account statements in a pdf (or similar) format.
+  Input:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Field code is used by developers to identify the type of this field, i.e. “Login”
+      title:
+        type: string
+        description: Field title is a user-friendly name of the field that you can show as a caption in your UI.
+      options:
+        type: array
+        description: If there is a limited set of values that can go into this field, those options would be listed in this array. Use this array to create a drop down list in your UI. 
+        items:
+          $ref: '#/definitions/PropertyInfo'
+      'required':
+        type: boolean
+        description: Even if the `options` array gives you an empty string as an option, if this field is set to true don’t accept an empty value from the user.
+      defaultValue:
+        type: string
+        description: The default value that we expect for this field.
+  Property:
+    type: object
+    description: We try to standardize the secondary properties as much as possible. For that reason we have the property `kind` value which identifies what type of attribute this is.
+    properties:
+      code:
+        type: string
+        description: This is usually a short codename of the property as described in the in the `/providers/{provider code}` method. I.e. "LastActivity"
+      name:
+        type: string
+        description: User friendly name of the property such as “Account number”. You can display this to your end users.
+      kind:
+        type: string
+        description: |
+          Type of property, the possible values are: 
+
+          **0** - Basic property 
+
+          **1** - Account number 
+
+          **2** - Expiration
+
+          **3** - Elite Status 
+
+          **4** - Lifetime points
+
+          **5** - Member since
+
+          **6** - Expiring balance (in some cases only a portion of the entire balance may expire)
+
+          **7** - Points / miles earned year-to-date (YTD).
+
+          **8** - Segments earned year-to-date (YTD).
+
+          **9** - Next elite level
+
+          **10** - Points / miles needed to get to the next elite level
+
+          **11** - Flights / nights needed to get to the next elite level.
+
+          **12** - Name of the account holder, as listed on the account.
+
+          **13** - Date of the last account activity.
+
+          **14** - Points / miles needed to get the next reward
+
+          **15** - Elite level expiration date
+
+          **16** - Points / miles needed to retain the current elite level
+
+          **17** - Segments / flights needed to retain the current elite level
+      value:
+        type: string
+        description: The actual property value, such as “Silver”
+  PropertyInfo:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Property code name – unique within a single provider. Can only have English numbers and letters with no spaces.
+      name:
+        type: string
+        description: User friendly name of the property such as “Account number”. You can display this to your end users.
+      kind:
+        type: string
+        description: |
+          Type of property, the possible values are: 
+
+          **0** - Basic property 
+
+          **1** - Account number 
+
+          **2** - Expiration
+
+          **3** - Elite Status 
+
+          **4** - Lifetime points
+
+          **5** - Member since
+
+          **6** - Expiring balance (in some cases only a portion of the entire balance may expire)
+
+          **7** - Points / miles earned year-to-date (YTD).
+
+          **8** - Segments earned year-to-date (YTD).
+
+          **9** - Next elite level
+
+          **10** - Points / miles needed to get to the next elite level
+
+          **11** - Flights / nights needed to get to the next elite level.
+
+          **12** - Name of the account holder, as listed on the account.
+
+          **13** - Date of the last account activity.
+
+          **14** - Points / miles needed to get the next reward
+
+          **15** - Elite level expiration date
+
+          **16** - Points / miles needed to retain the current elite level
+
+          **17** - Segments / flights needed to retain the current elite level
+  CheckAccountPackageRequest:
+    type: object
+    properties:
+      package:
+        type: array
+        description: 'An array of accounts to be updated by the service. The individual accounts in this array need to be defined the same way you would define a [single account](#method-loyalty_accounts_1).'
+        items:
+          $ref: '#/definitions/CheckAccountRequest'
+  PostCheckPackageResponse:
+    type: object
+    properties:
+      package:
+        type: array
+        description: 'In response you will get an array of request ids in the same order in which you sent the accounts in the request object. You can use these request ids to get the results of the account updates using the [`/account/check/{id}`](#method-loyalty_accounts_3) method in case if you are not using callback URLs.'
+        items:
+          $ref: '#/definitions/PostCheckResponse'
+  AutoLoginRequest:
+    type: object
+    properties:
+      provider:
+        type: string
+        description: 'Alpha-numeric value with no spaces that uniquely identifies any given provider. Can be retrieved from the [`/providers/list`](#method-providers_1) method.'
+      login:
+        type: string
+        description: |
+          User's login value to be used to login to the provider's website
+      login2:
+        type: string
+        description: 'Second login value. A common example would be a drop down list of countries that we support. For example, for BestBuy we may support the USA and the Canada regions (completely different websites). List of supported values can be retrieved from the [`/providers/list`](#method-providers_1) method.'
+      login3:
+        type: string
+        description: 'Similar in concept to `login2`, needed when an extra piece of input data is required from the user.'
+      password:
+        type: string
+        description: |
+          User's password value to be used to login to the provider's website
+      userId:
+        type: string
+        description: 'UserID that uniquely identifies the user in your system. Required for billing / accounting purposes.'
+      userData:
+        type: string
+        description: "Any data you wish to send. It will be returned untouched in the response. Could be used for matching requests to responses."
+      targetUrl:
+        type: string
+        description: 'This parameter allows you to do so called “deep linking”, in other words after we perform the auto-login we will navigate the logged in user to the URL that you specify in this attribute.'
+      startUrl:
+        type: string
+        description: 'This attribute allows you to first navigate the user to some page (typically some type of an affiliate link) and then proceed to the targetURL or whatever the default page that users sees after they login.'
+      supportedProtocols:
+        type: array
+        description: 'When we load the auto-login page we need to know which protocols your website supports, do you support http only or https only or both? Ideally your domain supports both protocols, and we will always try to use https whenever possible.'
+        items:
+          type: string
+          enum:
+            - https
+            - http
+    required:
+      - provider
+      - login
+      - userId
+      - supportedProtocols
+  AutoLoginResponse:
+    type: object
+    properties:
+      response:
+        type: string
+        description: 'The response attribute will contain an entire html page that you need to embed into a hidden iframe on your website. Once loaded, it will open up the provider’s website where the user will be logged in. As the page is getting loaded we recommend you to show some sort of “Please wait” message to the end user. All of this is designed so that the user will not know that AwardWallet is performing the auto-login for them.'
+      userData:
+        type: string
+        description: "This field returns whatever data you put in it when you made your request as is. Can be used for some sort of tracking."
+  BaseRequest:
+    type: object
+    properties:
+      provider:
+        type: string
+        description: 'Alpha-numeric value with no spaces that uniquely identifies any given provider. Can be retrieved from the [`/providers/list`](#method-providers_1) method.'
+      userId:
+        type: string
+        description: 'UserID that uniquely identifies the user in your system. Required for billing / accounting purposes.'
+      userData:
+        type: string
+        description: "Any data you wish to send. It will be returned untouched in the response. Could be used for matching requests to responses."
+      priority:
+        type: integer
+        description: 'Request priority values range from 1 to 9, where 1 is the lowest priority and 9 is the highest priority. In some cases, we throttle requests with priorities lower than X (default is 9). Please use this attribute to separate background account updates from the foreground account updates. In other words, background updating could have priority of 1 and accounts that are updated when an actual user is actually waiting for the results with priority of 9. This way your background updating will never negatively affect your updates when someone is actually waiting for the results.'
+        minimum: 1
+        maximum: 9
+      callbackUrl:
+        type: string
+        description: 'All callback URLs must be registered with us prior to use. For production deployments this is the recommended way to work with our API. So the idea is – you send us a request to update a loyalty account we send you the response as soon as we have it to the callback URL that was sent with the request. We will use http / basic authentication to authenticate ourselves. So when setting up your callback URLs with us you also need to provide a username (i.e. awardwallet) and a password that we will use to authenticate when sending callbacks to that URL.'
+      retries:
+        type: integer
+        description: Defines how many times we will retry account updating in case of an `unknown error`. If the user provided us with invalid credentials and we detect that, we will not keep retrying as that may lock out the user. Possible values are 0 to 4. The default is 4.
+        minimum: 0
+        maximum: 4
+        default: 4
+      timeout:
+        type: integer
+        description: 'Time in seconds which determines how long the account is allowed to sit in the queue. If that time passes and we have not retrieved the account details we will throw a "timeout" error. This way, if someone is waiting for an account update (staring at their device) and if it takes too long we will remove that account from the queue and will give a meaningful error (thus freeing up our resources) to update other accounts.'
+    required:
+      - userId
+      - priority
+      - provider
+  CheckAccountRequest:
+    type: object
+    allOf:
+      -
+        $ref: "#/definitions/BaseRequest"
+      -
+        $ref: "#/definitions/LoginFields"
+      -
+        properties:
+          browserState:
+            type: string
+            description: 'When you update accounts that have security questions for the first time you will get a `browserState` attribute back from us. Please store it on your end and send it with your next account update so that the user doesn’t get prompted for security questions again.'
+          parseItineraries:
+            type: boolean
+            description: 'Tells us if you also wish to retrieve itineraries from the loyalty account. It takes time (and therefore resources) to retrieve itineraries so please set this parameter to `false` if you don’t need to pull reservations during account updating.'
+            default: false
+          parsePastItineraries:
+            type: boolean
+            description: 'Set to `true` if you wish us to also retrieve past itineraries from this account.'
+            default: false
+          history:
+            description: |
+              Object that defines if (and what) history should be gathered from the account.
+            $ref: '#/definitions/RequestItemHistory'
+        required:
+          - provider
+          - login
+          - userId
+          - priority
+  CheckConfirmationRequest:
+    type: object
+    description: Request for confirmation number checking
+    allOf:
+      -
+        $ref: "#/definitions/BaseRequest"
+      -
+        properties:
+          fields:
+            type: array
+            description: Each provider may have different fields / values that need to be submitted to retrieve reservations by confirmation number. To know what filed names to pass you need to call the `/providers/{code}` method and look at the `confirmationNumberFields` array.
+            items:
+              $ref: '#/definitions/InputField'
+        required:
+          - provider
+          - userId
+          - fields
+          - priority
+  RequestItemHistory:
+    type: object
+    description: History items are the individual transactions (Account Activity) that show up on a loyalty account. It takes time to gather this information, please don’t request it unless you really need it.
+    properties:
+      range:
+        type: string
+        description: |
+          There are two possible values that can be sent in this attribute:
+          
+          **complete** - this means that you want AwardWallet to return a complete history of all transactions on for this account. In this scenario, you don’t need to send the `state` attribute to us. Also, please note that updating will take more time this way.
+          
+          **incremental** - this means you already have the account transactions history on your end and you are only interested in receiving the additional (incremental) transactions that happened since the last time you updated this account.
+        enum:
+          - "complete"
+          - "incremental"
+      state:
+        type: string
+        description: 'This attribute is only applicable if you set the `range` attribute to `incremental`. For this attribute, you need to send us the same `state` string value that we sent to you in the previous account update response.'
+  RequestItemFiles:
+    type: object
+    properties:
+      parse:
+        type: boolean
+        description: 'Parse and return account files'
+        default: false
+      version:
+        type: integer
+        description: 'Files version you have on your side. Null means no files cache.'
+      lastDate:
+        type: string
+        format: date
+        description: 'Up to what date do you have files cache on your end. Null means no cache. We will return partial files, starting from (including) this date.'
+  Answer:
+    description: 'Some programs require users to answer security questions to get into their loyalty accounts. In those cases, you will receive a response from the `/account/check` method that will have a `question` string. You need to get the answer from the user and send it to us along with the question. Each account may have multiple questions and answers. Please store all of them on your end and send them with each account update request.'
+    type: object
+    properties:
+      question:
+        type: string
+        description: 'Security question that is unique to that specific account'
+      answer:
+        type: string
+        description: 'Security answer that is unique to that specific account which corresponds to the security question.'
+    required:
+      - question
+      - answer
+  QueueInfoItem:
+    type: object
+    properties:
+      provider:
+        type: string
+        description: 'Provider code'
+      priority:
+        type: integer
+        description: Request priority
+      itemsCount:
+        type: integer
+        description: Total number of update requests for your API account waiting to be processed by our service for a given provider.
+  QueueInfoResponse:
+    type: object
+    properties:
+      queues:
+        type: array
+        description: Array of queue items grouped by provider.
+        items:
+          $ref: '#/definitions/QueueInfoItem'
+  PostCheckConfirmationResponse:
+    type: object
+    properties:
+      requestId:
+        type: string
+        description: 'An ID that uniquely identifies this request. You can use this value to get the results of this update request using the [`/confirmation/check/{id}`](#method-Reservations_via_conf#_2) method'
+    required:
+      - requestId
+  BaseCheckResponse:
+    type: object
+    properties:
+      requestId:
+        type: string
+        description: 'An ID that uniquely identifies this request.'
+      userData:
+        type: string
+        description: 'This field returns whatever data you put in it when you made your request as is. Can be used for some sort of tracking.'
+      provider:
+        type: string
+        description: 'Alpha-numeric value with no spaces that uniquely identifies any given provider, i.e. "marriott"'
+      message:
+        type: string
+        description: 'Human readable error message. You can show this message to your users.'
+      errorReason:
+        type: string
+        description: 'Technical error reason. Something like "AwardWallet sign-in attempt was blocked by the provider" or "We could not recognize captcha". Do not show this message to the end user.'
+      checkDate:
+        type: string
+        format: date-time
+        description: Date and time when this account information was retrieved from the provider’s website.
+      requestDate:
+        type: string
+        format: date-time
+        description: Date and time of when the request was sent to us, i.e. when the account was put into our queue for updating.
+      warnings:
+        description: If we want to return any warnings along with the response we will return those warnings in this field. Please note that warnings can be returned alongside a completely valid response, so the fact that there is a warning doesn’t mean the rest of the response is invalid.
+        type: array
+        items:
+          type: string
+  CheckConfirmationResponse:
+    type: object
+    allOf:
+      -
+        $ref: "#/definitions/BaseCheckResponse"
+      -
+        properties:
+          state:
+            type: integer
+            description: |
+                **1** - Reservation was successfully retrieved.
+
+                **6** - AwardWallet failed to parse the provider’s website.
+
+                **100** – The provider did not accept the parameters you sent, i.e. last name and confirmation number combination is not valid
+          itineraries:
+            type: array
+            description: An array of itineraries that corresponds to this confirmation number.
+            items:
+              anyOf:
+                - $ref: "#/definitions/Flight"
+                - $ref: "#/definitions/HotelReservation"
+                - $ref: "#/definitions/CarRental"
+                - $ref: "#/definitions/Event"
+                - $ref: "#/definitions/Transportation"
+                - $ref: "#/definitions/Cruise"
+                - $ref: "#/definitions/Cancelled"
+  PostCheckResponse:
+    type: object
+    properties:
+      requestId:
+        type: string
+        description: 'An ID that uniquely identifies this request. You can use this value to get the results of this update request using the [`/account/check/{id}`](#method-loyalty_accounts_1) method'
+    required:
+      - requestId
+  CheckAccountResponse:
+    type: object
+    allOf:
+      -
+        $ref: "#/definitions/BaseCheckResponse"
+      -
+        properties:
+          login:
+            type: string
+            description: |
+                User's login value that was used to login to the provider's website
+          login2:
+            type: string
+            description: 'Second login value such as a geographical region. Empty in most cases.'
+          login3:
+            type: string
+            description: 'Third login value. Empty in most cases.'
+          state:
+            type: integer
+            minimum: 0
+            maximum: 11
+            description: |
+               **0** – The account data has not yet been retrieved from the provider’s website. Please repeat your request again later to get the results.
+
+               **1** - Account information has been successfully retrieved.
+
+               **2** -	Error. The provider did not accept the credentials for this account.
+
+               **3** - Error. The provider has locked this account out due to multiple invalid login attempts.
+
+               **4** -	Error. The provider has returned some error or requires some additional user action, such as to update personal information.
+
+               **5** -	This provider has been disabled on AwardWallet.
+
+               **6** - An Unknown Error occurred, something unexpected happened and AwardWallet failed to retrieve the data.
+
+               **9** - Account information was successfully retrieved; however, there was some type of a warning. The warning message is returned in the `message` field.
+
+               **10** - The end user needs to answer a security question in order for this account information to be retrieved. The actual question is returned in the `question` field.
+
+               **11** - Retrieving this account took too much time. The request timed out.
+          question:
+            type: string
+            description: 'Security question to be shown to the end user to get the answer.'
+          balance:
+            type: number
+            format: double
+            description: "Account balance.  In some cases, you may get a `null` value which means that this account doesn’t have a main account balance. The most common scenario for this is when there are multiple sub accounts under this account, each having its own balance."
+          expirationDate:
+            type: string
+            format: date
+            description: Account balance expiration date
+          'properties':
+            type: array
+            description: We gather as much data as possible from any given account on top of the main attributes like the account balance and its expiration date. These secondary properties will be available in this array.
+            items:
+              $ref: '#/definitions/Property'
+          eliteLevel:
+            type: integer
+            description: The elite level of this account in the loyalty program.
+          noItineraries:
+            type: boolean
+            description: |
+               Sometimes our service may return zero itineraries even though there are itineraries on the account. This could happen if the prover’s website changed and our parsers are not aware of it. This doesn’t mean you should delete all user itineraries on your end. However, if we are able to detect with very high probability that there are indeed no itineraries on the account (i.e. it is explicitly stated on the website: “No future reservations”) we will set this parameter to true. Meaning that we are certain there are no future reservations for this account.
+          neverExpires:
+            type: boolean
+            description: The loyalty balance on this account never expires.
+          subAccounts:
+            type: array
+            description: Array of subaccounts
+            items:
+              $ref: '#/definitions/SubAccount'
+          detectedCards:
+            type: array
+            description: Designed for credit card accounts. This array will list all the credit cards that we found under this account.
+            items:
+              $ref: '#/definitions/DetectedCard'
+          browserState:
+            type: string
+            description: Browser state such as cookies and other info. Please store this data on your end with the account and always send it back to us for any subsequent `/account/check` requests. This will make your accounts updating much faster.
+          itineraries:
+            type: array
+            description: If you set `parseItineraries` to `true` in your request you will get an array of all the itineraries listed under the account. There are different types of itineraries, such as air, hotel, rental car, etc. They all have slightly different schemas and they are all [defined below](#section-Itineraries).
+            items:
+              anyOf:
+                - $ref: "#/definitions/Flight"
+                - $ref: "#/definitions/HotelReservation"
+                - $ref: "#/definitions/CarRental"
+                - $ref: "#/definitions/Event"
+                - $ref: "#/definitions/Transportation"
+                - $ref: "#/definitions/Cruise"
+                - $ref: "#/definitions/Cancelled"
+          history:
+            description: 'Object that defines history items which are the individual transactions (account activity) that show up on a loyalty account.'
+            $ref: '#/definitions/History'
+          files:
+            type: array
+            description: Array of files such as PDF statements or e-receipts from an account.
+            items:
+              $ref: '#/definitions/File'
+          filesVersion:
+            type: integer
+            description: Files cache version. Retrieving files, such as pdf statements from an account is an experimental feature that we have. Most likely you don’t use it and don’t need to worry about any of the “files…” attributes. In case if you do, store this value on your side for subsequent requests to `/account/check`, to populate the CheckAccountRequest.FilesVersion field. Could be `null` if there are no files.
+          filesCacheValid:
+            type: boolean
+            description: |
+                **true** - means the `files` array contains partial response, such as only the latest pdf statements, add those statements to the ones you already have for this account instead of overwriting the statements that you have on your end.
+
+                **false** - means you should discard the files (pdf statements) that you have on your end, the `files` array will contain a full set of files for that account.
+
+                **null** - means you have not filled the `filesVersion` and the `filesLastDate` fields in your request
+          invalidAnswers:
+            type: array
+            description: An array of answers to security questions that we tried and determined that the answers are not valid. You should mark these answers as invalid on your end.
+            items:
+              $ref: '#/definitions/Answer'
+          options:
+            type: string
+            description: This is a reserved field. Please ignore unless our support tells you otherwise.
+  Itinerary:
+    type: object
+    properties:
+      type:
+        type: "string"
+        description: |
+          Type of reservation. Possible options are:
+
+          **-** flight
+
+          **-** carRental
+
+          **-** hotelReservation
+
+          **-** transportation
+
+          **-** cruise
+
+          **-** event
+
+          **-** cancelled
+        enum:
+          - "flight"
+          - "carRental"
+          - "hotelReservation"
+          - "transportation"
+          - "cruise"
+          - "event"
+          - "cancelled"
+      providerDetails:
+        description: 'An object that contains common attributes that are related to the whole reservation.'
+        $ref: '#/definitions/ProviderDetails'
+      totalPrice:
+        description: 'An object that describes what was paid for this reservation, i.e. fees, taxes, miles, points, etc.'
+        $ref: '#/definitions/TotalPrice'
+    required:
+      - "type"
+      - "providerDetails"
+  Flight:
+    allOf:
+      -
+        $ref: "#/definitions/Itinerary"
+      -
+        properties:
+          travelers:
+            type: "array"
+            description: "Names of the people listed on the reservation"
+            items:
+              $ref: "#/definitions/Person"
+          ticketNumbers:
+            type: "array"
+            description: There may be different ticket numbers associated with an itinerary. All the ticket numbers that we gather would be presented as an array in this field.
+            items:
+              type: "string"
+          segments:
+            type: "array"
+            description: "An array describing individual flight segments of the itinerary."
+            items:
+              $ref: "#/definitions/FlightSegment"
+        required:
+          - "segments"
+    examples:
+      application/json: |
+        {
+          "providerDetails": {
+            "confirmationNumber": "ABC321",
+            "accountNumbers": "43214321, 56788765",
+            "name": "Alaska Air",
+            "code": "alaskaair"
+          },
+          "totalPrice": {
+            "total": 322.25,
+            "currencyCode": "USD",
+            "tax": 37.38
+          },
+          "type": "flight",
+          "segments": [
+            {
+              "departure": {
+                "airportCode": "LAX",
+                "name": "Los Angeles, CA ",
+                "localDateTime": "2017-02-02T10:00:00",
+                "address": {
+                  "text": "Los Angeles, CA ",
+                  "addressLine": "1 World Way",
+                  "city": "Los Angeles",
+                  "stateName": "California",
+                  "countryName": "United States",
+                  "postalCode": "90045",
+                  "lat": "33.9415889",
+                  "lng": "-118.40853",
+                  "timezone": "-28800"
+                }
+              },
+              "arrival": {
+                "airportCode": "SEA",
+                "name": "Seattle ",
+                "localDateTime": "2017-02-02T12:45:00",
+                "address": {
+                  "text": "Seattle ",
+                  "addressLine": "17801 International Boulevard",
+                  "city": "Seattle",
+                  "stateName": "Washington",
+                  "countryName": "United States",
+                  "postalCode": "98158",
+                  "lat": "47.4502499",
+                  "lng": "-122.3088165",
+                  "timezone": "-28800"
+                }
+              },
+              "seats": [
+                "3C",
+                "3D"
+              ],
+              "flightNumber": "475",
+              "airlineName": "Alaska",
+              "aircraft": "Boeing 737-900",
+              "traveledMiles": "954",
+              "cabin": "Main",
+              "bookingClass": "R",
+              "duration": "2h 45m",
+              "meal": "Food for Purchase"
+            }
+          ],
+          "travelers": [
+            {
+              "fullName": "John Smith"
+            },
+            {
+              "fullName": "Jennifer Smith"
+            }
+          ]
+        }
+  Transportation:
+    description: "Public Transportation or Shuttle bus"
+    allOf:
+      -
+        $ref: "#/definitions/Itinerary"
+      -
+        properties:
+          travelers:
+            type: "array"
+            description: "Names of the people listed on the reservation"
+            items:
+              $ref: "#/definitions/Person"
+          segments:
+            type: "array"
+            description: "An array describing individual travel segments of the itinerary."
+            items:
+              $ref: "#/definitions/TransportationSegment"
+        required:
+          - "segments"
+    examples:
+      application/json: |
+        {
+          "providerDetails" : {
+              "confirmationNumber": "123ABC",
+              "name" : "Amtrak",
+              "code" : "amtrak"
+          },
+          "totalPrice" : {
+              "total" : 40.25,
+              "currencyCode" : "$"
+          },
+          "type" : "transportation",
+          "segments" : [
+              {
+                  "departure" : {
+                      "stationCode" : "CHI",
+                      "name" : "Chicago, IL ",
+                      "localDateTime" : "2017-01-12T20:05:00",
+                      "address" : {
+                          "text" : "Chicago, IL ",
+                          "city" : "Chicago",
+                          "stateName" : "Illinois",
+                          "countryName" : "United States",
+                          "lat" : "41.8781136",
+                          "lng" : "-87.6297982",
+                          "timezone" : "-21600"
+                      }
+                  },
+                  "arrival" : {
+                      "stationCode" : "CHM",
+                      "name" : "Champaign, IL ",
+                      "localDateTime" : "2017-01-12T22:34:00",
+                      "address" : {
+                          "text" : "Champaign, IL ",
+                          "city" : "Champaign",
+                          "stateName" : "Illinois",
+                          "countryName" : "United States",
+                          "lat" : "40.1164204",
+                          "lng" : "-88.2433829",
+                          "timezone" : "-21600"
+                      }
+                  },
+                  "transport" : {
+                      "type" : "train"
+                  },
+                  "scheduleNumber" : "59",
+                  "duration" : "2 hr, 29 min"
+              }
+          ],
+          "travelers" : [
+              {
+                  "fullName" : "John Smith"
+              },
+              {
+                  "fullName" : "Jennifer Smith"
+              }
+          ]
+        }
+  HotelReservation:
+    description: "hotel reservation"
+    allOf:
+      -
+        $ref: "#/definitions/Itinerary"
+      -
+        properties:
+          hotelName:
+            type: "string"
+            description: Name of the hotel, i.e. “Hilton Garden Inn Atlanta Perimeter Center”
+          chainName:
+            type: "string"
+            description: Name of the hotel chain.
+          address:
+            $ref: "#/definitions/Address"
+            description: An object describing all the details of the address of the hotel.
+          checkInDate:
+            type: "string"
+            description: Check-in date.
+          checkOutDate:
+            type: "string"
+            description: Check-out date.
+          phone:
+            type: "string"
+            description: Hotel’s phone number.
+          fax:
+            type: "string"
+            description: Hotel’s fax number.
+          guests:
+            type: "array"
+            description: An array describing guests that are listed on the reservation.
+            items:
+              $ref: "#/definitions/Person"
+          guestCount:
+            type: "integer"
+            description: Number of guests on the reservation.
+            minimum: 1
+          kidsCount:
+            type: "integer"
+            description: Number of kids listed on the reservation.
+            minimum: 0
+          roomsCount:
+            type: "integer"
+            description: Number of rooms listed on the reservation.
+            minimum: 1
+          cancellationPolicy:
+            type: "string"
+            description: Cancelation policy of this specific reservation.
+          rooms:
+            type: "array"
+            description: An array describing the room(s) listed on the reservation.
+            items:
+              $ref: "#/definitions/Room"
+        required:
+          - "hotelName"
+          - "address"
+          - "checkInDate"
+          - "checkOutDate"
+    examples:
+      application/json: |
+        {
+          "providerDetails": {
+            "confirmationNumber": "1122334455",
+            "name": "Marriott",
+            "code": "marriott"
+          },
+          "totalPrice": {
+            "total": 1659.39,
+            "cost": 1622.51,
+            "currencyCode": "USD",
+            "tax": 36.88
+          },
+          "type": "hotelReservation",
+          "hotelName": "Orlando World Center Marriott",
+          "checkInDate": "2017-01-08T00:00:00",
+          "checkOutDate": "2017-01-13T00:00:00",
+          "address": {
+            "text": "8701 World Center Drive, Orlando, Florida 32821 USA",
+            "addressLine": "8701 World Center Drive",
+            "city": "Orlando",
+            "stateName": "Florida",
+            "countryName": "United States",
+            "postalCode": "32821",
+            "lat": "28.3609503",
+            "lng": "-81.5099458",
+            "timezone": "-18000"
+          },
+          "phone": "+1-407-239-4200",
+          "guests": [
+            {
+              "fullName": "Mr. John Smith",
+              "fullName": "Ms. Jenifer Smith"
+            }
+          ],
+          "kidsCount": 0,
+          "guestCount": 2,
+          "roomsCount": 1,
+          "rooms": [
+            {
+              "type": "5 nights at 270.00 USD 1,659.39 USD Total hotel currency (incl. est. taxes)",
+              "description": ""
+            }
+          ],
+          "cancellationPolicy": "If you cancel for any reason, attempt to modify this reservation, or do not arrive on your specified check-in date, your payment is non-refundable."
+        }
+  Cruise:
+    type: object
+    allOf:
+      -
+        $ref: "#/definitions/Itinerary"
+      -
+        properties:
+          travelers:
+            type: "array"
+            description: "Names of the people listed on the reservation"
+            items:
+              $ref: "#/definitions/Person"
+          segments:
+            type: "array"
+            description: "An array describing individual travel segments of the itinerary."
+            items:
+              $ref: "#/definitions/CruiseSegment"
+          cruiseDetails:
+            description: 'Cruise Details'
+            $ref: '#/definitions/CruiseDetails'
+    examples:
+      application/json: |
+        {
+          "providerDetails": {
+            "confirmationNumber": "3456789",
+            "name": "Norwegian Cruise Line",
+            "code": "norwegiancruise"
+          },
+          "totalPrice": [],
+          "type": "cruise",
+          "segments": [
+            {
+              "departure": {
+                "name": "New Orleans, Louisiana",
+                "localDateTime": "2017-01-08T16:00:00",
+                "address": {
+                  "text": "New Orleans, Louisiana",
+                  "city": "New Orleans",
+                  "stateName": "Louisiana",
+                  "countryName": "United States",
+                  "lat": "29.9510658",
+                  "lng": "-90.0715323",
+                  "timezone": "-21600"
+                }
+              },
+              "arrival": {
+                "name": "Cozumel, Mexico",
+                "localDateTime": "2017-01-10T08:00:00",
+                "address": {
+                  "text": "Cozumel, Mexico",
+                  "addressLine": "Cozumel",
+                  "city": "San Miguel de Cozumel",
+                  "stateName": "Quintana Roo",
+                  "countryName": "Mexico",
+                  "lat": "20.4229839",
+                  "lng": "-86.9223432",
+                  "timezone": "-18000"
+                }
+              }
+            },
+            {
+              "departure": {
+                "name": "Cozumel, Mexico",
+                "localDateTime": "2017-01-10T17:00:00",
+                "address": {
+                  "text": "Cozumel, Mexico",
+                  "addressLine": "Cozumel",
+                  "city": "San Miguel de Cozumel",
+                  "stateName": "Quintana Roo",
+                  "countryName": "Mexico",
+                  "lat": "20.4229839",
+                  "lng": "-86.9223432",
+                  "timezone": "-18000"
+                }
+              },
+              "arrival": {
+                "name": "Roatan, Bay Islands, Honduras",
+                "localDateTime": "2017-01-11T10:00:00",
+                "address": {
+                  "text": "Roatan, Bay Islands, Honduras",
+                  "addressLine": "Roat\u00e1n",
+                  "city": "Coxen Hole",
+                  "stateName": "Bay Islands Department",
+                  "countryName": "Honduras",
+                  "lat": "16.3297608",
+                  "lng": "-86.5299673",
+                  "timezone": "-21600"
+                }
+              }
+            }
+          ],
+          "travelers": [
+            {
+              "fullName": "Mr John Smith"
+            },
+            {
+              "fullName": "Mrs Jenifer Smith"
+            },
+            {
+              "fullName": "Mr Ryan Smith"
+            }
+          ],
+          "cruiseDetails": {
+            "description": "7-Day Western Caribbean from New Orleans",
+            "deck": "Inside Stateroom",
+            "room": "1234",
+            "ship": "Norwegian Dawn"
+          }
+        }
+  CarRental:
+    type: object
+    description: 'Rental car reservation'
+    allOf:
+      -
+        $ref: "#/definitions/Itinerary"
+      -
+        properties:
+          pickup:
+            description: 'Object defining the pickup location of the car.'
+            $ref: '#/definitions/CarRentalLocation'
+          dropoff:
+            description: 'Object defining the dropoff location of the car.'
+            $ref: '#/definitions/CarRentalLocation'
+          car:
+            description: 'Object defining the rental car.'
+            $ref: '#/definitions/Car'
+          discounts:
+            description: 'An array of various discounts that were applied to the reservation.'
+            type: array
+            items:
+              $ref: '#/definitions/CarRentalDiscount'
+          driver:
+            description: 'Object describing the driver of the car.'
+            $ref: '#/definitions/Person'
+          pricedEquipment:
+            type: array
+            description: 'An array of additional equipment that was added to the reservation.'
+            items:
+              $ref: '#/definitions/Fee'
+          rentalCompany:
+            description: 'Name of the rental company.'
+            type: string
+          promoCode:
+            description: 'Promo code used during the reservation.'
+            type: string
+          serviceLevel:
+            description: 'Level of service, such as gold, platinum, etc.'
+            type: string
+          paymentMethod:
+            description: 'Method of payment such as Pay Now, Pay Later, etc.'
+            type: string
+        required:
+          - "pickup"
+          - "dropoff"
+    examples:
+      application/json: |
+        {
+          "providerDetails": {
+            "confirmationNumber": "1234567890",
+            "accountNumbers": "9988776655",
+            "name": "National",
+            "code": "national"
+          },
+          "totalPrice": {
+            "total": 158.67,
+            "currencyCode": "$",
+            "tax": 8.98,
+            "discount": 0,
+            "fees": [
+              {
+                "name": "Rental Car Facility Chrg 3.95\/day",
+                "charge": 11.85
+              },
+              {
+                "name": "Concession Recoupment Fee 10 Pct (10.0%)",
+                "charge": 11.99
+              },
+              {
+                "name": "Florida Surcharge 2.00\/day",
+                "charge": 6
+              },
+              {
+                "name": "Tire Battery Fee .02 Day",
+                "charge": 0.06
+              },
+              {
+                "name": "Vehicle License Fee .78\/day",
+                "charge": 2.34
+              }
+            ]
+          },
+          "type": "carRental",
+          "pickup": {
+            "address": {
+              "text": "Ft. Lauderdale Intl Arpt  (FLL)",
+              "addressLine": "100 Terminal Drive",
+              "city": "Fort Lauderdale",
+              "stateName": "Florida",
+              "countryName": "United States",
+              "postalCode": "33315",
+              "lat": "26.0742344",
+              "lng": "-80.1506022",
+              "timezone": "-18000"
+            },
+            "localDateTime": "2017-01-08T12:00:00",
+            "phone": "(954)359-2550"
+          },
+          "dropoff": {
+            "address": {
+              "text": "Ft. Lauderdale Intl Arpt  (FLL)",
+              "addressLine": "100 Terminal Drive",
+              "city": "Fort Lauderdale",
+              "stateName": "Florida",
+              "countryName": "United States",
+              "postalCode": "33315",
+              "lat": "26.0742344",
+              "lng": "-80.1506022",
+              "timezone": "-18000"
+            },
+            "localDateTime": "2017-01-10T15:00:00",
+            "phone": "(954)359-2550"
+          },
+          "car": {
+            "type": "Midsize",
+            "model": "Hyundai Elantra",
+            "imageUrl": "https:\/\/www.nationalcar.com\/content\/dam\/global-vehicle-images\/cars\/HYUN_ELAN_SE_2017.png"
+          },
+          "driver": {
+            "fullName": "John Smith"
+          }
+        }
+  Event:
+    allOf:
+      -
+        $ref: "#/definitions/Itinerary"
+      -
+        properties:
+          address:
+            $ref: "#/definitions/Address"
+            description: The address of the event.
+          eventName:
+            type: "string"
+            description: Event name such as the name of the restaurant.
+          eventType:
+            type: "integer"
+            description: |
+              Type of the event. The possible values are:
+
+              **1** - for “Restaurant”
+
+              **2** - for “Meeting”
+
+              **3** - for “Show”
+
+              **4** - for “Event”
+            enum:
+              - 1
+              - 2
+              - 3
+              - 4
+          startDateTime:
+            type: "string"
+            description: Date and time when the event starts.
+          endDateTime:
+            type: "string"
+            description: Date and time when the event ends.
+          phone:
+            type: "string"
+            description: Phone number associated with the event, such as restaurant’s phone number.
+          fax:
+            type: "string"
+            description: Fax number associated with the event, such as show organizer’s fax number.
+          guestCount:
+            type: "integer"
+            description: Number of guests participating in the event.
+            minimum: 1
+          guests:
+            type: "array"
+            description: Arrays of guests participating in the event.
+            items:
+              $ref: "#/definitions/Person"
+        required:
+          - "address"
+          - "eventName"
+          - "startDateTime"
+    examples:
+      application/json: |
+        {
+          "providerDetails": {
+            "confirmationNumber": "11223344",
+            "name": "OpenTable.com",
+            "code": "opentable",
+            "earnedAwards": "100"
+          },
+          "totalPrice": [],
+          "type": "event",
+          "eventName": "Palace Cafe",
+          "address": {
+            "text": "605 Canal Street New Orleans, LA 70130",
+            "addressLine": "605 Canal Street",
+            "city": "New Orleans",
+            "stateName": "Louisiana",
+            "countryName": "United States",
+            "postalCode": "70130",
+            "lat": "29.9528899",
+            "lng": "-90.0681833",
+            "timezone": "-21600"
+          },
+          "startDateTime": "2017-01-08T10:30:00",
+          "phone": "+1 504-523-1661",
+          "guestCount": 4
+        }
+  Cancelled:
+    type: object
+    description: ''
+    properties:
+      type:
+        type: "string"
+        description: In case of a canceled reservation type will always be set to `canceled`
+        enum:
+          - "cancelled"
+      itineraryType:
+        description: |
+          Type of reservation. Possible options are:
+
+          **-** flight
+
+          **-** carRental
+
+          **-** hotelReservation
+
+          **-** transportation
+
+          **-** cruise
+
+          **-** event
+
+          **-** cancelled
+        type: string
+        enum:
+          - "flight"
+          - "carRental"
+          - "hotelReservation"
+          - "transportation"
+          - "cruise"
+          - "event"
+      confirmationNumber:
+        description: Confirmation number of the canceled reservation.
+        type: string
+    required:
+      - "type"
+      - "itineraryType"
+      - "confirmationNumber"
+    examples:
+      application/json: |
+        {
+            "type": "cancelled",
+            "itineraryType": "flight",
+            "confirmationNumber": "ABC321"
+        }
+  Room:
+    type: "object"
+    properties:
+      type:
+        type: "string"
+        description: Room type, i.e. “2 QUEEN BEDS NONSMOKING”
+      description: 
+        type: "string"
+        description: Room description, i.e. “Non-Smoking Room Confirmed”
+    required:
+      - "type"
+  CarRentalDiscount:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: Discount name, such as “Your Rate has been discounted based on the Hertz CDP provided”.
+      code:
+        type: "string"
+        description: Discount code, such as “AAA SOUTHERN NEW ENGLAND”
+  CruiseDetails:
+    type: "object"
+    properties:
+      description:
+        type: "string"
+        description: Cruise description, such as “7-Day Eastern Caribbean from Orlando (Port Canaveral)”
+      class:
+        type: "string"
+        description: Room class
+      deck:
+        type: "string"
+        description: Name of the deck, i.e. “The Haven Stateroom”
+      room:
+        type: "string"
+        description: Room number.
+      ship:
+        type: "string"
+        description: The name of the ship, i.e. “Norwegian Epic”
+      shipCode:
+        type: "string"
+        description: This is usually a two-letter code that identifies the ship.
+  ProviderDetails:
+    type: object
+    description: ''
+    properties:
+      confirmationNumber:
+        description: 'Reservation confirmation number.'
+        type: string
+      confirmationNumbers:
+        description: 'In some cases, there are multiple reservation numbers, for example if there are multiple hotel rooms booked, there may be multiple reservation numbers, this array would list them all.'
+        type: array
+        items:
+          type: "string"
+      tripNumber:
+        description: 'When booking through an OTA there may be a separate confirmation number that is specific to that OTA.'
+        type: string
+      accountNumbers:
+        description: 'Account numbers of the travelers listed on the reservation.'
+        type: string
+      name:
+        description: Provider name, same as what you could get from the `providers/{code}` method.
+        type: string
+      code:
+        description: Provider code, same as what you could get from the `providers/list` method.
+        type: string
+      status:
+        description: 'Status of the reservation. I.e. cancelled, confirmed, etc.'
+        type: string
+      reservationDate:
+        description: 'Date when the reservation was booked'
+        type: string
+      earnedAwards:
+        description: Awards earned from this reservation.
+        type: string
+    required:
+      - "confirmationNumber"
+  TotalPrice:
+    type: object
+    description: ''
+    properties:
+      total:
+        description: 'Total cost of the reservation including all taxes and fees.'
+        type: number
+        format: double
+      cost:
+        description: 'Cost of the reservation before taxes.'
+        type: number
+        format: double
+      tax:
+        description: 'Amount paid in taxes'
+        type: number
+        format: double
+      discount:
+        description: 'Total amount of discounts, if any.'
+        type: number
+        format: double
+      spentAwards:
+        description: 'Frequent flier miles, points, or other kinds or bonuses spent on this reservation.'
+        type: string
+      currencyCode:
+        description: Currency code as gathered from the website. I.e. `USD`.
+        type: string
+      rate:
+        description: 'In case of a hotel reservation would be the room rate per night.'
+        type: string
+      rateType:
+        description: 'In case of a hotel reservation this field would be describing the room, i.e. “2 QUEEN BEDS NONSMOKING”.'
+        type: string
+      fees:
+        type: array
+        description: 'Various fees associated with the reservation.'
+        items:
+          $ref: '#/definitions/Fee'
+  Fee:
+    type: object
+    description: ''
+    properties:
+      name:
+        description: 'Fee description.'
+        type: string
+      charge:
+        description: 'Fee amount.'
+        type: number
+        format: double
+  Address:
+    type: object
+    description: ''
+    properties:
+      text:
+        description: 'Non-validated address string. You can usually use this line to search some API (i.e. Google API) to get detailed / structured information about that address. We usually just grab this text as-is from the provider’s website.'
+        type: string
+      addressLine:
+        description: 'Validated address line of the address (without the city, state, country and zip code) that we got from Google API.'
+        type: string
+      city:
+        description: 'Name of the city validated by the Google API'
+        type: string
+      stateName:
+        description: 'Name of the state validated by the Google API'
+        type: string
+      countryName:
+        description: 'Name of the country validated by the Google API'
+        type: string
+      postalCode:
+        description: 'Zip / postal code validated by the Google API'
+        type: string
+      lat:
+        description: 'Latitude coordinate of the address'
+        type: string
+      lng:
+        description: 'Longitude coordinate of the address'
+        type: string
+      timezone:
+        description: 'Time zone in which this address is located.'
+        type: string
+  Car:
+    type: object
+    description: ''
+    properties:
+      type:
+        description: 'Type of the rental car, i.e. “Intermediate SUV”.'
+        type: string
+      model:
+        description: 'Model of the rental car, i.e. “Ford Escape or similar”.'
+        type: string
+      imageUrl:
+        description: 'URL of the image of the car.'
+        type: string
+  CarRentalLocation:
+    description: "Pickup or drop off location of the rental car."
+    type: "object"
+    properties:
+      address:
+        $ref: "#/definitions/Address"
+        description: Rental car facility address.
+      localDateTime:
+        type: string
+        description: Scheduled date and time of the car pickup or drop-off in the time zone of the location of the rental car facility.
+      openingHours:
+        type: "string"
+        description: Rental car facility hours of operation.
+      phone:
+        type: "string"
+        description: Rental car facility phone number. 
+      fax:
+        type: "string"
+        description: Rental car facility fax number. 
+    required:
+      - "address"
+      - "localDateTime"
+  Person:
+    type: "object"
+    properties:
+      fullName:
+        type: "string"
+        description: Full name of the person listed on the reservation.
+    required:
+      - "fullName"
+  FlightSegment:
+    type: "object"
+    properties:
+      flightNumber:
+        type: "string"
+        description: Flight number
+      departure:
+        $ref: "#/definitions/TripLocation"
+        description: An object describing all the aspects of the departure airport, such as code, name, address, geographical coordinates, etc.
+      arrival:
+        $ref: "#/definitions/TripLocation"
+        description: An object describing the arrival airport – same idea and structure as the object defining the departure airport.
+      seats:
+        type: "array"
+        description: Assigned passenger seats.
+        items:
+          type: "string"
+      airlineName:
+        type: "string"
+        description: Airline Name. Typically, this would be the airline that sold the tickets.
+      operator:
+        type: "string"
+        description: If there is a separate operating airline it would be listed in this field.
+      aircraft:
+        type: "string"
+        description: "Aircraft name such as “Boeing 777 jet”"
+      traveledMiles:
+        type: "string"
+        description: Number of miles traveled on this flight segment.
+      cabin:
+        type: "string"
+        description: Cabin class, i.e. “Economy”
+      bookingClass:
+        type: "string"
+        description: Booking class code, i.e. “T”
+      duration:
+        type: "string"
+        description: Flight duration, as a string, as we gathered it from the provider’s website. Don’t expect to be able to use it programmatically to add or subtract time without some type of transformation on your end that would be specific to each provider.
+      meal:
+        type: "string"
+        description: Meal, if any, that will be offered on the flight.
+      smoking:
+        type: "string"
+        description: Most flights nowadays are non-smoking; however, in case if the airline identifies the flight as a smoking flight it would be listed in this field.
+      stops:
+        type: "integer"
+        description: Number of stops this flight has.
+    required:
+      - "departure"
+      - "arrival"
+      - "flightNumber"
+  TransportationSegment:
+    type: "object"
+    properties:
+      scheduleNumber:
+        type: "string"
+        description: ScheduleNumber is similar in concept to FlightNumber but applicable to Trains, Busses, Ferries, etc. So it is designed to define a route number for various types of transportation itineraries.
+      departure:
+        $ref: "#/definitions/TripLocation"
+        description: An object describing the departure location of this trip segment, such as train station or a bus stop location.
+      arrival:
+        $ref: "#/definitions/TripLocation"
+        description: An object describing the arrival location -  similar to departure location.
+      transport:
+        $ref: "#/definitions/Transport"
+        description: Transportation type, i.e. train, bus, fairy, etc.
+      seats:
+        type: "array"
+        description: Assigned passenger seats.
+        items:
+          type: "string"
+      traveledMiles:
+        type: "string"
+        description: Number of miles traveled on this segment.
+      cabin:
+        type: "string"
+        description: Cabin class, i.e. “Economy”
+      bookingClass:
+        type: "string"
+        description: Booking class code, i.e. “SL” for “Sleeper class” booking code.
+      duration:
+        type: "string"
+        description: Trip duration
+      meal:
+        type: "string"
+        description: Meal, if any, that will be offered on the train, ferry, bus, etc.
+      smoking:
+        type: "string"
+        description: Most transporation services nowadays are non-smoking; however, in case if the provider identifies the car / train / bus as smoking  it would be listed in this field.
+      stops:
+        type: "integer"
+        description: Number of stops this transportation segment has.
+    required:
+      - "departure"
+      - "arrival"
+      - "scheduleNumber"
+  CruiseSegment:
+    type: "object"
+    properties:
+      departure:
+        $ref: "#/definitions/TripLocation"
+        description: "Object describing the departure port"
+      arrival:
+        $ref: "#/definitions/TripLocation"
+        description: "Object describing the arrival port"
+    required:
+      - "departure"
+      - "arrival"
+
+  Transport:
+    type: "object"
+    description: This object defines the type of transportation this is.
+    properties:
+      type:
+        type: "string"
+        description: |
+          We support four types of transportations, so this value could be one of the following: `bus`, `train`, `ferry`, `ship`
+        enum:
+          - "bus"
+          - "train"
+          - "ferry"
+          - "ship"
+      name:
+        type: "string"
+        description: User-friendly name of the transportation type.
+      vehicleClass:
+        type: "string"
+        description: Additional information about the transportation service (e.g. vehicle model, additional equipment, etc.).
+  TripLocation:
+    type: "object"
+    description: Itineraries where people travel from place to place have departure and arrival locations that have a lot in common. We define them as a separate object as described below.
+    properties:
+      airportCode:
+        type: "string"
+        description: If this location happened to be an airport this field will return a Validated IATA airport code.
+      stationCode:
+        type: "string"
+        description: This attribute shows the bus station or train station or port code as it shows up on the provider’s website. This field is not validated.
+      terminal:
+        type: "string"
+        description: In cases when terminal is known it will be returned in this field.
+      name:
+        type: "string"
+        description: Train station name or airport name such as “John F. Kennedy International Airport”.
+      localDateTime:
+        type: "string"
+        description: Local date and time of arrival or departure (depending on the type of this location).
+      address:
+        $ref: "#/definitions/Address"
+        description: Object defining the address of this location.
+    required:
+      - "name"
+      - "localDateTime"
+
+  File:
+    type: object
+    description: This is an experimental feature we played around with. It allows you to retrieve pdf statements or e-folios from accounts. For example, it could return credit card statements in a pdf format. Unfortunately, currently this feature is not implemented but could be implemented in the future.
+    properties:
+      date:
+        type: date
+        description: File date
+      name:
+        type: string
+        description: File name
+      extension:
+        type: string
+        description: "File extension, i.e. \"pdf\""
+      kind:
+        type: string
+        description: The only file kind that we support is **statement** but we may support other file types in the future. This field would identify those types.
+      accountNumber:
+        type: string
+        description: In case of credit cards each statement is related to a specific account number. Most users have multiple banking accounts / credit cards under a single login name. This account number identifies the account to which this statement is related to.
+      accountName:
+        type: string
+        description: In case of credit cards, accounts may have user friendly names. This value shows that name.
+      accountType:
+        type: string
+        description: In case of credit cards this could be “checking”, “savings”, etc.
+      contents:
+        type: string
+        description: The actual file content, base 64 encoded.
+  History:
+    type: object
+    description: 'History object returns you the individual transactions that are listed under a given loyalty account, a.k.a. “Account Activity”.'
+    properties:
+      range:
+        type: string
+        description: |
+          Identifies if the response contains complete or incremental history. There are only two possible values:
+          - **complete**
+          - **incremental**
+        enum:
+          - "complete"
+          - "incremental"
+      state:
+        type: string
+        description: 'Please store this string value on your end along with this account and send it to us with consequent account update requests and set the `range` value to `incremental`'
+      rows:
+        type: array
+        description: This is where the actual transactions history data will be (the information you would normally see under the “Account Activity” section of a loyalty account). This is an array of account history items.
+        items:
+          $ref: '#/definitions/HistoryRow'
+      subAccounts:
+        type: array
+        description: In some cases, sub-accounts may have their own transactions history, when they do, they will be returned in this attribute as an array of `subAccounts` history items.
+        items:
+          $ref: '#/definitions/SubAccountHistory'
+  SubAccountHistory:
+    type: object
+    description: 'In some cases, sub-accounts may have their own transactions history, when they do, they will be returned in this object.'
+    properties:
+      code:
+        type: string
+        description: Each sub-account has a unique `code` value. You will need to use this code value to match up sub-account history with individual sub-accounts.
+      rows:
+        type: array
+        description: The rows array for sub-accounts has the same structure as the rows array for accounts (above). So basically, this is where the actual transactions history data will be. 
+        items:
+          $ref: '#/definitions/HistoryRow'
+  HistoryRow:
+    type: object
+    description: Unfortunately, most providers present their history differently, as much as we want to unify this information it doesn’t seem to be possible, so when presenting a single history row, we define each field separately with three values as [described below](#object-HistoryField).
+    properties:
+      fields:
+        type: array
+        description: History fields as described below.
+        items:
+          $ref: '#/definitions/HistoryField'
+  HistoryField:
+    type: object
+    description: Think of a single row of data that describes a historical transaction. `fileds` are the individual values that comprise that transaction. Instead of just providing you with a text value we provide you with an array of metadata that define what this value is.
+    properties:
+      code:
+        type: string
+        description: |
+          We have four predefined filed codes; they are:
+
+          **PostingDate** – date-time value of the transaction
+
+          **Description** – text value of the transaction description
+
+          **Miles** – the number of miles added or subtracted from the account
+
+          **Info** – any other column that we see as part of the history on the prover’s website.
+      name:
+        type: string
+        description: User-friendly name of the field, i.e. “Posting Date” that you can show as the column heading to your end users. 
+      value:
+        type: string
+        description: The actual field value, such as "1/25/2016"
+  InputField:
+    type: object
+    properties:
+      code:
+        type: string
+        description: "To know what filed code to pass you need to call the [`/providers/{code}`](#method-providers_2) method and look at the `confirmationNumberFields` array."
+      value:
+        type: string
+        description: "Value, such as travelers last name or confirmation number."
+  SubAccount:
+    type: object
+    description: Some loyalty programs have multiple loyalty balances that users want to track. For example, a single banking account may have multiple credit cards, each earning its own loyalty points. We would present those individual loyalty balances as sub-accounts.
+    properties:
+      balance:
+        type: number
+        format: double
+        description: Account balance. In some cases, you may get a `null` value which means that balance is not applicable for this type of subaccount.
+      expirationDate:
+        type: string
+        format: date
+        description: Subaccount balance expiration date.
+      code:
+        type: string
+        description: Some value that uniquely identifies this specific sub-account. I.e. 11234-HH-471
+      displayName:
+        type: string
+        description: The subaccount display name defines this subaccount to the user. For example, “Bank of America Companion Fare”
+      'properties':
+        type: array
+        description: Just like accounts, subaccounts also can have additional properties that are specific to each subaccount.
+        items:
+          $ref: '#/definitions/Property'
+      neverExpires:
+        type: boolean
+        description: Just like with accounts this field tells if you the balance on this subaccount never expires.
+  DetectedCard:
+    type: object
+    description: There are typically multiple credit cards under a single online account. Some cards may not be earning miles or may be earning miles for other loyalty programs and should be tracked separately. For example, a user may have a British Airways Chase card – those miles should be tracked via British Airways account, instead of the Chase account; however, we will still detect that the user has that BA card and will list it in this array of detected cards.
+    properties:
+      code:
+        type: string
+        description: Card code is a value that uniquely identifies a specific credit card within an account, i.e. **chase.4321** where 4321 are the last four digits of the card.
+      displayName:
+        type: string
+        description: |
+          The display name of the card as we show it on AwardWallet. May not be exactly what you are looking for. An example would be: “Personal Card ending with 4321 (Sapphire Preferred / Ultimate Rewards):”
+      cardDescription:
+        type: string
+        description: |
+          Card description is what we show to our users about that specific card as it pertains to tracking loyalty points on that card. So we created this description ourselves. For example, for the Amex SPG card the description may be: "Should be tracked separately as a separate Starwood account added to AwardWallet".
+  LoginFields:
+    type: object
+    properties:
+      login:
+        type: string
+        description: |
+          User's login value to be used to login to the provider's website
+      login2:
+        type: string
+        description: 'Second login value. A common example would be a drop down list of countries that we support. For example, for BestBuy we may support the USA and the Canada regions (completely different websites).'
+      login3:
+        type: string
+        description: 'Similar in concept to `login2`, needed when an extra piece of input data is required from the user.'
+      password:
+        type: string
+        description: |
+          User's password value to be used to login to the provider's website
+      answers:
+        type: array
+        description: |
+          Array with security questions and answers.
+        items:
+          $ref: '#/definitions/Answer'
+    required:
+      - 'login'
+  Error:
+    type: object
+    properties:
+      code:
+        type: integer
+        format: int32
+      message:
+        type: string
+      fields:
+        type: string
+  VndError:
+    type: object
+    required:
+      - message
+      - logref
+    properties:
+      message:
+        type: string
+      logref:
+        type: string
+      errors:
+        type: array
+        items:
+          type: string
+
+responses:
+  ServerError:
+    description: 'Server Error'
+    schema:
+      $ref: '#/definitions/VndError'
+  InputError:
+    description: 'Input Error'
+    schema:
+      $ref: '#/definitions/VndError'

@@ -1,0 +1,249 @@
+imports:
+    - { resource: parameters.yml }
+    - { resource: security.yml }
+    - { resource: services.yml }
+    - { resource: controllers.yml }
+    - { resource: '../../vendor/awardwallet/service/Common/Parsing/Filter/FlightStats/services.yml'}
+    - { resource: '../../vendor/awardwallet/service/Common/AWS/services.yml'}
+    - { resource: '../../vendor/awardwallet/service/Common/Parsing/Solver/services.yml'}
+    - { resource: '../../vendor/awardwallet/service/Common/Geo/services.yml'}
+    - { resource: '../../vendor/awardwallet/service/Common/Parsing/Web/services.yml'}
+    - { resource: '../../vendor/awardwallet/service/Common/CurrencyConverter/services.yml'}
+    - { resource: '../../vendor/awardwallet/service/Common/Airport/services.yml'}
+    - { resource: '../../vendor/awardwallet/service/Common/AirLabs/services.yml'}
+    - { resource: '../../vendor/awardwallet/service/Common/Selenium/services.yml'}
+    - { resource: '../../vendor/awardwallet/service/Common/Selenium/HotSession/services.yml'}
+    - { resource: '../../vendor/awardwallet/extension-worker/src/services.yml'}
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: en
+    memcached_expiration: 1800
+    elastic_stat_index: loyalty-stats
+    elastic_stat_doc_type: partners
+    elastic_stat_client_config:
+        host: '%elastic_stat_host%'
+        port: '%elastic_stat_port%'
+        transport: Http
+    env(AWS_REGION): 'us-east-1'
+    public_services: false
+    env(EXTENSION_WORKER_CENTRIFUGE_SERVER_API_URL): 'http://centrifugo:8000/api'
+    env(EXTENSION_WORKER_CENTRIFUGE_API_KEY): 'my_api_key'
+    env(EXTENSION_WORKER_CENTRIFUGE_SECRET): 'my_secret'
+    memory_limit: 150000000
+    public_services_names: []
+
+framework:
+    #esi:             ~
+    #translator:      { fallbacks: ["%locale%"] }
+    secret:          "%secret%"
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    #serializer:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+        #assets_version: SomeVersionScheme
+    default_locale:  "%locale%"
+    trusted_hosts:   ~
+    session:
+        # handler_id set to null will use default session handler from php.ini
+        handler_id:  ~
+        save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
+    fragments:       ~
+    http_method_override: true
+    assets: ~
+monolog:
+    channels: [fsstat]
+# Twig Configuration
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        default_connection: default
+        connections:
+            default:
+                driver:   pdo_mysql
+                host:     "%database_host%"
+                port:     "%database_port%"
+                dbname:   "%database_name%"
+                user:     "%database_user%"
+                password: "%env(MYSQL_PASSWORD)%"
+                charset:  UTF8
+                wrapper_class: Facile\DoctrineMySQLComeBack\Doctrine\DBAL\Connection
+                driver_class: AwardWallet\Common\Mysql\ComebackDriver
+                options:
+                    x_reconnect_attempts: 3
+                platform_service: 'Doctrine\DBAL\Platforms\MySQL80Platform' # it's here to prevent connection attempt when warming up cache
+            shared:
+                wrapper_class: Facile\DoctrineMySQLComeBack\Doctrine\DBAL\Connection
+                driver_class: AwardWallet\Common\Mysql\ComebackDriver
+                options:
+                    x_reconnect_attempts: 2
+                    1002: set session lock_wait_timeout = 30 # PDO::MYSQL_ATTR_INIT_COMMAND
+                driver:   pdo_mysql
+                host:     "%env(SHARED_DATABASE_HOST)%"
+                port:     "3306"
+                dbname:   "%env(SHARED_DATABASE_NAME)%"
+                user:     "%env(SHARED_DATABASE_USER)%"
+                password: "%shared_database_password%"
+                charset:  UTF8
+                platform_service: 'Doctrine\DBAL\Platforms\MySQL80Platform' # it's here to prevent connection attempt when warming up cache
+
+    orm:
+#        auto_mapping: true
+        default_entity_manager: default
+        auto_generate_proxy_classes: "%kernel.debug%"
+        entity_managers:
+            default:
+                connection: default
+                mappings:
+                    ServiceBundle:
+                        type: annotation
+                        dir: "%kernel.root_dir%/../vendor/awardwallet/service/Common/Entity"
+                        prefix: AwardWallet\Common\Entity
+                        is_bundle: false
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+
+old_sound_rabbit_mq:
+    connections:
+        default:
+            host:      "%env(RABBITMQ_HOST)%"
+            port:      "%rabbitmq_port%"
+            user:      "%rabbitmq_user%"
+            password:  "%rabbitmq_password%"
+            vhost:     "%rabbitmq_vhost%"
+            lazy:      true
+            heartbeat: 180
+            keepalive: true
+    producers:
+        send_callback:
+            connection: default
+            exchange_options: {name: 'loyalty_send_callback', type: direct}
+            queue_options:
+                name: 'loyalty_send_callback'
+                arguments:
+                    x-max-priority: ['I', 10]
+        send_callback_delayed:
+            connection: default
+            exchange_options:
+                name: 'loyalty_send_callback_delayed'
+                type: 'x-delayed-message'
+                arguments:
+                    x-delayed-type: ['S', 'direct']
+            queue_options:
+                name: 'loyalty_send_callback'
+                arguments:
+                    x-max-priority: ['I', 10]
+        check_delayed:
+            connection: default
+            exchange_options:
+                name: 'loyalty_check_delayed'
+                type: 'x-delayed-message'
+                arguments:
+                    x-delayed-type: ['S', 'direct']
+            queue_options:
+                name: 'loyalty_check_delayed'
+    consumers:
+        check_delayed:
+            connection: default
+            exchange_options:
+                name: 'loyalty_check_delayed'
+                type: 'x-delayed-message'
+                arguments:
+                    x-delayed-type: ['S', 'direct']
+            queue_options:    {name: 'loyalty_check_delayed'}
+            qos_options:      {prefetch_size: 0, prefetch_count: 1, global: false}
+            callback:         AppBundle\Worker\CheckDelayedWorker
+        send_callback:
+            connection:       default
+            exchange_options: {name: 'loyalty_send_callback', type: direct}
+            queue_options:
+                name: 'loyalty_send_callback'
+                arguments:
+                    x-max-priority: ['I', 10]
+            qos_options:      {prefetch_size: 0, prefetch_count: 1, global: false}
+            callback:         aw.worker.send_callback
+        dump_statistic:
+            connection:       default
+            exchange_options: {name: 'loyalty_dump_statistic', type: direct}
+            queue_options:    {name: 'loyalty_dump_statistic'}
+            qos_options:      {prefetch_size: 0, prefetch_count: 1, global: false}
+            callback:         aw.worker.dump_statistic
+
+doctrine_mongodb:
+    default_commit_options: ~
+    connections:
+        default:
+            server: '%mongodb_host%'
+            options:
+                username: "%mongodb_username%"
+                password: "%mongodb_password%"
+                db: "%mongodb_dbname%"
+                socketTimeoutMS: 10000
+                w: 1
+        replica:
+            server: '%mongodb_host%'
+            options:
+                username: "%mongodb_username%"
+                password: "%mongodb_password%"
+                db: "%mongodb_dbname%"
+                socketTimeoutMS: 600000
+                w: 1
+
+    default_connection: default
+    default_database: '%mongodb_dbname%'
+    document_managers:
+        default:
+            connection: default
+            mappings:
+                AppBundle: ~
+                Model:
+                    type: annotation
+                    dir: "%kernel.project_dir%/src/AppBundle/Model/Resources"
+                    prefix: AppBundle\Model\Resources
+                    is_bundle: false
+                service_mapping:
+                    type: annotation
+                    dir: "%kernel.project_dir%/vendor/awardwallet/service/Common/Document"
+                    prefix: AwardWallet\Common\Document
+                    is_bundle: false
+            retry_connect: 2
+        replica:
+            connection: replica
+            mappings:
+                AppBundle: ~
+                Model:
+                    type: annotation
+                    dir: "%kernel.project_dir%/src/AppBundle/Model/Resources"
+                    prefix: AppBundle\Model\Resources
+                    is_bundle: false
+                service_mapping:
+                    type: annotation
+                    dir: "%kernel.project_dir%/vendor/awardwallet/service/Common/Document"
+                    prefix: AwardWallet\Common\Document
+                    is_bundle: false
+            retry_connect: 2
+
+services:
+    # it's not in services.yml to override Selenium/services.yml
+    aw.selenium_mac_node_finder:
+        class: 'AwardWallet\WebdriverClient\NodeFinder'
+        autowire: true
+        public: true # for debug proxy
+        arguments:
+            $httpClient: "@aw.webdriver_curl_client"
+            $endPoint: '%mac_cluster_endpoint%'

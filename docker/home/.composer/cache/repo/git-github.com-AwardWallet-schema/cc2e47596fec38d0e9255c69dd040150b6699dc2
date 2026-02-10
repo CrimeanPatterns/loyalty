@@ -1,0 +1,1 @@
+{"name":"awardwallet\/schema","description":"Awardwallet APIs general entities","autoload":{"psr-4":{"AwardWallet\\Schema\\":"src"}},"require":{"php":">=5.4.0","jms\/serializer":">=1.5","symfony\/symfony":"^2.6|^3.0"},"time":"2017-08-17T05:39:55+00:00"}

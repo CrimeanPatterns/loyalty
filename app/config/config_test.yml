@@ -1,0 +1,102 @@
+imports:
+    - { resource: config.yml }
+    - { resource: dev_parameters.yml }
+
+framework:
+    test: ~
+    session:
+        storage_id: session.storage.mock_file
+#    profiler:
+#        collect: false
+#
+#web_profiler:
+#    toolbar: false
+#    intercept_redirects: false
+
+swiftmailer:
+    disable_delivery: false
+
+services:
+    aw.s3client:
+        class: AwardWallet\Common\Tests\TestS3Client
+        arguments: ["tests/_output/s3"]
+        public: true
+
+    aw.google_api:
+        class: AppBundle\Extension\Test\MissGoogleApi
+        autowire: true
+        arguments:
+            $httpDriver: '@aw.curl_driver'
+            $apiKey: "%google_api_key%"
+    aw.geo.google_api:
+        alias: 'aw.google_api'
+    aw.memcached:
+        public: true
+        class: AwardWallet\Common\Memcached\MemcachedMock
+    aw.shared_memcached:
+        class: AwardWallet\Common\Memcached\MemcachedMock
+    aw.selenium_memcached:
+        class: AwardWallet\Common\Memcached\MemcachedMock
+    AwardWallet\WebdriverClient\NodeFinder:
+        autowire: true
+        public: true
+        arguments:
+            $httpClient: "@aw.webdriver_curl_client"
+            $endPoint: '%webdriver_cluster_endpoint%'
+    # use selenium from docker-compose for tests
+    aw.selenium_finder:
+        public: true
+        class: SeleniumSinglePortFinder
+        arguments:
+            $server: 'selenium'
+            $port: 4444
+    AwardWallet\ExtensionWorker\ParserFactory:
+        autowire: true
+        public: true
+    AwardWallet\ExtensionWorker\ClientFactory:
+        autowire: true
+        public: true
+        arguments:
+            $centrifuge: '@aw.extension-worker.centrifuge'
+            $rabbitConnection: '@old_sound_rabbit_mq.connection.default'
+
+parameters:
+    disable_flight_stats: true
+    selenium_startup_url: 'about:blank'
+    ra_parse_mode: 'testParseMode'
+    public_services: true
+    memory_limit: 8000000000
+    public_services_names: ['monolog.logger']
+
+monolog:
+    handlers:
+        console:
+            type:  console
+            level: info
+        file:
+            type:  stream
+            path:  '%kernel.logs_dir%/%kernel.environment%.log'
+            level: debug
+        dev_notification:
+            type:         fingers_crossed
+            activation_strategy: 'AwardWallet\Common\Monolog\ActivationStrategy\DevNotificationActivationStrategy'
+            handler:      swift
+            buffer_size:  1
+            stop_buffering: false
+        critical:
+            type:         fingers_crossed
+            action_level: warning
+            handler:      error
+            buffer_size:  200
+            stop_buffering: false
+        error:
+            type:    group
+            members: [file, swift]
+        swift:
+            type:       swift_mailer
+            level:      debug
+            formatter:  aw.extension.monolog.formatter.awardwallet
+            email_prototype:
+                id: 'AwardWallet\Common\Monolog\EmailPrototype'
+                method: 'buildMessage'
+

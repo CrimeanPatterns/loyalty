@@ -1,0 +1,324 @@
+swagger: '2.0'
+info:
+  title: 'AwardWallet Hotel Reward Availability API'
+  description: '???'
+  version: 1.0.0
+host: ra-hotels.awardwallet.com
+schemes:
+  - https
+securityDefinitions:
+  Authentication:
+    type: apiKey
+    name: X-Authentication
+    in: header
+    description: |
+      Every API call needs to be authenticated with an API authntiction token. This token is passed in the "X-Authentication" field with the https request header. The token is formed by concatinating the API username and API password with a ":" symbol. You need to [contact us](https://awardwallet.com/contact) to get your API credentials.
+
+      <code class="prettyprint">X-Authentication: YourUserName:YourPassword</code>
+
+      <aside class="success">Obviously you need to replace <code>YourUserName:YourPassword</code> with your personal credentials.</aside>
+
+basePath: /v1
+produces:
+  - application/json
+
+paths:
+  /search:
+    post:
+      security:
+        - Authentication: []
+      summary: '???'
+      description: '???'
+      parameters:
+        -
+          name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/RaHotelRequest'
+      tags:
+        - reward_availability_hotel
+      examples:
+        application/json: '???'
+      responses:
+        200:
+          description: '???'
+          schema:
+            $ref: '#/definitions/PostCheckResponse'
+          examples:
+            application/json: |
+              {
+                  "requestId": "580d54da9d44d8ee39e29584"
+              }
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/definitions/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/definitions/InputError'
+
+  '/getResults/{id}':
+    get:
+      security:
+        - Authentication: []
+      summary: '???'
+      description: '???'
+      parameters:
+        -
+          name: id
+          in: path
+          required: true
+          type: string
+          description: '???'
+      tags:
+        - Reward_availability#
+      responses:
+        200:
+          description: '???'
+          schema:
+            $ref: '#/definitions/RewardAvailabilityResponse'
+          examples:
+            application/json: '???'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/definitions/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/definitions/InputError'
+
+definitions:
+
+  RaHotelRequest:
+    type: object
+    properties:
+      provider:
+        type: string
+        description: 'Alpha-numeric value with no spaces that uniquely identifies any given provider. Can be retrieved from the [`/providers/list`](#method-providers_1) method.'
+      destination:
+        type: string
+        description: 'At what destinations are you looking to find hotels.'
+      checkInDate:
+        type: string
+        pattern: '^\d{4}-\d{2}-\d{2}$'
+        description: 'Desired hotel check-in date in the following format: 2023-04-16'
+      checkOutDate:
+        type: string
+        pattern: '^\d{4}-\d{2}-\d{2}$'
+        description: 'Desired hotel check-out date in the following format: 2023-04-18'
+      numberOfRooms:
+        type: integer
+        minimum: 1
+        maximum: 10
+        description: 'Number of rooms you want to search for. At the moment we only support searching maximum for 2 rooms.'
+      numberOfAdults:
+        type: integer
+        description: 'Number of adults per room (maximum 4).'
+        minimum: 1
+        maximum: 4
+      numberOfKids:
+        type: integer
+        description: 'Number of kids per room (maximum 4).'
+        minimum: 0
+        maximum: 4
+      downloadPreview:
+        type: boolean
+        description: 'Download preview of hotel or not'
+      userData:
+        type: string
+        maxLength: 500
+        description: "Any data you wish to send. It will be returned untouched in the response. Could be used for matching requests to responses."
+      priority:
+        type: integer
+        description: 'Request priority values range from 1 to 9, where 1 is the lowest priority and 9 is the highest priority. In some cases, we throttle requests with priorities lower than X (default is 9). Please use this attribute to separate background account updates from the foreground account updates. In other words, background updating could have priority of 1 and accounts that are updated when an actual user is actually waiting for the results with priority of 9. This way your background updating will never negatively affect your updates when someone is actually waiting for the results.'
+        minimum: 1
+        maximum: 9
+      callbackUrl:
+        type: string
+        description: |
+          All callback URLs must be registered with us before use. For production deployments, this is the recommended way to work with our API. So the idea is – you send us a request to update a loyalty account we send you the response as soon as we have it to the callback URL that was sent with the request. We will use http / basic authentication to authenticate ourselves. So when setting up your callback URLs with us, you also need to provide a username (i.e. awardwallet) and a password that we will use to authenticate ourselves when sending callbacks to that URL. We do not need the full path to your endpoint; we do not need the protocol or the port number; all we need is the domain. If your callback URL is `https://api.mydomain.com:8080/path/to/my/endpoint`, we would only need to register `api.mydomain.com`. We also support wildcards, so if you have multiple subdomains, we could register `*.mydomain.com`. We will send headers that look as follows with our callbacks:
+
+          Content-type: 'application/json'<br/>
+          Authorization: 'Basic YXdhcmR3YWxsZXQ6YXdkZXZlbG9wZXI='
+
+          where `YXdhcmR3YWxsZXQ6YXdkZXZlbG9wZXI=` is a base64 encoded string of the username and password separated by a colon, i.e. `awardwallet:password`
+
+          When we send our callbacks, we expect to receive code 200. If we get anything another than code 200, we will keep re-trying to send you the response. The page itself can be empty as long as we get code 200.
+    required:
+      - provider
+      - priority
+      - destination
+      - checkInDate
+      - numberOfRooms
+      - numberOfAdults
+      - numberOfKids
+
+  RaHotelResponse:
+    type: object
+    properties:
+      requestId:
+        type: string
+        maxLength: 24
+        description: 'An ID that uniquely identifies this request.'
+      userData:
+        type: string
+        description: 'This field returns whatever data you put in it when you made your request as is. Can be used for some sort of tracking.'
+      message:
+        type: string
+        description: 'Human readable error message.'
+      requestDate:
+        type: string
+        format: date-time
+        description: Date and time of when the request was sent to us, i.e. when the account was put into our queue for updating.
+      state:
+        type: string
+        description: 'State of processing'
+      hotels:
+        type: array
+        description: 'An array of available hotels that we found for this search'
+        items:
+          - $ref: '#/definitions/Hotel'
+    required:
+      - state
+      - requestId
+      - requestDate
+      - hotels
+
+  Hotel:
+    description: '???'
+    type: object
+    properties:
+      name:
+        type: string
+        description: 'The name of the hotel.'
+      checkInDate:
+        type: string
+        format: date-time
+        description: 'Hotel check-in date.'
+      checkOutDate:
+        type: string
+        format: date-time
+        description: 'Hotel hotel check-out date.'
+      roomType:
+        type: string
+        description: 'Room type, i.e. “Standard room reward”.'
+      hotelDescription:
+        type: string
+        description: 'Hotel description, if available, such as “Newly renovated historic downtown property with spacious suites & fully equipped kitchens.”'
+      numberOfNights:
+        type: integer
+        description: 'The number of nights being booked.'
+      pointsPerNight:
+        type: integer
+        description: 'Average cost in points per night for this room. If you need to know the total cost in points for this stay you need to multiply this number by the number of nights being booked.'
+      cashPerNight:
+        type: number
+        description: 'Alternative cost of this room in cash (USD).'
+      originalCurrency:
+        type: string
+        description: 'Currency in which a request is made. If a request is made in USD, this field will be empty.'
+      conversionRate:
+        type: number
+        description: 'If we converted the prices from one currency to USD, we will specify the conversion rate in this attribute.'
+      distance:
+        type: number
+        description: 'Distance from the address in miles.'
+      rating:
+        type: number
+        description: 'Hotel star rating where 5 starts is the highest rating.'
+      numberOfReviews:
+        type: integer
+        description: 'This number indicates the number of people who rated this hotel.'
+      address:
+        $ref: '#/definitions/DetailedAddress'
+      phone:
+        type: string
+        description: 'Holtel phone number.'
+      url:
+        type: string
+        description: 'URL address of the hotel.'
+      preview:
+        type: string
+        description: 'base64 encoded hotel preview'
+    required:
+      - name
+      - checkInDate
+      - cashPerNight
+      - numberOfNights
+      - pointsPerNight
+      - address
+  DetailedAddress:
+    type: object
+    description: ''
+    properties:
+      text:
+        description: 'Non-validated address string. You can usually use this line to search some API (i.e. Google API) to get detailed / structured information about that address. We usually just grab this text as-is from the provider’s website.'
+        type: string
+      addressLine:
+        description: 'Validated address line of the address (without the city, state, country and zip code) that we got from Google API.'
+        type: string
+      city:
+        description: 'Name of the city validated by the Google API'
+        type: string
+      stateName:
+        description: 'Name of the state validated by the Google API'
+        type: string
+      countryName:
+        description: 'Name of the country validated by the Google API'
+        type: string
+      postalCode:
+        description: 'Zip / postal code validated by the Google API'
+        type: string
+      lat:
+        description: 'Latitude coordinate of the address'
+        type: number
+      lng:
+        description: 'Longitude coordinate of the address'
+        type: number
+      timezone:
+        description: 'Time zone in which this address is located.'
+        type: string
+    required:
+      - text
+  PostCheckResponse:
+    type: object
+    properties:
+      requestId:
+        type: string
+        description: ''
+    required:
+      - requestId
+
+  Error:
+    type: object
+    required:
+      - message
+      - logref
+    properties:
+      message:
+        type: string
+      logref:
+        type: string
+      errors:
+        type: array
+        items:
+          type: string
+  ServerError:
+    description: 'Server Error'
+    schema:
+      $ref: '#/definitions/Error'
+  InputError:
+    description: 'Input Error'
+    schema:
+      $ref: '#/definitions/Error'

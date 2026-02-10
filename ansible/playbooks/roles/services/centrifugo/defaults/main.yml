@@ -1,0 +1,2 @@
+centrifugo_path: /opt/centrifugo
+loyalty_ssm_path: '/loyalty/prod'

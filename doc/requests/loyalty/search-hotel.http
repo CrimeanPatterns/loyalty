@@ -1,0 +1,21 @@
+POST {{endpoint}}/v1/search
+Accept: application/json
+X-Authentication: {{apiKey}}
+
+{
+"provider": "marriott",
+"destination": "New York City",
+"checkInDate": "2024-10-01",
+"checkOutDate": "2024-10-20",
+"numberOfRooms": 1,
+"numberOfAdults": 2,
+"numberOfKids":0,
+"priority":9,
+"userData": "",
+"callbackUrl": "",
+"downloadPreview": false
+}
+
+> {%
+client.global.set("requestId", response.body.requestId);
+%}

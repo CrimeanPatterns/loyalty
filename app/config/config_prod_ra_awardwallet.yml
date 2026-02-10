@@ -1,0 +1,46 @@
+imports:
+  - { resource: config_prod.yml }
+  - { resource: '../../vendor/awardwallet/ssm-env-var-processor/src/services.yml' }
+
+parameters:
+  ssm_path: '/loyalty/ra-awardwallet'
+  database_host: 'mysql.infra.awardwallet.com'
+  database_name: 'loyalty'
+  database_user: 'loyalty'
+  env(MYSQL_PASSWORD): '%env(ssm:mysql_password)%'
+  env(SHARED_DATABASE_HOST): 'mysql.infra.awardwallet.com'
+  env(SHARED_DATABASE_NAME): 'loyalty'
+  env(SHARED_DATABASE_USER): 'loyalty'
+  shared_database_password: '%env(ssm:mysql_password)%'
+  memcached_host: 'memcached.infra.awardwallet.com'
+  shared_memcached_host: 'memcached.infra.awardwallet.com'
+  env(RABBITMQ_HOST): 'rabbitmq.infra.awardwallet.com'
+  mongodb_host: 'mongodb://mongo-1.infra.awardwallet.com:27017,mongo-2.infra.awardwallet.com:27017/?replicaSet=loyalty'
+  mongodb_dbname: 'loyalty'
+  reward_availability_host: 'ra-flights.awardwallet.com'
+  host: 'loyalty-ra-api.awardwallet.com' # unused
+  aws_s3_bucket: 'ra-awardwallet-logs'
+  aws_s3_region: 'us-east-1'
+  aes_key_local_browser_state: '%env(ssm:aes_key_local_browser_state)%'
+  selenium_consul_address: 'selenium-consul.infra.awardwallet.com'
+  selenium_memcached_host: 'memcached.infra.awardwallet.com'
+  illuminati_customer: 'c_53542d33'
+  illuminati_zone: 'gen'
+  netnut_username: 'AwardWallet'
+  debug_service_location: 'https://awardwallet.com'
+  elastic_stat_host: "stat-es.awardwallet.com"
+  use_last_host_as_proxy: true
+  flight_info.app_id: '4ae36ced'
+  timezonedb_endpoint: "http://vip.timezonedb.com"
+  reward_availability_hotel_host: ra-hotels.awardwallet.com
+  goproxies_username: 'awardwallet_ra'
+  webdriver_cluster_endpoint: 'http://webdriver.infra.awardwallet.com'
+  proxy_auth_external_ip: '18.232.27.10'
+  proxy_auth_internal_ip: '192.168.2.146'
+  rewards_availability_mode: true
+  partner_thread_limits: false
+  reward_availability_callback_aw: 'https://awardwallet.com/api/reward-availability/flights'
+
+
+
+

@@ -1,0 +1,7 @@
+[mysqld]
+character-set-server = utf8
+skip-character-set-client-handshake = 1
+wait_timeout=300
+max_allowed_packet=128000000
+interactive_timeout=300
+max_connections=2000

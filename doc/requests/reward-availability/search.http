@@ -1,0 +1,24 @@
+POST {{endpoint}}/v1/search
+Accept: application/json
+X-Authentication: {{apiKey}}
+
+{
+    "arrival": "LAX",
+    "cabin": "economy",
+    "departure": {
+        "date": "2024-11-26",
+        "airportCode": "JFK"
+    },
+    "passengers": {
+        "adults": 1
+    },
+    "currency": "USD",
+    "provider": "mileageplus",
+    "priority": 9,
+    "userData": "awDebug",
+    "callbackUrl": ""
+}
+
+> {%
+client.global.set("requestId", response.body.requestId);
+%}

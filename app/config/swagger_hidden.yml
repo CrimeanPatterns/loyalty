@@ -1,0 +1,384 @@
+swagger: '2.0'
+info:
+  title: 'AwardWallet Reward Availability API'
+  description: '???'
+  version: 1.0.0
+host: reward-availability.awardwallet.com
+schemes:
+  - https
+securityDefinitions:
+  Authentication:
+    type: apiKey
+    name: X-Authentication
+    in: header
+    description: |
+      Every API call needs to be authenticated with an API authntiction token. This token is passed in the "X-Authentication" field with the https request header. The token is formed by concatinating the API username and API password with a ":" symbol. You need to [contact us](https://awardwallet.com/contact) to get your API credentials.
+
+      <code class="prettyprint">X-Authentication: YourUserName:YourPassword</code>
+
+      <aside class="success">Obviously you need to replace <code>YourUserName:YourPassword</code> with your personal credentials.</aside>
+
+basePath: /v1
+produces:
+  - application/json
+
+paths:
+  /search:
+    post:
+      security:
+        - Authentication: []
+      summary: '???'
+      description: '???'
+      parameters:
+        -
+          name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/RewardAvailabilityRequest'
+      tags:
+        - reward_availability
+      examples:
+        application/json: '???'
+      responses:
+        200:
+          description: '???'
+          schema:
+            $ref: '#/definitions/PostCheckResponse'
+          examples:
+            application/json: |
+              {
+                  "requestId": "580d54da9d44d8ee39e29584"
+              }
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/definitions/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/definitions/InputError'
+
+  '/getResults/{id}':
+    get:
+      security:
+        - Authentication: []
+      summary: '???'
+      description: '???'
+      parameters:
+        -
+          name: id
+          in: path
+          required: true
+          type: string
+          description: '???'
+      tags:
+        - Reward_availability#
+      responses:
+        200:
+          description: '???'
+          schema:
+            $ref: '#/definitions/RewardAvailabilityResponse'
+          examples:
+            application/json: '???'
+        default:
+          description: 'Unexpected error'
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: 'Generic server error'
+          schema:
+            $ref: '#/definitions/ServerError'
+        400:
+          description: 'Client input error'
+          schema:
+            $ref: '#/definitions/InputError'
+
+definitions:
+
+  RewardAvailabilityRequest:
+    type: object
+    properties:
+      provider:
+        type: string
+        description: 'Alpha-numeric value with no spaces that uniquely identifies any given provider. Can be retrieved from the [`/providers/list`](#method-providers_1) method.'
+      departure:
+        type: object
+        $ref: "#/definitions/Departure"
+      arrival:
+        type: string
+        description: ???
+      cabin:
+        type: string
+        description: '???'
+        enum:
+          - firstClass
+          - business
+          - premiumEconomy
+          - economy
+      maxStops:
+        type: integer
+        description: '???'
+      passengers:
+        type: object
+        $ref: "#/definitions/Passengers"
+      currency:
+        type: string
+        description: '???'
+      userData:
+        type: string
+        description: "Any data you wish to send. It will be returned untouched in the response. Could be used for matching requests to responses."
+      priority:
+        type: integer
+        description: 'Request priority values range from 1 to 9, where 1 is the lowest priority and 9 is the highest priority. In some cases, we throttle requests with priorities lower than X (default is 9). Please use this attribute to separate background account updates from the foreground account updates. In other words, background updating could have priority of 1 and accounts that are updated when an actual user is actually waiting for the results with priority of 9. This way your background updating will never negatively affect your updates when someone is actually waiting for the results.'
+        minimum: 1
+        maximum: 9
+      callbackUrl:
+        type: string
+        description: |
+          All callback URLs must be registered with us before use. For production deployments, this is the recommended way to work with our API. So the idea is – you send us a request to update a loyalty account we send you the response as soon as we have it to the callback URL that was sent with the request. We will use http / basic authentication to authenticate ourselves. So when setting up your callback URLs with us, you also need to provide a username (i.e. awardwallet) and a password that we will use to authenticate ourselves when sending callbacks to that URL. We do not need the full path to your endpoint; we do not need the protocol or the port number; all we need is the domain. If your callback URL is `https://api.mydomain.com:8080/path/to/my/endpoint`, we would only need to register `api.mydomain.com`. We also support wildcards, so if you have multiple subdomains, we could register `*.mydomain.com`. We will send headers that look as follows with our callbacks:
+
+          Content-type: 'application/json'<br/>
+          Authorization: 'Basic YXdhcmR3YWxsZXQ6YXdkZXZlbG9wZXI='
+
+          where `YXdhcmR3YWxsZXQ6YXdkZXZlbG9wZXI=` is a base64 encoded string of the username and password separated by a colon, i.e. `awardwallet:password`
+
+          When we send our callbacks, we expect to receive code 200. If we get anything another than code 200, we will keep re-trying to send you the response. The page itself can be empty as long as we get code 200.
+    required:
+      - provider
+      - priority
+      - departure
+      - arrival
+      - passengers
+      - cabin
+      - currency
+
+  Departure:
+    type: object
+    description: ???
+    properties:
+      date:
+        type: string
+        description: '???'
+      flexibility:
+        type: integer
+        description: '???'
+      airportCode:
+        type: string
+        description: '???'
+    required:
+      - date
+      - airportCode
+
+  Passengers:
+    type: object
+    description: ???
+    properties:
+      adults:
+        type: integer
+        description: '???'
+    required:
+      - adults
+
+  RewardAvailabilityResponse:
+    type: object
+    properties:
+      requestId:
+        type: string
+        description: 'An ID that uniquely identifies this request.'
+      userData:
+        type: string
+        description: 'This field returns whatever data you put in it when you made your request as is. Can be used for some sort of tracking.'
+      message:
+        type: string
+        description: 'Human readable error message.'
+      requestDate:
+        type: string
+        format: date-time
+        description: Date and time of when the request was sent to us, i.e. when the account was put into our queue for updating.
+      state:
+        type: integer
+        description: |
+          **1** - ???
+
+          **6** - AwardWallet failed to parse the provider’s website.
+      routes:
+        type: array
+        description: '???'
+        items:
+          - $ref: '#/definitions/Route'
+    required:
+      - state
+      - requestId
+      - requestDate
+      - routes
+
+  Route:
+    description: '???'
+    type: object
+    properties:
+      numberOfStops:
+        type: integer
+        description: '???'
+      tickets:
+        type: integer
+        description: '???'
+      parsedDistance:
+        type: string
+        description: '???'
+      awardTypes:
+        type: string
+        description: '???'
+      message:
+        type: string
+        description: '???'
+      times:
+        $ref: '#/definitions/Times'
+      mileCost:
+        $ref: '#/definitions/Redemptions'
+      cashCost:
+        $ref: '#/definitions/Payments'
+      segments:
+        description: '???'
+        type: array
+        items:
+          - $ref: '#/definitions/Segment'
+    required:
+      - segments
+      - mileCost
+      - cashCost
+
+  Payments:
+    type: object
+    description: '???'
+    properties:
+      currency:
+        type: string
+      taxes:
+        type: number
+      fees:
+        type: number
+    required:
+      - currency
+
+  Redemptions:
+    type: object
+    description: '???'
+    properties:
+      miles:
+        description: '???'
+        type: integer
+      program:
+        type: string
+        description: '???'
+    required:
+      - miles
+
+  Segment:
+    description: '???'
+    type: object
+    properties:
+      departure:
+        $ref: '#/definitions/SegmentPoint'
+      arrival:
+        $ref: '#/definitions/SegmentPoint'
+      meal:
+        description: '???'
+        type: string
+      cabin:
+        description: '???'
+        type: string
+        enum:
+          - firstClass
+          - business
+          - premiumEconomy
+          - economy
+      fareСlass:
+        type: string
+        description: '???'
+      tickets:
+        type: integer
+        description: '???'
+      flightNumbers:
+        type: array
+        description: '???'
+        items:
+          type: string
+      airlineCode:
+        type: string
+        description: '???'
+      aircraft:
+        type: string
+        description: '???'
+      times:
+        $ref: '#/definitions/Times'
+    required:
+      - departure
+      - arrival
+      - cabin
+      - airlineCode
+
+  Times:
+    description: '???'
+    type: object
+    properties:
+      properties:
+        flight:
+          type: string
+          description: '???'
+        layover:
+          type: string
+          description: '???'
+
+  SegmentPoint:
+    description: '???'
+    type: object
+    properties:
+      dateTime:
+        type: string
+        description: '???'
+      airport:
+        type: string
+        description: '???'
+      terminal:
+        type: string
+        description: '???'
+    required:
+      - dateTime
+      - airport
+
+  PostCheckResponse:
+    type: object
+    properties:
+      requestId:
+        type: string
+        description: ''
+    required:
+      - requestId
+
+  Error:
+    type: object
+    required:
+      - message
+      - logref
+    properties:
+      message:
+        type: string
+      logref:
+        type: string
+      errors:
+        type: array
+        items:
+          type: string
+  ServerError:
+    description: 'Server Error'
+    schema:
+      $ref: '#/definitions/Error'
+  InputError:
+    description: 'Input Error'
+    schema:
+      $ref: '#/definitions/Error'

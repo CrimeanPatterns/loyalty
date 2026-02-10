@@ -1,0 +1,27 @@
+- name: Create a directory if it does not exist
+  become: yes
+  ansible.builtin.file:
+    path: /opt/mongo
+    state: directory
+    group: adm
+    mode: '0775'
+- name: copy files
+  copy: src=./ dest=/opt/mongo/ group=adm mode=664
+- name: chmod
+  ansible.builtin.file:
+    path: /opt/mongo/scripts/init.sh
+    mode: '0775'
+- name: up
+  become: true
+  shell:
+    chdir: /opt/mongo
+    cmd: 'docker compose up -d'
+- name: Pause for 1 minute to init mongo
+  ansible.builtin.pause:
+    minutes: 2
+# should be run on configured dns
+#- name: setup replicaset
+#  become: true
+#  shell:
+#    chdir: /opt/mongo
+#    cmd: 'docker compose exec mongo /tmp/scripts/init.sh'

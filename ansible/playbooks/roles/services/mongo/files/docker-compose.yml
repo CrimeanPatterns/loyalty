@@ -1,0 +1,16 @@
+version: '3.5'
+
+services:
+  mongo:
+    image:  mongo:3.6-xenial
+    command: ["--bind_ip_all", "--replSet", "loyalty"]
+    volumes:
+      - './scripts:/tmp/scripts:ro'
+    restart: always
+    ports:
+      - '27017:27017'
+    ulimits:
+      nofile:
+        soft: 20000
+        hard: 40000
+

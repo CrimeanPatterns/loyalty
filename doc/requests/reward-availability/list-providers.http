@@ -1,0 +1,3 @@
+GET https://ra-hotels.awardwallet.com/v1/providers/list
+X-Authentication: {{apiKey}}
+

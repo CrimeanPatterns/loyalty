@@ -1,0 +1,10 @@
+[mysqld]
+character-set-server = utf8
+skip-character-set-client-handshake = 1
+interactive_timeout=3600
+max_allowed_packet=128000000
+max_connections=2000
+tmp_table = 8M
+net_read_timeout = 600
+net_write_timeout = 600
+innodb_temp_data_file_path = ibtmp1:12M:autoextend:max:5G

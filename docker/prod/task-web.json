@@ -1,0 +1,142 @@
+{
+  "networkMode": "bridge",
+  "family": "loyalty-web",
+
+  "containerDefinitions": [
+    {
+      "memoryReservation": 64,
+      "name": "fpm",
+      "links": [
+        "mail:mail",
+        "fluent:fluent",
+        "amqproxy:amqproxy"
+      ],
+      "dependsOn": [
+        {"containerName":  "mail", "condition":  "START"},
+        {"containerName":  "fluent", "condition":  "START"},
+        {"containerName":  "amqproxy", "condition":  "START"}
+      ],
+      "mountPoints": [
+        {
+          "containerPath": "/www/loyalty/current/src/AppBundle/Engine",
+          "sourceVolume": "engine"
+        }
+      ],
+      "image": "718278292471.dkr.ecr.us-east-1.amazonaws.com/loyalty:fpm-TAG",
+      "essential": true,
+      "portMappings": [],
+      "cpu": 0,
+      "environment": [
+        {
+          "name": "RABBITMQ_HOST",
+          "value": "amqproxy"
+        }
+      ]
+    },
+    {
+      "memoryReservation": 32,
+      "environment": [],
+      "name": "mail",
+      "mountPoints": [],
+      "image": "718278292471.dkr.ecr.us-east-1.amazonaws.com/postfix:baed54c0835277be7910f075105ca35f990ff171",
+      "cpu": 0,
+      "portMappings": [],
+      "essential": true,
+      "volumesFrom": []
+    },
+    {
+      "memoryReservation": 32,
+      "environment": [
+        {
+          "name": "DETECT_AWS_IP",
+          "value": "1"
+        }
+      ],
+      "name": "fluent",
+      "mountPoints": [],
+      "image": "718278292471.dkr.ecr.us-east-1.amazonaws.com/loyalty:fluentbit-TAG",
+      "cpu": 0,
+      "essential": true
+    },
+    {
+      "memoryReservation": 32,
+      "environment": [],
+      "name": "nginx",
+      "links": [
+        "fpm:fpm",
+        "fluent:fluent"
+      ],
+      "dependsOn": [
+        {"containerName":  "fpm", "condition":  "START"},
+        {"containerName":  "fluent", "condition":  "START"}
+      ],
+      "mountPoints": [],
+      "image": "718278292471.dkr.ecr.us-east-1.amazonaws.com/loyalty:nginx-TAG",
+      "essential": true,
+      "portMappings": [
+        {
+          "protocol": "tcp",
+          "containerPort": 80,
+          "hostPort": 0
+        }
+      ],
+      "cpu": 0,
+      "volumesFrom": []
+    },
+
+    {
+      "name": "engine-sync",
+      "essential": true,
+      "mountPoints": [
+        {
+          "containerPath": "/destination",
+          "sourceVolume": "engine"
+        },
+        {
+          "containerPath": "/mnt/efs/engine",
+          "sourceVolume": "efs-engine"
+        }
+      ],
+      "image": "718278292471.dkr.ecr.us-east-1.amazonaws.com/engine-sync:v6",
+      "memoryReservation": 64,
+      "command": ["bin/console", "sync-engine", "/mnt/efs/engine", "/destination", "-vv", "--rabbit-host", "%RABBIT_HOST%", "--listen"]
+    },
+
+    {
+      "name": "amqproxy",
+      "essential": true,
+      "image": "cloudamqp/amqproxy:v0.8.1",
+      "command": ["-l", "0.0.0.0", "-p", "5672", "amqp://%RABBIT_HOST%:5672"],
+      "memoryReservation": 64
+    }
+
+  ],
+
+  "volumes": [
+    {
+      "name": "engine",
+      "host": {
+        "sourcePath": "/var/engine"
+      }
+    },
+    {
+      "name": "efs-engine",
+      "dockerVolumeConfiguration": {
+        "scope": "task",
+        "driver": "local",
+        "driverOpts": {
+          "type": "nfs",
+          "device": ":/var/engine",
+          "o": "%NFS_OPTIONS%"
+        }
+      }
+    }
+  ],
+
+  "placementConstraints": [
+    {
+      "expression": "attribute:service == ECS_WEB_SERVICE_ATTRIBUTE",
+      "type": "memberOf"
+    }
+  ]
+}

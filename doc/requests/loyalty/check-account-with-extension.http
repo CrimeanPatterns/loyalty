@@ -1,0 +1,10 @@
+POST {{endpoint}}/v2/account/check
+X-Authentication: {{apiKey}}
+Content-Type: application/json
+Cooooookie: XDEBUG_SESSION=aw_idekey_loyalty.docker
+
+{"provider":"testprovider", "login": "Chrome.Chrome94", "userId": "1", "priority": 6, "userData": "{\"accountId\": 1}", "method":  "browser-extension", "extensionSessionId":  "123"}
+
+> {%
+client.global.set("requestId", response.body.requestId);
+%}

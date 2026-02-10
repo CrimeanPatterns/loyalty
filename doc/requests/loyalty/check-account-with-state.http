@@ -1,0 +1,9 @@
+POST {{endpoint}}/v2/account/check
+X-Authentication: {{apiKey}}
+Content-Type: application/json
+
+{"provider":"testprovider", "login": "Selenium.Screenshot", "userId": "1", "priority": 7, "userData": "{\"accountId\": 1}", "answers":  [{"question":  "Question", "answer":  "Answer"}], "browserState": "{{browserState}}"}
+
+> {%
+client.global.set("requestId", response.body.requestId);
+%}

@@ -1,0 +1,4 @@
+parameters:
+  env(SHARED_DATABASE_HOST): 'mysql'
+  env(SHARED_DATABASE_USER): 'loyalty'
+  env(SHARED_DATABASE_NAME): 'loyalty'

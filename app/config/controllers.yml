@@ -1,0 +1,121 @@
+services:
+
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  AppBundle\Controller\ProvidersController:
+    arguments:
+      $connection: '@database_connection'
+      $memcached: '@aw.memcached'
+    tags:
+      - { name: controller.service_arguments }
+
+  AppBundle\Controller\AccountController:
+    arguments:
+      $repo: '@aw.mongo.repo.account'
+    tags:
+      - { name: controller.service_arguments }
+
+  AppBundle\Controller\ConfirmationController:
+    arguments:
+      $repo: '@aw.mongo.repo.confirmation'
+      $manager: '@Doctrine\ODM\MongoDB\DocumentManager'
+    tags:
+      - { name: controller.service_arguments }
+
+  AppBundle\Controller\ChangePasswordController:
+    arguments:
+      $connection: '@database_connection'
+      $repo: '@aw.mongo.repo.change_password'
+    tags:
+      - { name: controller.service_arguments }
+
+  AppBundle\Controller\AutoLoginController:
+    public: true
+    arguments:
+      $logger: '@logger'
+      $connection: '@database_connection'
+      $dm: '@Doctrine\ODM\MongoDB\DocumentManager'
+
+  AppBundle\Controller\AutologinWithExtensionController:
+
+  AppBundle\Controller\RewardAvailabilityController:
+    arguments:
+      $repo: '@aw.mongo.repo.reward_availability'
+      $connection: '@database_connection'
+    tags:
+      - { name: controller.service_arguments }
+
+  AppBundle\Controller\HotSessionController:
+    tags:
+      - { name: controller.service_arguments }
+
+  AppBundle\Controller\RaHotelController:
+    arguments:
+      $repo: '@aw.mongo.repo.reward_availability_hotel'
+      $connection: '@database_connection'
+    tags:
+      - { name: controller.service_arguments }
+
+  AppBundle\Controller\RegisterController:
+    arguments:
+      $repo: '@aw.mongo.repo.register_account'
+      $connection: '@database_connection'
+      $aesKey: '%aes_key_local_browser_state%'
+    tags:
+      - { name: controller.service_arguments }
+
+  AppBundle\Controller\RegisterConfigController:
+    arguments:
+      $repo: '@aw.mongo.repo.register_config'
+      $connection: '@database_connection'
+    tags:
+      - { name: controller.service_arguments }
+
+  AppBundle\Controller\AdminController:
+    arguments:
+      $manager: '@doctrine_mongodb.odm.replica_document_manager'
+      $dm: '@Doctrine\ODM\MongoDB\DocumentManager'
+      $elasticStatIndex: '%elastic_stat_index%'
+      $elasticStatType: '%elastic_stat_doc_type%'
+      $aesKey: '%aes_key_local_browser_state%'
+    calls:
+      - [ "setContainer", [ '@service_container' ] ]
+    tags:
+      - { name: controller.service_arguments }
+
+  AppBundle\Controller\AwAdminController:
+    arguments:
+      $dm: '@Doctrine\ODM\MongoDB\DocumentManager'
+      $dmReplica: '@doctrine_mongodb.odm.replica_document_manager'
+    tags:
+      - { name: controller.service_arguments }
+
+
+  AppBundle\Controller\SchemaController:
+    tags:
+      - { name: controller.service_arguments }
+
+  AppBundle\Controller\PacController:
+    tags:
+      - { name: controller.service_arguments }
+
+  AppBundle\Controller\StatusController:
+    arguments:
+      $manager: '@Doctrine\ODM\MongoDB\DocumentManager'
+      $connection: '@database_connection'
+    tags:
+      - { name: controller.service_arguments }
+
+  AppBundle\Controller\EmailCallbackController:
+    autowire: true
+    arguments:
+      $jms: "@jms_serializer"
+      $callbackPass: "%email_callback_password%"
+    tags:
+      - { name: controller.service_arguments }
+
+  AppBundle\Controller\ExtensionResponseController:
+    tags:
+      - { name: controller.service_arguments }

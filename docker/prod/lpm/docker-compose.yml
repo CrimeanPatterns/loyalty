@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+
+  squid:
+    image: 718278292471.dkr.ecr.us-east-1.amazonaws.com/squid-with-ssl
+    restart: always
+    volumes:
+      - ./cache:/var/spool/squid
+      - ./squid-ca-cert.pem:/etc/squid/certs/squid-ca-cert.pem
+      - ./squid-ca-key.pem:/etc/squid/certs/squid-ca-key.pem
+    ports:
+      - "3128:3128"
+
+  lpm:
+    image: 718278292471.dkr.ecr.us-east-1.amazonaws.com/services/lpm
+    restart: always
+    volumes:
+      - "./lpm:/lpm"
+    command: ["luminati", "--www_whitelist_ips", "192.168.0.0/16", "--whitelist_ips", "192.168.0.0/16", "--ssl", "true", "--config", "/lpm/config.json"]
+    network_mode: host
+    ulimits:
+      nofile:
+        soft: 40000
+        hard: 60000
+

@@ -1,0 +1,46 @@
+#!/usr/bin/env php
+<?php
+require_once __DIR__ . '/../vendor/autoload.php';
+
+$realDir = realpath(__DIR__ . '/../src/AppBundle/Engine');
+
+echo "checking syntax on $realDir\n";
+
+$providerFolders = glob($realDir . '/*', GLOB_ONLYDIR);
+
+$nameSpace = 'AwardWallet\\Engine';
+$patterns = [
+    'functions.php',
+    'QuestionAnalyzer.php',
+    'RewardAvailability/*.php'
+];
+
+spl_autoload_register(function($className) use ($realDir, $nameSpace) {
+    if(strpos($className, $nameSpace) === 0){
+        require_once $realDir . str_replace('\\', '/', substr($className, strlen($nameSpace))) . '.php';
+    }
+});
+
+$files = 0;
+
+ob_start();
+foreach($providerFolders as $d) {
+    foreach ($patterns as $pattern) {
+        foreach (glob($d . '/' . $pattern) as $file) {
+            $files++;
+            require_once $file;
+        }
+    }
+}
+
+foreach (glob("$realDir/*.php") as $file) {
+    if (basename($file) === 'pac.php') {
+        continue;
+    }
+
+    $files++;
+    require_once $file;
+}
+ob_clean();
+
+echo("syntax checked, scanned $files files\n");

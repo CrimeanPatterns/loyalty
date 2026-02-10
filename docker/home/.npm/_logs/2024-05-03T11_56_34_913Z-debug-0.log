@@ -1,0 +1,79 @@
+0 verbose cli /usr/local/lib/nodejs/node-v16.17.0-linux-x64/bin/node /usr/local/lib/nodejs/node-v16.17.0-linux-x64/bin/npm
+1 info using npm@8.15.0
+2 info using node@v16.17.0
+3 timing npm:load:whichnode Completed in 1ms
+4 timing config:load:defaults Completed in 3ms
+5 timing config:load:file:/usr/local/lib/nodejs/node-v16.17.0-linux-x64/lib/node_modules/npm/npmrc Completed in 4ms
+6 timing config:load:builtin Completed in 4ms
+7 timing config:load:cli Completed in 2ms
+8 timing config:load:env Completed in 1ms
+9 timing config:load:file:/www/loyalty/.npmrc Completed in 1ms
+10 timing config:load:project Completed in 35ms
+11 timing config:load:file:/home/user/.npmrc Completed in 0ms
+12 timing config:load:user Completed in 1ms
+13 timing config:load:file:/usr/local/lib/nodejs/node-v16.17.0-linux-x64/etc/npmrc Completed in 0ms
+14 timing config:load:global Completed in 0ms
+15 timing config:load:validate Completed in 0ms
+16 timing config:load:credentials Completed in 3ms
+17 timing config:load:setEnvs Completed in 2ms
+18 timing config:load Completed in 55ms
+19 timing npm:load:configload Completed in 55ms
+20 timing npm:load:mkdirpcache Completed in 3ms
+21 timing npm:load:mkdirplogs Completed in 1ms
+22 verbose title npm i
+23 verbose argv "i"
+24 timing npm:load:setTitle Completed in 3ms
+25 timing config:load:flatten Completed in 5ms
+26 timing npm:load:display Completed in 9ms
+27 verbose logfile logs-max:10 dir:/home/user/.npm/_logs
+28 verbose logfile /home/user/.npm/_logs/2024-05-03T11_56_34_913Z-debug-0.log
+29 timing npm:load:logFile Completed in 16ms
+30 timing npm:load:timers Completed in 0ms
+31 timing npm:load:configScope Completed in 0ms
+32 timing npm:load Completed in 92ms
+33 timing arborist:ctor Completed in 1ms
+34 silly logfile done cleaning log files
+35 timing idealTree:init Completed in 27ms
+36 timing idealTree:userRequests Completed in 0ms
+37 silly idealTree buildDeps
+38 timing idealTree:#root Completed in 0ms
+39 timing idealTree:buildDeps Completed in 2ms
+40 timing idealTree:fixDepFlags Completed in 0ms
+41 timing idealTree Completed in 30ms
+42 timing reify:loadTrees Completed in 38ms
+43 timing reify:diffTrees Completed in 0ms
+44 silly reify moves {}
+45 timing reify:retireShallow Completed in 1ms
+46 timing reify:createSparse Completed in 4ms
+47 timing reify:loadBundles Completed in 0ms
+48 silly audit bulk request {
+48 silly audit   '@awardwallet/extension-v3': [ '1.0.9' ],
+48 silly audit   'webextension-polyfill': [ '0.10.0' ]
+48 silly audit }
+49 silly tarball no local data for @awardwallet/extension-v3@https://npm.pkg.github.com/download/@awardwallet/extension-v3/1.0.9/0c249f911f1a7e3fc73257465aa191738387d5c9. Extracting by manifest.
+50 timing reifyNode:node_modules/webextension-polyfill Completed in 100ms
+51 http fetch GET 401 https://npm.pkg.github.com/download/@awardwallet/extension-v3/1.0.9/0c249f911f1a7e3fc73257465aa191738387d5c9 545ms (cache skip)
+52 timing reify:rollback:createSparse Completed in 12ms
+53 timing reify:rollback:retireShallow Completed in 0ms
+54 timing command:i Completed in 707ms
+55 verbose stack HttpErrorGeneral: 401 Unauthorized - GET https://npm.pkg.github.com/download/@awardwallet/extension-v3/1.0.9/0c249f911f1a7e3fc73257465aa191738387d5c9 - authentication token not provided
+55 verbose stack     at /usr/local/lib/nodejs/node-v16.17.0-linux-x64/lib/node_modules/npm/node_modules/npm-registry-fetch/lib/check-response.js:93:15
+55 verbose stack     at processTicksAndRejections (node:internal/process/task_queues:96:5)
+56 verbose statusCode 401
+57 verbose pkgid @awardwallet/extension-v3@https://npm.pkg.github.com/download/@awardwallet/extension-v3/1.0.9/0c249f911f1a7e3fc73257465aa191738387d5c9
+58 verbose cwd /www/loyalty
+59 verbose Linux 6.6.22-linuxkit
+60 verbose node v16.17.0
+61 verbose npm  v8.15.0
+62 error code E401
+63 error 401 Unauthorized - GET https://npm.pkg.github.com/download/@awardwallet/extension-v3/1.0.9/0c249f911f1a7e3fc73257465aa191738387d5c9 - authentication token not provided
+64 verbose exit 1
+65 timing npm Completed in 880ms
+66 verbose unfinished npm timer reify 1714737395075
+67 verbose unfinished npm timer reify:audit 1714737395145
+68 verbose unfinished npm timer auditReport:getReport 1714737395145
+69 verbose unfinished npm timer reify:unpack 1714737395156
+70 verbose unfinished npm timer reifyNode:node_modules/@awardwallet/extension-v3 1714737395156
+71 verbose code 1
+72 error A complete log of this run can be found in:
+72 error     /home/user/.npm/_logs/2024-05-03T11_56_34_913Z-debug-0.log

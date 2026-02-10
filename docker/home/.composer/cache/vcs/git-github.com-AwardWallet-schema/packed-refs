@@ -1,0 +1,48 @@
+# pack-refs with: peeled fully-peeled sorted 
+04c39fb2f46e623b8512889064f9628b56672911 refs/heads/16485-checker-data-filters
+74dac4b65fc54e5932168f79167a4ef068a4d388 refs/heads/20485-rate-as-an-array
+85077fed9eeb4222eb9b3fa2374f5a8322183d90 refs/heads/bug-with-remove-itinerary
+0e9fdcf4bb9e508a259479fe62906a183473dd68 refs/heads/feature/14986-add-coupon-parsing
+1a6e59a342c573fcc9a2bc29b2d6b619f5d3b55e refs/heads/feature/16664-railway-iata
+4d3a7554e517d1906b8b42111d8cf520ce9b769e refs/heads/feature/16666-add-one-time-code-parsing
+6c20871bbbae0bb1636abc7c213eae86c0503a90 refs/heads/feature/16714-add-ferry-parsing
+b06e4e8a98f07c29eb1249e8a4820b6d0d019b26 refs/heads/feature/16790-new-hotel-fields
+66064af305081649c517c68535331f573e21650a refs/heads/feature/17128-support-for-timeless-dates
+ce4565176843b1b6d5c3bfd9445e810f44e2fe1a refs/heads/feature/17337-parser-mark-emails-asjunk
+78e0ae3b53dd52c2cceee70baea5a7de6fe15218 refs/heads/feature/17812-cancelled-swagger
+7c0e7e848752068f6f58cfa6025b4eb0a6c986de refs/heads/feature/21546-add-notes-field
+9e0d5102a3390222190166e9c7807ff54081c6e1 refs/heads/features/19219-meal-as-seats
+eec7885ee29005fa6f60c22bb7672da944bde201 refs/heads/master
+4f2852d3a82e2f837204105d6a4464af71565807 refs/heads/task/17970-change-schema-cancelled
+b06e4e8a98f07c29eb1249e8a4820b6d0d019b26 refs/pull/1/head
+4f2852d3a82e2f837204105d6a4464af71565807 refs/pull/2/head
+d712ce369129ef5dbd511c1c3aba1963c6858bdf refs/pull/2/merge
+cdf8986f202b1f720d2e5297417fdcdd09e98955 refs/tags/0.1
+a23d2a760093975ae9ea294afb4d50e245b8a63a refs/tags/0.2
+a688d0cd85a0e355c510b86d7ae25fa44f933ccf refs/tags/0.3.0
+c13136a9b33348bc15afd5dde1dd9a9c75113c83 refs/tags/0.3.1
+2dce96e57e8dfd39ab1830a9d26ea92f279e491c refs/tags/0.3.10
+^d63be29303764391572f0157542855ab1c003232
+f667cb5fe3c0db1986df9b829025e4a3dc60d901 refs/tags/0.3.11
+^7a7a09b4d7e8cd53798c60a7ebddf17577550d99
+7e401a95f9200f86bcf22c9ab8f513fbaddc3238 refs/tags/0.3.12
+^4145b4efa84a5df755751576eec9b00c4e5510d7
+74b9c7f5b159db32399b5a81066728b289563400 refs/tags/0.3.13
+^6d32cde88e5a74f34d57453dd4d4d019f767694b
+4c5023dd8a9878c422dc33479ec3db02d9f024ef refs/tags/0.3.14
+b8d3e04c5e2a9220f0648e60b1764767a7664fc6 refs/tags/0.3.15
+81981c460abc2c2ed5deebbae59cfbe359b1c9c2 refs/tags/0.3.16
+43e965aed155e67c13881e50fc0470576abc76dd refs/tags/0.3.17
+6c22f44a9b73032ad64f8533ef14e6f2fd9354b1 refs/tags/0.3.2
+3dab0531ea3ffb9b0b3e249db1a31cf2a78d2b0c refs/tags/0.3.3
+2391da67ad17e18a1532f458894ccd1791ecc0fc refs/tags/0.3.4
+cc2e47596fec38d0e9255c69dd040150b6699dc2 refs/tags/0.3.5
+d1a2224ba92aabedcc01ddec7322248a3efdb789 refs/tags/0.3.6
+^82cbb09b8f839caa219b5c68164b2b5882335206
+7f7f7188044a394ca2183ee09da09795714fa8ea refs/tags/0.3.7
+^92ae6f4ea82e67c46569ff7f7a95c2e3c0aa2535
+e4a069418ccc7126af20d9619288079b82fa8f30 refs/tags/0.3.8
+^20651e0d41f54816ef357d1f1afb51a3abfea7d2
+247a52e413feb317d0c745dab4e3b5a1b9e40afd refs/tags/0.3.9
+^beb740e4c8e4ca992e9f9d7999334ac6548e84ff
+53fd30f9d0c113908e6f16b3b29b5ea44379134b refs/tags/1.0.0

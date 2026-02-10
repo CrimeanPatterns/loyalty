@@ -1,0 +1,5 @@
+#!/bin/sh
+
+echo "this is sudo emulation through 'gosu root' for compatibility"
+set -- /usr/sbin/gosu root "$@"
+exec "$@"

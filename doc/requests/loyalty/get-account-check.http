@@ -1,0 +1,7 @@
+GET {{endpoint}}/v2/account/check/{{requestId}}
+X-Authentication: {{apiKey}}
+
+> {%
+client.global.set("browserState", response.body.browserState);
+//client.global.set("browserState", null);
+%}

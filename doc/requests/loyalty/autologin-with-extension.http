@@ -1,0 +1,6 @@
+POST {{endpoint}}/v2/account/autologin-with-extension
+X-Authentication: {{apiKey}}
+Content-Type: application/json
+Coodkie: XDEBUG_SESSION=aw_idekey_loyalty.docker
+
+{"provider":"aeroflot", "login": "somelogin", "password": "somepassword", "userId": "1", "userData": "{\"accountId\": 1}", "answers":  [{"question":  "question 1", "answer":  "answer 1"}]}

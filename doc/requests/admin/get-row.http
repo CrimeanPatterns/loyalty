@@ -1,0 +1,4 @@
+GET {{endpoint}}/admin/account/{{requestId}}
+X-Authentication: {{apiKey}}
+Content-Type: application/json
+

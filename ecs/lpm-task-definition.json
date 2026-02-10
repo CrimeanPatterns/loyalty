@@ -1,0 +1,26 @@
+{
+  "networkMode": "host",
+  "family": "loyalty-lpm",
+  "placementConstraints": [
+    {
+      "expression": "attribute:service == lpm",
+      "type": "memberOf"
+    }
+  ],
+  "containerDefinitions" : [
+    {
+      "name": "lpm",
+      "image": "luminati/luminati-proxy:1.410.597",
+      "memory": 128,
+      "essential": true,
+      "command": ["pmgr", "--www_whitelist_ips", "0.0.0.0/0"],
+      "portMappings": [
+        {
+          "protocol": "tcp",
+          "containerPort": 22999,
+          "hostPort": 22999
+        }
+      ]
+    }
+  ]
+}

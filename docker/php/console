@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "docker-compose exec console is deprecated, use docker-compose exec bash instead"
+exec /bin/bash

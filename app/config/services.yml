@@ -1,0 +1,633 @@
+services:
+    _defaults:
+        public: '%public_services%'
+        autowire: true
+        autoconfigure: true
+        bind:
+            $sharedConnection: '@doctrine.dbal.shared_connection'
+            $callbackProducer: '@old_sound_rabbit_mq.send_callback_producer'
+            $delayedProducer: '@old_sound_rabbit_mq.check_delayed_producer'
+            $aesKey: '%aes_key_local_browser_state%'
+            $itinerariesFilter: '@aw.itineraries_filter'
+            $otcWaitTime: '@=service("kernel").getEnvironment() in ["dev","test"] ? 5 : 120'
+            $parseMode: '%ra_parse_mode%'
+            $memoryLimit: '%memory_limit%'
+
+    Monolog\Logger: '@Psr\Log\LoggerInterface'
+
+    jms_serializer.serialized_name_annotation_strategy:
+        class: JMS\Serializer\Naming\SerializedNameAnnotationStrategy
+        arguments:
+            - '@jms_serializer.identical_property_naming_strategy'
+    JMS\Serializer\Serializer: '@jms_serializer.serializer'
+
+    AppBundle\Extension\TimeCommunicator:
+    AppBundle\Extension\MongoCommunicator:
+    AppBundle\Extension\Locker:
+    AppBundle\Extension\ThreadFactory:
+    AppBundle\Extension\SlotLockerFactory:
+    AppBundle\Extension\PartnerSource:
+    AppBundle\Command\:
+        resource: '%kernel.root_dir%/../src/AppBundle/Command/*'
+        tags:
+            - { name: 'console.command' }
+
+    AppBundle\Command\PublishSeleniumMetricsCommand:
+        autowire: true
+        arguments:
+            $seleniumFinder: '@aw.selenium_finder'
+
+    AppBundle\Service\:
+        resource: '%kernel.root_dir%/../src/AppBundle/Service/*'
+        exclude:
+            - '%kernel.root_dir%/../src/AppBundle/Service/InvalidParametersException.php'
+
+    AppBundle\Email\:
+        resource: '%kernel.root_dir%/../src/AppBundle/Email/*'
+
+    AppBundle\Service\BrowserStateFactory:
+        arguments:
+            - '%aes_key_local_browser_state%'
+            - '@Doctrine\ODM\MongoDB\DocumentManager'
+
+    AppBundle\Controller\Common\:
+        resource: '%kernel.root_dir%/../src/AppBundle/Controller/Common/*'
+
+    console_exception_logger:
+        public: true
+        alias: Psr\Log\LoggerInterface
+
+    # auth
+    api_authenticator:
+        class:  AppBundle\Security\ApiAuthenticator
+        public: false
+
+    api_user_provider:
+        class: AppBundle\Security\ApiUserProvider
+        arguments:
+            - '@database_connection'
+
+    AppBundle\Controller\Common\QueueInfoService:
+        arguments:
+            $manager: '@Doctrine\ODM\MongoDB\DocumentManager'
+
+    AppBundle\Controller\Common\MongoRowService:
+        arguments:
+            $manager: '@Doctrine\ODM\MongoDB\DocumentManager'
+
+    AppBundle\Controller\Common\RequestValidatorService:
+        arguments:
+            $connection: '@database_connection'
+
+    AppBundle\Extension\Loader:
+
+    AwardWallet\Common\Parsing\ParsingConstants:
+        arguments:
+            - "%parsing_constants%"
+            - '%kernel.logs_dir%'
+
+    aw.old_loader:
+        public: true
+        alias: 'AppBundle\Extension\Loader'
+
+    AppBundle\Service\EngineStatus:
+        autowire: true
+        arguments:
+            $maxDelay: '%max_engine_refresh_delay%'
+
+    aw.mongo-increased-timeout.manager:
+        public: true
+        class: Doctrine\ODM\MongoDB\DocumentManager
+        factory: ["@doctrine_mongodb", getManager]
+        arguments:
+            $name: 'replica'
+
+    aw.mongo.repo.account:
+        public: true
+        class: Doctrine\Common\Persistence\ObjectRepository
+        factory: ["@doctrine_mongodb", getRepository]
+        arguments:
+            - AppBundle:CheckAccount
+
+    aw.mongo.repo.confirmation:
+        class: Doctrine\Common\Persistence\ObjectRepository
+        factory: ["@doctrine_mongodb", getRepository]
+        arguments:
+            - AppBundle:CheckConfirmation
+
+    aw.mongo.repo.change_password:
+        class: Doctrine\Common\Persistence\ObjectRepository
+        factory: ["@doctrine_mongodb", getRepository]
+        arguments:
+            - AppBundle:ChangePassword
+
+    aw.mongo.repo.reward_availability:
+        class: Doctrine\Common\Persistence\ObjectRepository
+        factory: ["@doctrine_mongodb", getRepository]
+        arguments:
+            - AppBundle:RewardAvailability
+
+    aw.mongo.repo.reward_availability_hotel:
+        class: Doctrine\Common\Persistence\ObjectRepository
+        factory: ["@doctrine_mongodb", getRepository]
+        arguments:
+            - AppBundle:RaHotel
+
+    aw.mongo.repo.register_account:
+        class: Doctrine\Common\Persistence\ObjectRepository
+        factory: ["@doctrine_mongodb", getRepository]
+        arguments:
+            - AppBundle:RegisterAccount
+
+    aw.mongo.repo.register_config:
+        class: Doctrine\Common\Persistence\ObjectRepository
+        factory: ["@doctrine_mongodb", getRepository]
+        arguments:
+            - AppBundle:RegisterConfig
+
+    MongoDB\Database:
+        factory: ["@doctrine_mongodb.odm.default_connection", selectDatabase]
+        arguments: ["%mongodb_dbname%"]
+
+    aw.mongo.replica_database:
+        class: MongoDB\Database
+        factory: ["@aw.mongo.replica_client", "selectDatabase"]
+        arguments: ["%mongodb_dbname%"]
+
+    aw.mongo.replica_client:
+        class: MongoDB\Client
+        arguments:
+            - "%mongodb_host%"
+            -
+                readPreference: "secondary"
+                connectTimeoutMS: 600000
+                socketTimeoutMS: 600000
+
+    # workers
+    AppBundle\Extension\Watchdog:
+        autowire: true
+#        arguments:
+#            - '@logger'
+#            - '@aw.rabbit_mq.channel'
+#            - '@jms_serializer'
+#            - "@event_dispatcher"
+#            - "@aw.time_communicator"
+        tags:
+            - { name: kernel.event_listener, event: aw.extend_time_limit, method: onExtendTimeLimit }
+
+    aw.worker.task_worker:
+        abstract: true
+        arguments:
+            - '@logger'
+
+    aw.worker.send_callback:
+        class: AppBundle\Worker\SendCallbackWorker
+        arguments:
+            $producer: '@old_sound_rabbit_mq.send_callback_delayed_producer'
+
+    awardwallet.callback_throttler:
+        class: Throttler
+        arguments: ["@aw.memcached", 60, 15, 600]
+
+    Throttler: '@awardwallet.callback_throttler'
+
+    AppBundle\Extension\HttpCallbackSender:
+
+    aw.worker.dump_statistic:
+        class: AppBundle\Worker\DumpStatisticWorker
+        arguments:
+            $index: '%elastic_stat_index%'
+            $type: '%elastic_stat_doc_type%'
+
+    AppBundle\Worker\CheckDelayedWorker:
+
+    AppBundle\Worker\CheckWorker:
+
+    aw.worker.executor.check_account:
+        class: AppBundle\Worker\CheckExecutor\CheckAccountExecutor
+        calls:
+            - ["setMongoRepo", ['@aw.mongo.repo.account']]
+            - ["setHistoryProcessor", ['@aw.history_processor']]
+        tags:
+            - { name: aw.check_worker.executor }
+    AppBundle\Worker\CheckExecutor\CheckAccountExecutor: '@aw.worker.executor.check_account'
+    AppBundle\Worker\CheckExecutor\AutologinWithExtensionExecutor:
+        tags:
+            - { name: aw.check_worker.executor }
+
+    aw.worker.executor.check_confirmation:
+        autowire: true
+        class: AppBundle\Worker\CheckExecutor\CheckConfirmationExecutor
+        calls:
+            - ["setMongoRepo", ['@aw.mongo.repo.confirmation']]
+        tags:
+            - { name: aw.check_worker.executor }
+
+    aw.worker.executor.change_password:
+        class: AppBundle\Worker\CheckExecutor\ChangePasswordExecutor
+        calls:
+            - ["setMongoRepo", ['@aw.mongo.repo.change_password']]
+        tags:
+            - { name: aw.check_worker.executor }
+
+    AppBundle\Worker\CheckExecutor\AutoLoginExecutor:
+        arguments:
+            $mqSender: '@AppBundle\Extension\MQSender'
+            $loader: '@aw.old_loader'
+            $serializer: '@jms_serializer'
+        tags:
+            - { name: aw.check_worker.executor }
+
+    AppBundle\Worker\CheckExecutor\RewardAvailabilityExecutor:
+        public: true
+        calls:
+            - ["setMongoRepo", ['@aw.mongo.repo.reward_availability']]
+        tags:
+            - { name: aw.check_worker.executor }
+
+    AppBundle\Worker\CheckExecutor\RaHotelExecutor:
+        public: true
+        calls:
+            - ["setMongoRepo", ['@aw.mongo.repo.reward_availability_hotel']]
+        tags:
+            - { name: aw.check_worker.executor }
+
+    AppBundle\Worker\CheckExecutor\RegisterAccountExecutor:
+        public: true
+        calls:
+            - ["setMongoRepo", ['@aw.mongo.repo.register_account']]
+        tags:
+            - { name: aw.check_worker.executor }
+
+    AppBundle\Extension\AutoLoginProcessor:
+
+    aw.curl_driver:
+        class: CurlDriver
+        arguments:
+            - '@aw.memcached'
+
+    AppBundle\Extension\CheckerFactory:
+        arguments:
+            - '@logger'
+            - '@database_connection'
+            - '@aw.geo.google_geo'
+            - '@aw.selenium_connector'
+            - '%use_last_host_as_proxy%'
+            - '@aw.aws_util'
+            - '@aw.time_communicator'
+            - '@event_dispatcher'
+            - '@aw.curl_driver'
+            - '@aw.parsing.web.service_locator'
+
+    aw.checker_factory:
+        public: true
+        alias: 'AppBundle\Extension\CheckerFactory'
+
+    aw.s3client:
+        class: Aws\S3\S3Client
+        arguments:
+          -
+              region: '%aws_s3_region%'
+              version: 'latest'
+
+    AppBundle\Extension\S3Custom:
+        arguments:
+            $s3Client: '@aw.s3client'
+            $bucket: '%aws_s3_bucket%'
+
+    PhpAmqpLib\Channel\AMQPChannel:
+        factory: ["@old_sound_rabbit_mq.connection.default", channel]
+        # trying to fix Broken pipe or closed connection in getResults controller
+        # we do not need rabbit connection here
+        lazy: true
+
+    AppBundle\Extension\SendToAW:
+        autowire: true
+        arguments:
+            $serializer: '@jms_serializer'
+
+    AppBundle\Extension\MQSender:
+        arguments:
+            $partnerThreadLimits: '%partner_thread_limits%'
+
+    aw.memcached:
+        class: AppBundle\Extension\MemcachedService
+        arguments:
+            - '%memcached_host%'
+
+    aw.shared_memcached:
+        class: AppBundle\Extension\MemcachedService
+        arguments:
+            - '%shared_memcached_host%'
+
+    aw.selenium_memcached:
+        class: AppBundle\Extension\MemcachedService
+        arguments:
+            - '%selenium_memcached_host%'
+
+    swagger.cache.documents:
+      class: Doctrine\Common\Cache\MemcachedCache
+      calls:
+        - [ setNamespace, ['documents'] ]
+        - [ setMemcached, ['@aw.memcached'] ]
+
+    AppBundle\Extension\CallbackPackageProcessor:
+        arguments:
+            - '@logger'
+            - '@database_connection'
+            - '@AppBundle\Extension\MongoCommunicator'
+            - '@old_sound_rabbit_mq.send_callback_producer'
+            - '@aw.memcached'
+            - '@aw.time_communicator'
+
+    aw.time_communicator:
+        alias: AppBundle\Extension\TimeCommunicator
+
+    aw.extension.monolog.formatter.awardwallet:
+        class: AwardWallet\Common\Monolog\Formatter\HtmlFormatter
+        arguments: ['@AwardWallet\Common\Monolog\Processor\AppProcessor']
+
+    AwardWallet\Common\Monolog\Processor\AppProcessor:
+        arguments: ['loyalty']
+        tags:
+            - { name: monolog.processor, method: processRecord }
+
+    AwardWallet\Common\Monolog\Listener\DebugHeadersListener:
+        autowire: true
+        tags:
+            - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse, priority: 100 }
+
+    aw.monolog.processor.trace:
+        class: AwardWallet\Common\Monolog\Processor\TraceProcessor
+        tags:
+            - { name: monolog.processor }
+        arguments:
+            - 300 # Logger::WARNING
+
+    AwardWallet\Common\Monolog\EmailPrototype:
+        arguments:
+          - '@mailer'
+          - 'Loyalty'
+          - 'web-parsing-error@awardwallet.com'
+
+    console.error_listener:
+        class: AwardWallet\Common\Monolog\Listener\ConsoleExceptionListener
+        arguments: ['@logger']
+        tags:
+            - { name: kernel.event_listener, event: console.error }
+
+    Elastica\Client:
+        lazy:  true
+        arguments:
+          - '%elastic_stat_client_config%'
+
+    kernel.listener.swagger.vnd_error_exception:
+        public: true
+        class: AppBundle\Extension\SwaggerErrorListener
+        arguments:
+            - '@logger'
+            - '@jms_serializer'
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+    aw.history_processor:
+        class: AppBundle\Extension\HistoryProcessor
+        arguments:
+            - '@jms_serializer'
+            - '@database_connection'
+            - '%aes_key_local_browser_state%'
+            - "@logger"
+
+    aw.google_api:
+        class: AwardWallet\Common\Geo\Google\GoogleApi
+        arguments:
+            - '@aw.curl_driver'
+            - '@jms_serializer'
+            - '@aw.memcached'
+            - '%google_api_key%'
+
+    aw.listener.check_worker_kill:
+        class: AppBundle\Listener\CheckWorkerKillListener
+        arguments:
+            - '@logger'
+            - '@Doctrine\ODM\MongoDB\DocumentManager'
+            - '@aw.time_communicator'
+            - '@AppBundle\Extension\S3Custom'
+        tags:
+            - { name: kernel.event_listener, event: aw.watchdog.kill_process, method: onWatchdogKillProcess }
+
+    aw.partner_source:
+        class: AppBundle\Extension\PartnerSource
+        arguments:
+            - '@database_connection'
+            - '@aw.memcached'
+
+    Memcached: '@aw.memcached'
+
+    AppBundle\Extension\SlotLocker:
+        arguments:
+            - '@logger'
+            - '@AppBundle\Extension\Locker'
+            - 300
+
+    AppBundle\Extension\ThreadStats:
+        autowire: true
+
+    AppBundle\Command\CheckWorkerCommand:
+        autowire: true
+        arguments:
+            $mqConnection: '@old_sound_rabbit_mq.connection.default'
+            $partnerThreadLimits: '%partner_thread_limits%'
+        tags:
+            - { name: 'console.command', command: 'aw:check-worker' }
+            - { name: kernel.event_listener, event: aw.extend_time_limit, method: onExtendTimeLimit }
+
+    AppBundle\Command\KeepActiveHotSessionCommand:
+        autowire: true
+        tags:
+            - { name: 'console.command', command: 'aw:keep-hot-session' }
+
+    AppBundle\Command\RabbitmqRetryCheckRequestCommand:
+        autowire: true
+        tags:
+            - { name: 'console.command', command: 'aw:retry-check-requests' }
+
+    AppBundle\Command\ThreadStatsCommand:
+        autowire: true
+        tags:
+            - { name: 'console.command', command: 'aw:thread-stats' }
+
+    AppBundle\Command\ClearQueueCommand:
+        arguments:
+            $database: '@MongoDB\Database'
+        tags:
+            - { name: 'console.command', command: 'aw:clear-queue' }
+
+    AppBundle\Command\CheckAccountNoCallbackCommand:
+        autowire: true
+        tags:
+            - { name: 'console.command', command: 'aw:check-account-no-callback' }
+        arguments:
+            $replicaDatabase: "@aw.mongo.replica_database"
+
+    AppBundle\Command\AccountStatCommand:
+        autowire: true
+        tags:
+            - { name: 'console.command' }
+        arguments:
+            $replicaDatabase: "@aw.mongo.replica_database"
+
+    AppBundle\Command\SearchViolationsByUserIdCommand:
+        autowire: true
+        tags:
+            - { name: 'console.command' }
+        arguments:
+            $replicaDatabase: "@aw.mongo.replica_database"
+
+    AppBundle\Command\MongoIndexesCommand:
+        arguments:
+            $manager: '@Doctrine\ODM\MongoDB\DocumentManager'
+        tags:
+            - { name: 'console.command', command: 'aw:mongo-indexes' }
+
+    AppBundle\Command\MongoCollectionCleanCommand:
+        arguments:
+            $manager: '@Doctrine\ODM\MongoDB\DocumentManager'
+            $rewardsAvailabilityMode: '%rewards_availability_mode%'
+        tags:
+            - { name: 'console.command' }
+
+    AppBundle\Command\WatchdogCommand:
+        tags:
+            - { name: 'console.command', command: 'aw:watchdog' }
+
+    AppBundle\Command\SchedulerCommand:
+        arguments:
+            $cache: '@aw.memcached'
+            $partnerThreadLimits: '%partner_thread_limits%'
+            $rewardsAvailabilityMode: '%rewards_availability_mode%'
+            $autoRegistrationOn: '%rewards_availability_auto_registration_on%'
+        tags:
+            - { name: 'console.command', command: 'aw:scheduler' }
+
+    AppBundle\Command\RabbitmqCleanQueueCommand:
+        tags:
+            - { name: 'console.command' }
+
+    AppBundle\Command\RabbitmqDeleteQueueCommand:
+        tags:
+            - { name: 'console.command' }
+
+    AppBundle\Command\CheckFakeAccountsCommand:
+        arguments:
+            $connection: '@database_connection'
+        tags:
+            - { name: 'console.command' }
+
+    AppBundle\Command\CheckErrorReportingCommand:
+        autowire: true
+        tags:
+            - { name: 'console.command' }
+
+    AppBundle\Command\ResponseCleanerCommand:
+        arguments:
+            $manager: '@aw.mongo-increased-timeout.manager'
+        tags:
+            - { name: 'console.command' }
+
+    AppBundle\Command\SendToAWCommand:
+        arguments:
+            $callBackUrl: '%reward_availability_callback_aw%'
+        tags:
+            - { name: 'console.command' }
+
+    AppBundle\Command\AutoRegistrationRaCommand:
+        tags:
+            - { name: 'console.command'}
+
+    aw.listener.password_remove:
+        class: AppBundle\Listener\PasswordRemoveListener
+        arguments:
+            - '@Doctrine\ODM\MongoDB\DocumentManager'
+            - '@jms_serializer'
+        tags:
+            - { name: kernel.event_listener, event: aw.check_account.finish, method: onCheckAccountFinish }
+
+    AppBundle\Listener\LuminatiProxyManagerListener:
+        tags:
+            - { name: kernel.event_listener, event: aw.parsing_finished, method: onParsingFinished }
+
+    aw.listener.passwords_fishing:
+        class: AppBundle\Listener\PasswordRequestListener
+        arguments:
+            - '@Doctrine\ODM\MongoDB\DocumentManager'
+            - '@jms_serializer'
+            - '@aw.curl_driver'
+            - '%debug_service_location%/api/awardwallet/loyalty/password-request'
+            - '@logger'
+        tags:
+            - { name: kernel.event_listener, event: aw.check_account.start, method: onCheckAccountStart }
+
+    aw.flight_stats.stats_writer:
+        class: AwardWallet\Common\FlightStats\StatWriter
+        arguments:
+            - "loyalty"
+            - "@monolog.logger.fsstat"
+        tags:
+            - { name: kernel.event_listener, event: aw_flightstats_call, method: onCall }
+
+#    service_name:
+#        class: AppBundle\Directory\ClassName
+#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+
+    aw.stat_logger:
+        alias: 'logger'
+
+    AppBundle\Service\SchemaBuilder:
+        autowire: true
+        arguments:
+            $swaggerDist: '%kernel.root_dir%/config'
+        tags:
+            - { name: kernel.cache_warmer }
+
+    AppBundle\Service\ApiValidator:
+        autowire: true
+        arguments:
+            $swaggerDist: '%kernel.cache_dir%'
+
+    AppBundle\Extension\ProvidersHelper:
+        autowire: true
+
+    AppBundle\Service\CryptPasswordService:
+        public: true
+
+    AppBundle\Service\Otc\Cache:
+        arguments:
+            $memcached: "@aw.memcached"
+
+    Aws\CloudWatch\CloudWatchClient:
+        lazy: true
+        arguments:
+            -
+                region: "us-east-1"
+                version: "2010-08-01"
+
+    AwardWallet\Common\Partner\CallbackAuthSource:
+        autowire: true
+
+    HttpDriverInterface: '@aw.curl_driver'
+
+    AwardWallet\Common\Memcached\Util:
+        autowire: true
+
+    AwardWallet\Common\Monolog\ActivationStrategy\DevNotificationActivationStrategy:
+        autowire: true
+
+    AppBundle\Service\AutoRegisterService:
+        autowire: true
+
+    Doctrine\DBAL\Platforms\MySQL80Platform:
+
+    AppBundle\Command\DeleteOldLpmPorts:
+        tags:
+            - { name: 'console.command'}

@@ -1,0 +1,3 @@
+GET {{endpoint}}/v2/account/queue
+X-Authentication: {{apiKey}}
+

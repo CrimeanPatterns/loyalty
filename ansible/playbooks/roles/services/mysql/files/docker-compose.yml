@@ -1,0 +1,19 @@
+version: '3.5'
+
+services:
+  mysql:
+    image: mysql:5.7
+    restart: always
+    ports:
+      - "3306:3306"
+    ulimits:
+      nofile:
+        soft: 20000
+        hard: 40000
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=1
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_DATABASE=loyalty
+    volumes:
+      - ./mysql.cnf:/etc/mysql/mysql.conf.d/awardwallet.cnf

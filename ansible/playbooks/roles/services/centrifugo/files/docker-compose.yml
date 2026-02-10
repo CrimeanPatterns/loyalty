@@ -1,0 +1,13 @@
+version: '3.5'
+
+services:
+  centrifugo:
+    image: centrifugo/centrifugo:v5
+    volumes:
+      - ./config.json:/centrifugo/config.json
+    command: centrifugo -c config.json
+    network_mode: host
+    ulimits:
+      nofile:
+        soft: 65535
+        hard: 65535

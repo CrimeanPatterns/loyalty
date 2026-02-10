@@ -1,0 +1,66 @@
+# To get started with security, check out the documentation:
+# http://symfony.com/doc/current/book/security.html
+security:
+
+    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+#    providers:
+#        in_memory:
+#            memory: ~
+
+    firewalls:
+        # disables authentication for assets and the profiler, adapt it according to your needs
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+
+#        main:
+#            pattern:  /
+#            security: false
+
+        doc:
+            pattern:  /spec
+            security: false
+
+        swagger-schema:
+            pattern:  /swagger-schema
+            security: false
+
+        callback_test:
+            pattern:  /callback/test
+            security: false
+
+        callback:
+            pattern: ^/callback/
+            security: false
+
+        status:
+            pattern:  /elb-check
+            security: false
+
+        pac-file:
+            pattern:  ^/pac
+            security: false
+
+        secured:
+            pattern: ^/
+            stateless: true
+            simple_preauth:
+                authenticator: 'api_authenticator'
+            provider: 'api_user_provider'
+
+    access_control:
+        - { path: ^/, roles: ROLE_USER }
+
+    providers:
+        api_user_provider:
+            id: api_user_provider
+
+#        main:
+#            anonymous: ~
+            # activate different ways to authenticate
+
+            # http_basic: ~
+            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
+
+            # form_login: ~
+            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html

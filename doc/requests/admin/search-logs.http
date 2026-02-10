@@ -1,0 +1,10 @@
+POST {{endpoint}}/admin/logs
+X-Authentication: {{apiKey}}
+Content-Type: application/json
+
+{
+  "partner":"awardwallet",
+  "method": "RewardAvailability",
+  "provider": "delta",
+  "requestId": "6446524503ebe764f7018c72"
+}

@@ -1,0 +1,13 @@
+imports:
+  - { resource: config_prod.yml }
+  - { resource: '../../vendor/awardwallet/ssm-env-var-processor/src/services.yml' }
+
+parameters:
+  ssm_path: '/loyalty/prod'
+  env(RABBITMQ_HOST): "192.168.2.171" # dns issues in amqproxy when using domain name
+  env(SHARED_DATABASE_HOST): 'shared-mysql.infra.awardwallet.com'
+  env(SHARED_DATABASE_USER): 'loyalty_shared'
+  env(SHARED_DATABASE_NAME): 'shared'
+  env(EXTENSION_WORKER_CENTRIFUGE_SERVER_API_URL): 'http://centrifugo.loyalty.infra.awardwallet.com:8000/api'
+  env(EXTENSION_WORKER_CENTRIFUGE_API_KEY): '%env(ssm:centrifugo_api_key)%'
+  env(EXTENSION_WORKER_CENTRIFUGE_SECRET): '%env(ssm:centrifugo_token_hmac_secret_key)%'

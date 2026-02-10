@@ -1,0 +1,3 @@
+GET {{ endpoint }}/v2/providers/thankyou
+X-Authentication: {{apiKey}}
+

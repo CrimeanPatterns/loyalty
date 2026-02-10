@@ -1,0 +1,121 @@
+{
+  "networkMode": "bridge",
+  "family": "loyalty-ECS_WORKER_SERVICE_ATTRIBUTE",
+  "containerDefinitions": [
+    {
+      "name": "worker",
+      "image": "718278292471.dkr.ecr.us-east-1.amazonaws.com/loyalty:worker-TAG",
+      "memoryReservation": 100,
+      "essential": true,
+      "mountPoints": [
+        {
+          "containerPath": "/www/loyalty/current/src/AppBundle/Engine",
+          "sourceVolume": "engine"
+        }
+      ],
+      "links": [
+        "mail:mail",
+        "fluent:fluent"
+      ],
+      "dependsOn": [
+        {"containerName":  "mail", "condition":  "START"},
+        {"containerName":  "fluent", "condition":  "START"}
+      ],
+      "environment": [
+        {
+          "name": "CHECK_PROXY_IP",
+          "value": "1"
+        }
+      ],
+      "healthCheck": {
+        "command": [
+          "CMD",
+          "/www/loyalty/current/util/supervisor-healthcheck.sh"
+        ],
+        "interval": 60,
+        "timeout": 30,
+        "startPeriod": 30
+      }
+    },
+    {
+      "essential": true,
+      "name": "mail",
+      "image": "718278292471.dkr.ecr.us-east-1.amazonaws.com/postfix:baed54c0835277be7910f075105ca35f990ff171",
+      "memoryReservation": 64
+    },
+
+    {
+      "essential": true,
+      "name": "fluent",
+      "image": "718278292471.dkr.ecr.us-east-1.amazonaws.com/loyalty:fluentbit-TAG",
+      "environment": [
+        {
+          "name": "DETECT_AWS_IP",
+          "value": "1"
+        }
+      ],
+      "memoryReservation": 64
+    },
+
+    {
+      "essential": true,
+      "name": "squid",
+      "image": "718278292471.dkr.ecr.us-east-1.amazonaws.com/squid:baed54c0835277be7910f075105ca35f990ff171",
+      "memoryReservation": 64,
+      "portMappings": [
+        {
+          "protocol": "tcp",
+          "containerPort": 3128,
+          "hostPort": 3128
+        }
+      ]
+    },
+
+    {
+      "name": "engine-sync",
+      "essential": true,
+      "mountPoints": [
+        {
+          "containerPath": "/destination",
+          "sourceVolume": "engine"
+        },
+        {
+          "containerPath": "/mnt/efs/engine",
+          "sourceVolume": "efs-engine"
+        }
+      ],
+      "image": "718278292471.dkr.ecr.us-east-1.amazonaws.com/engine-sync:v6",
+      "memoryReservation": 64,
+      "command": ["bin/console", "sync-engine", "/mnt/efs/engine", "/destination", "-vv", "--rabbit-host", "%RABBIT_HOST%", "--listen"]
+    }
+
+  ],
+
+  "volumes": [
+    {
+      "name": "engine",
+      "host": {
+        "sourcePath": "/var/engine"
+      }
+    },
+    {
+      "name": "efs-engine",
+      "dockerVolumeConfiguration": {
+        "scope": "task",
+        "driver": "local",
+        "driverOpts": {
+          "type": "nfs",
+          "device": ":/var/engine",
+          "o": "%NFS_OPTIONS%"
+        }
+      }
+    }
+  ],
+
+  "placementConstraints": [
+    {
+      "expression": "attribute:service == ECS_WORKER_SERVICE_ATTRIBUTE",
+      "type": "memberOf"
+    }
+  ]
+}
