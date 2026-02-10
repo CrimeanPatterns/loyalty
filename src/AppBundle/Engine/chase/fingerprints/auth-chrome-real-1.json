@@ -1,0 +1,33 @@
+{
+    "navigator": {
+        "vendorSub": "",
+        "productSub": "20030107",
+        "vendor": "Google Inc.",
+        "maxTouchPoints": 0,
+        "doNotTrack": null,
+        "hardwareConcurrency": 8,
+        "cookieEnabled": true,
+        "appCodeName": "Mozilla",
+        "appName": "Netscape",
+        "appVersion": "5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Safari/537.36",
+        "platform": "MacIntel",
+        "product": "Gecko",
+        "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.67 Safari/537.36",
+        "language": "en-US",
+        "onLine": true,
+        "deviceMemory": 8
+    },
+    "plugins": [],
+    "screen": {
+        "availHeight": 1335,
+        "availWidth": 2560,
+        "colorDepth": 24,
+        "height": 1440,
+        "pixelDepth": 24,
+        "width": 2560
+    },
+    "extra": {
+        "javascript_ver": "2.0",
+        "timezone": -300
+    }
+}

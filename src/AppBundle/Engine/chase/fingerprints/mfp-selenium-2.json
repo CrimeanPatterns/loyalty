@@ -1,0 +1,35 @@
+{
+    "VERSION": "2.1.2",
+    "MFP": {
+        "Browser": {
+            "UserAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.102 Safari/537.36",
+            "Vendor": "Google Inc.",
+            "VendorSubID": "",
+            "BuildID": "20030107",
+            "CookieEnabled": true
+        },
+        "IEPlugins": {},
+        "NetscapePlugins": {
+            "Chrome PDF Plugin": "",
+            "Chrome PDF Viewer": "",
+            "Native Client": ""
+        },
+        "Screen": {
+            "FullHeight": 1020,
+            "AvlHeight": 998,
+            "FullWidth": 1360,
+            "AvlWidth": 1360,
+            "ColorDepth": 24,
+            "PixelDepth": 24
+        },
+        "System": {
+            "Platform": "MacIntel",
+            "systemLanguage": "en-US",
+            "Timezone": 300
+        }
+    },
+    "ExternalIP": "",
+    "MESC": {
+        "mesc": "mi=1;cd=5;id=0;mesc=444"
+    }
+}

@@ -1,0 +1,40 @@
+{
+    "navigator": {
+        "doNotTrack": "1",
+        "maxTouchPoints": 0,
+        "oscpu": "Intel+Mac+OS+X+10.15",
+        "vendor": "",
+        "vendorSub": "",
+        "productSub": "20100101",
+        "cookieEnabled": true,
+        "buildID": "20181001000000",
+        "webdriver": false,
+        "hardwareConcurrency": 4,
+        "appCodeName": "Mozilla",
+        "appName": "Netscape",
+        "appVersion": "5.0+(Macintosh)",
+        "platform": "MacIntel",
+        "userAgent": "Mozilla/5.0+(Macintosh;+Intel+Mac+OS+X+10.15;+rv:82.0)+Gecko/20100101+Firefox/82.0",
+        "product": "Gecko",
+        "language": "en-US",
+        "onLine": true
+    },
+    "plugins": [
+        {
+            "name": "Macromedia+Shockwave+Flash",
+            "version": "21.0"
+        }
+    ],
+    "screen": {
+        "availHeight": 800,
+        "availWidth": 1440,
+        "colorDepth": 24,
+        "height": 900,
+        "pixelDepth": 24,
+        "width": 1440
+    },
+    "extra": {
+        "javascript_ver": "2.0",
+        "timezone": -300
+    }
+}

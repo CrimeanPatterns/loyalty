@@ -1,0 +1,38 @@
+{
+  "MX": {
+    "name": "Mexico",
+    "states": {
+      "AG": "Aguascalientes",
+      "BN": "Baja California",
+      "BS": "Baja California Sur",
+      "CM": "Campeche",
+      "CP": "Chiapas",
+      "CH": "Chihuahua",
+      "CA": "Coahuila De Zaragoza",
+      "CL": "Colima",
+      "DF": "Distrito Federal",
+      "DU": "Durango",
+      "GT": "Guanajuato",
+      "GR": "Guerrero",
+      "HI": "Hidalgo",
+      "JA": "Jalisco",
+      "MC": "Michoac\u00e1n de Ocampo",
+      "MR": "Morelos",
+      "NA": "Nayarit",
+      "NL": "Nuevo Le\u00f3n",
+      "OA": "Oaxaca",
+      "PU": "Puebla",
+      "QE": "Quer\u00e9taro De Arteaga",
+      "QR": "Quintana Roo",
+      "SL": "San Luis Potos\u00ed",
+      "SI": "Sinaloa",
+      "SO": "Sonora",
+      "TB": "Tabasco",
+      "TM": "Tamaulipas",
+      "TL": "Tlaxcala",
+      "VE": "Veracruz",
+      "YU": "Yucat\u00e1n",
+      "ZA": "Zacatecas"
+    }
+  }
+}

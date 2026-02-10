@@ -1,0 +1,36 @@
+{
+    "navigator": {
+        "webdriver": false,
+        "doNotTrack": "unspecified",
+        "maxTouchPoints": 0,
+        "vendor": "",
+        "vendorSub": "",
+        "productSub": "20100101",
+        "cookieEnabled": true,
+        "buildID": "20180117222144",
+        "hardwareConcurrency": 4,
+        "appCodeName": "Mozilla",
+        "appName": "Netscape",
+        "userAgent": "Mozilla/5.0+(Macintosh;+Intel+Mac+OS+X+10.15;+rv:82.0)+Gecko/20100101+Firefox/82.0",
+        "product": "Gecko",
+        "onLine": true
+    },
+    "plugins": [
+        {
+            "name": "Macromedia+Shockwave+Flash",
+            "version": "21.0"
+        }
+    ],
+    "screen": {
+        "availHeight": 998,
+        "availWidth": 1360,
+        "colorDepth": 24,
+        "height": 1020,
+        "pixelDepth": 24,
+        "width": 1360
+    },
+    "extra": {
+        "javascript_ver": "2.0",
+        "timezone": 300
+    }
+}
