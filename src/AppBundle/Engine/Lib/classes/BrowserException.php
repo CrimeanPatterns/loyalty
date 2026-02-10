@@ -1,5 +1,0 @@
-<?
-
-class BrowserException extends Exception{
-
-}
