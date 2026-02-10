@@ -1,0 +1,927 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions targetNamespace="http://custhub.ct.aa.com/CustomerPNRV3/WSDL" xmlns:SOAP="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://custhub.ct.aa.com/CustomerPNRV3" xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdltns="http://custhub.ct.aa.com/CustomerPNRV3/WSDL" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+<!-- CONFIDENTIAL LICENSED MATERIAL -->
+<!-- ============================== -->
+<!-- Copyright (c) 2004-2010 by Progress Software Corporation -->
+
+<!-- Export Configuration options -->
+<!-- ============================ -->
+<!-- complex types only            - false -->
+<!-- include required rules        - true -->
+<!-- include reverse relationships - false -->
+<!-- export with weak typing       - false -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+ targetNamespace="http://custhub.ct.aa.com/CustomerPNRV3"
+ xmlns:tns="http://custhub.ct.aa.com/CustomerPNRV3"
+ xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+
+   <!-- The type: customerpnrv2.AirSegmentTypeCodeEnum -->
+   <xs:simpleType name="AirSegmentTypeCodeEnum">
+      <xs:restriction base="xs:int">
+         <xs:enumeration value="0"/>
+         <xs:enumeration value="2"/>
+         <xs:enumeration value="9"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <!-- The type: customerpnrv2.Airline -->
+   <xs:element name="Airline" type="tns:Airline"/>
+   <xs:complexType name="Airline">
+      <xs:sequence>
+         <xs:element name="AirlineCode" type="xs:string"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.BaseCabinClassCodeEnum -->
+   <xs:simpleType name="BaseCabinClassCodeEnum">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="C"/>
+         <xs:enumeration value="F"/>
+         <xs:enumeration value="Y"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <!-- The type: customerpnrv2.CUPIDType -->
+   <xs:simpleType name="CUPIDType">
+      <xs:restriction base="xs:long">
+         <xs:minExclusive value="0"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <!-- The type: customerpnrv2.CustomerIndividual -->
+   <xs:element name="CustomerIndividual" type="tns:CustomerIndividual"/>
+   <xs:complexType name="CustomerIndividual">
+      <xs:annotation>
+         <xs:documentation>
+CUSTOMER INDIVIDUAL is a person fulfilling the role of a customer in relationship to the enterprise by performing the following activities
+- Shows intent to purchase products/services with a reservation
+- Inquires about a product or service
+- Purchases products/services from the enterprise
+- Consumes products/services from the enterprise
+Examples of a customer individual can be
+       Passenger who books a reservation or purchases a ticket 
+  or  Party&apos;s that participate in a company sponsored loyalty program.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="CustomerIdentifier" type="tns:CUPIDType"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.CustomerPNRPassenger -->
+   <xs:element name="CustomerPNRPassenger" type="tns:CustomerPNRPassenger"/>
+   <xs:complexType name="CustomerPNRPassenger">
+      <xs:sequence>
+         <xs:element name="CustomerIndividual" type="tns:CustomerIndividual"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.ErrorTypeEnum -->
+   <xs:simpleType name="ErrorTypeEnum">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="B"/>
+         <xs:enumeration value="S"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <!-- The type: customerpnrv2.FaultType -->
+   <xs:element name="FaultType" type="tns:FaultType"/>
+   <xs:complexType name="FaultType">
+      <xs:sequence>
+         <xs:element name="ErrorCd" type="xs:string"/>
+         <xs:element name="ErrorType" type="tns:ErrorTypeEnum"/>
+         <xs:element name="ErrorMessage" type="xs:string"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.Flight -->
+   <xs:element name="Flight" type="tns:Flight"/>
+   <xs:complexType name="Flight">
+      <xs:sequence>
+         <xs:element name="Airline" type="tns:Airline"/>
+         <xs:element name="FlightNumber" type="xs:string" minOccurs="0"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.GroupPNR -->
+   <xs:element name="GroupPNR" type="tns:GroupPNR"/>
+   <xs:complexType name="GroupPNR">
+      <xs:complexContent>
+         <xs:extension base="tns:PNR">
+            <xs:sequence>
+               <xs:element name="PassengerGroupName" type="xs:string"/>
+               <xs:element name="PassengerQuantity" type="xs:int" default="1"/>
+               <xs:element name="PNRPassenger" type="tns:PNRPassenger" minOccurs="0" maxOccurs="unbounded"/>
+               <xs:element name="PNRPassengerSeat" type="tns:PNRPassengerSeat" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.ListResponseHdrStatusCodeType -->
+   <xs:simpleType name="ListResponseHdrStatusCodeType">
+      <xs:restriction base="xs:decimal">
+         <xs:enumeration value="0"/>
+         <xs:enumeration value="10"/>
+         <xs:enumeration value="11"/>
+         <xs:enumeration value="12"/>
+         <xs:enumeration value="13"/>
+         <xs:enumeration value="99"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <!-- The type: customerpnrv2.ListResponseHdrStatusMessageType -->
+   <xs:simpleType name="ListResponseHdrStatusMessageType">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="Invalid WSDL version"/>
+         <xs:enumeration value="No Results"/>
+         <xs:enumeration value="Partial Results"/>
+         <xs:enumeration value="Schema Validation Error"/>
+         <xs:enumeration value="Success"/>
+         <xs:enumeration value="Unknown Error"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <!-- The type: customerpnrv2.ListResponseHdrStatusType -->
+   <xs:element name="ListResponseHdrStatusType" type="tns:ListResponseHdrStatusType"/>
+   <xs:complexType name="ListResponseHdrStatusType">
+      <xs:complexContent>
+         <xs:extension base="tns:ResponseStatusType">
+            <xs:sequence>
+               <xs:element name="Info" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.ListResponseHeaderType -->
+   <xs:element name="ListResponseHeaderType" type="tns:ListResponseHeaderType"/>
+   <xs:complexType name="ListResponseHeaderType">
+      <xs:complexContent>
+         <xs:extension base="tns:ResponseHeaderType">
+            <xs:sequence/>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.Name -->
+   <xs:element name="Name" type="tns:Name"/>
+   <xs:complexType name="Name">
+      <xs:sequence>
+         <xs:element name="FirstName" >
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:maxLength value="35"/>
+                  <xs:pattern value="([-' A-Za-z]*)"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="LastName" >
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:maxLength value="35"/>
+                  <xs:pattern value="([-' A-Za-z]*)"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="MiddleName"  minOccurs="0">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:maxLength value="35"/>
+                  <xs:pattern value="([-' A-Za-z]*)"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="PrefixTitle"  minOccurs="0">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:maxLength value="20"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="SuffixTitle"  minOccurs="0">
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:maxLength value="20"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+         <xs:element name="PreferredName" >
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:maxLength value="35"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.NonGroupPNR -->
+   <xs:element name="NonGroupPNR" type="tns:NonGroupPNR"/>
+   <xs:complexType name="NonGroupPNR">
+      <xs:complexContent>
+         <xs:extension base="tns:PNR">
+            <xs:sequence>
+               <xs:element name="PNRPassenger" type="tns:PNRPassenger" maxOccurs="unbounded"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.OAOperatingAirSegment -->
+   <xs:element name="OAOperatingAirSegment" type="tns:OAOperatingAirSegment"/>
+   <xs:complexType name="OAOperatingAirSegment">
+      <xs:complexContent>
+         <xs:extension base="tns:PNRHostAirSegment">
+            <xs:sequence>
+               <xs:element name="OperatingAirlinePNRIdentifier" type="xs:string" minOccurs="0"/>
+               <xs:element name="FlightOperated" type="tns:Flight" minOccurs="0"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNR -->
+   <xs:element name="PNR" type="tns:PNR" abstract="true"/>
+   <xs:complexType name="PNR" abstract="true">
+      <xs:annotation>
+         <xs:documentation>
+The Passenger Name Record (PNR).
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="PNRIdentifier" type="xs:string"/>
+         <xs:element name="PNRCreateTime" type="xs:time"/>
+         <xs:element name="PNRCreateDate" type="xs:date"/>
+         <xs:element name="PNRTypeCode" type="tns:PNRTypeCodeEnum" default="0"/>
+         <xs:element name="PNRTicket" type="tns:PNRTicket" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="PNRTravelSegment" type="tns:PNRTravelSegment" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="PNRSpecialServiceRequest" type="tns:PNRSpecialServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRAirSegment -->
+   <xs:element name="PNRAirSegment" type="tns:PNRAirSegment"/>
+   <xs:complexType name="PNRAirSegment">
+      <xs:complexContent>
+         <xs:extension base="tns:PNRTravelSegment">
+            <xs:sequence>
+               <xs:element name="ClassOfServiceBookedCode" type="xs:string"/>
+               <xs:element name="MealServiceIndicator" type="xs:boolean" minOccurs="0"/>
+               <xs:element name="BaseCabinClassCode" type="tns:BaseCabinClassCodeEnum" minOccurs="0" default="C"/>
+               <xs:element name="AircraftTypeNumericCode" type="xs:string" minOccurs="0"/>
+               <xs:element name="SegmentStatusPreviousCode" type="tns:SegmentStatus"/>
+               <xs:element name="SegmentStatusCurrentCode" type="tns:SegmentStatus"/>
+               <xs:element name="SegmentServiceEndCode" type="tns:Station"/>
+               <xs:element name="SegmentServiceBeginCode" type="tns:Station"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRBasedLoyaltyMember -->
+   <xs:element name="PNRBasedLoyaltyMember" type="tns:PNRBasedLoyaltyMember"/>
+   <xs:complexType name="PNRBasedLoyaltyMember">
+      <xs:complexContent>
+         <xs:extension base="tns:PNRLoyaltyMember">
+            <xs:sequence>
+               <xs:element name="LoyaltyPNRAirlineBookedCode" type="tns:Airline"/>
+               <xs:element name="SegmentStatus" type="tns:SegmentStatus" minOccurs="0"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRBasedSpecialServiceRequest -->
+   <xs:element name="PNRBasedSpecialServiceRequest" type="tns:PNRBasedSpecialServiceRequest"/>
+   <xs:complexType name="PNRBasedSpecialServiceRequest">
+      <xs:complexContent>
+         <xs:extension base="tns:PNRSpecialServiceRequest">
+            <xs:sequence>
+               <xs:element name="SegmentBeginDate" type="xs:date" minOccurs="0"/>
+               <xs:element name="ClassOfServicePNRBookedCode" type="xs:string" minOccurs="0"/>
+               <xs:element name="SegmentStatus" type="tns:SegmentStatus" minOccurs="0"/>
+               <xs:element name="FlightBooked" type="tns:Flight" minOccurs="0"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRHistoryRetrieveList -->
+   <xs:simpleType name="PNRHistoryRetrieveList">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="Ticket"/>
+         <xs:enumeration value="SpecialServiceRequest"/>
+         <xs:enumeration value="Passenger"/>
+         <xs:enumeration value="PassengerSeat"/>
+         <xs:enumeration value="TravelSegment"/>
+         <xs:enumeration value="LoyaltyMember"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <!-- The type: customerpnrv2.PNRHostAirSegment -->
+   <xs:element name="PNRHostAirSegment" type="tns:PNRHostAirSegment" abstract="true"/>
+   <xs:complexType name="PNRHostAirSegment" abstract="true">
+      <xs:complexContent>
+         <xs:extension base="tns:PNRStandardAirSegment">
+            <xs:sequence>
+               <xs:element name="FlightMarketed" type="tns:Flight" minOccurs="0"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRLoyaltyMember -->
+   <xs:element name="PNRLoyaltyMember" type="tns:PNRLoyaltyMember"/>
+   <xs:complexType name="PNRLoyaltyMember">
+      <xs:sequence>
+         <xs:element name="FrequentTravelerSequenceIdentifier" type="xs:int"/>
+         <xs:element name="LoyaltyAccountNumber" type="xs:string" minOccurs="0"/>
+         <xs:element name="LoyaltyMemberMarkettingAffiliationNumericText" type="xs:string"/>
+         <xs:element name="FrequentTravelerProgramOwningAirlineCode" type="tns:Airline" minOccurs="0"/>
+         <xs:element name="LoyaltyMemberSegmentStatusCurrentCode" type="tns:SegmentStatus"/>
+         <xs:element name="PassengerSequenceNumber" type="xs:integer" minOccurs="0"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRLoyaltyMemberTransactionHistory -->
+   <xs:element name="PNRLoyaltyMemberTransactionHistory" type="tns:PNRLoyaltyMemberTransactionHistory"/>
+   <xs:complexType name="PNRLoyaltyMemberTransactionHistory">
+      <xs:sequence>
+         <xs:element name="TransactionBookingActivityCode" type="xs:string"/>
+         <xs:element name="PNRLoyaltyMember" type="tns:PNRLoyaltyMember" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNROpenAirSegment -->
+   <xs:element name="PNROpenAirSegment" type="tns:PNROpenAirSegment"/>
+   <xs:complexType name="PNROpenAirSegment">
+      <xs:complexContent>
+         <xs:extension base="tns:PNRAirSegment">
+            <xs:sequence>
+               <xs:element name="SegmentBeginTimestamp" type="xs:date" minOccurs="0"/>
+               <xs:element name="AirlineBookedCode" type="tns:Airline"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNROtherAirSegment -->
+   <xs:element name="PNROtherAirSegment" type="tns:PNROtherAirSegment"/>
+   <xs:complexType name="PNROtherAirSegment">
+      <xs:complexContent>
+         <xs:extension base="tns:PNRStandardAirSegment">
+            <xs:sequence/>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRPassenger -->
+   <xs:element name="PNRPassenger" type="tns:PNRPassenger"/>
+   <xs:complexType name="PNRPassenger">
+      <xs:annotation>
+         <xs:documentation>
+The passenger name(s) from the passenger name field in the PNR.  Includes individual passenger names, corporate names, or block space group names.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="PassengerSequenceIdentifier" type="xs:integer"/>
+         <xs:element name="PassengerTypeCode" type="tns:PassengerTypeCodeEnum" minOccurs="0" default="A"/>
+         <xs:element name="PNRFirstName" type="xs:string" minOccurs="0"/>
+         <xs:element name="PNRLastName" type="xs:string"/>
+         <xs:element name="PNRLoyaltyMember" type="tns:PNRLoyaltyMember" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="PNRPassengerSeat" type="tns:PNRPassengerSeat" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="CustomerPNRPassenger" type="tns:CustomerPNRPassenger" minOccurs="0"/>
+         <xs:element name="PNRSpecialServiceRequest" type="tns:PNRSpecialServiceRequest" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRPassengerAirSegment -->
+   <xs:element name="PNRPassengerAirSegment" type="tns:PNRPassengerAirSegment"/>
+   <xs:complexType name="PNRPassengerAirSegment">
+      <xs:sequence>
+         <xs:element name="PassengerSequenceNumber" type="xs:integer" minOccurs="0"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRPassengerSeat -->
+   <xs:element name="PNRPassengerSeat" type="tns:PNRPassengerSeat"/>
+   <xs:complexType name="PNRPassengerSeat">
+      <xs:sequence>
+         <xs:element name="PassengerSeatSequenceIdentifier" type="xs:int"/>
+         <xs:element name="SeatRowIdentifier" type="xs:string" minOccurs="0"/>
+         <xs:element name="RowLetterIdentifier" type="xs:string" minOccurs="0"/>
+         <xs:element name="FlightLegBeginDate" type="xs:date"/>
+         <xs:element name="FlightLegServiceEndCode" type="tns:Station"/>
+         <xs:element name="FlightLegServiceBeginCode" type="tns:Station"/>
+         <xs:element name="SeatFlightBooked" type="tns:Flight"/>
+         <xs:element name="SeatCharacteristicCode1" type="xs:string" minOccurs="0"/>
+         <xs:element name="SeatCharacteristicCode2" type="xs:string" minOccurs="0"/>
+         <xs:element name="ClassOfServiceBookedCode" type="xs:string"/>
+         <xs:element name="SeatSegmentStatusCurrentCode" type="tns:SegmentStatus"/>
+         <xs:element name="SeatSegmentStatusPreviousCode" type="tns:SegmentStatus"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRPassengerSeatTransactionHistory -->
+   <xs:element name="PNRPassengerSeatTransactionHistory" type="tns:PNRPassengerSeatTransactionHistory"/>
+   <xs:complexType name="PNRPassengerSeatTransactionHistory">
+      <xs:sequence>
+         <xs:element name="TransactionBookingActivityCode" type="xs:string"/>
+         <xs:element name="PNRPassengerSeat" type="tns:PNRPassengerSeat" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRPassengerTransactionHistory -->
+   <xs:element name="PNRPassengerTransactionHistory" type="tns:PNRPassengerTransactionHistory"/>
+   <xs:complexType name="PNRPassengerTransactionHistory">
+      <xs:sequence>
+         <xs:element name="TransactionBookingActivity" type="xs:string"/>
+         <xs:element name="PNRPassenger" type="tns:PNRPassenger" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="GroupPNR" type="tns:GroupPNR" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRSegmentLoyaltyMember -->
+   <xs:element name="PNRSegmentLoyaltyMember" type="tns:PNRSegmentLoyaltyMember"/>
+   <xs:complexType name="PNRSegmentLoyaltyMember">
+      <xs:annotation>
+         <xs:documentation>
+The frequent traveler information from the frequent traveler &quot;FD&quot; field in the PNR.  Includes airline (AA and OA), car and hotel frequent traveler information.
+         </xs:documentation>
+      </xs:annotation>
+      <xs:sequence>
+         <xs:element name="PassengerSequenceNumber" type="xs:integer" minOccurs="0"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRSpecialServiceRequest -->
+   <xs:element name="PNRSpecialServiceRequest" type="tns:PNRSpecialServiceRequest"/>
+   <xs:complexType name="PNRSpecialServiceRequest">
+      <xs:sequence>
+         <xs:element name="SequenceIdentifier" type="xs:int"/>
+         <xs:element name="Code" type="xs:string"/>
+         <xs:element name="Text" type="xs:string" minOccurs="0"/>
+         <xs:element name="Quantity" type="xs:int" minOccurs="0"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRSpecialServiceRqstTransactionHistory -->
+   <xs:element name="PNRSpecialServiceRqstTransactionHistory" type="tns:PNRSpecialServiceRqstTransactionHistory"/>
+   <xs:complexType name="PNRSpecialServiceRqstTransactionHistory">
+      <xs:sequence>
+         <xs:element name="TransactionBookingActivityCode" type="xs:string"/>
+         <xs:element name="PNRSpecialServiceRequest" type="tns:PNRSpecialServiceRequest" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRStandardAirSegment -->
+   <xs:element name="PNRStandardAirSegment" type="tns:PNRStandardAirSegment" abstract="true"/>
+   <xs:complexType name="PNRStandardAirSegment" abstract="true">
+      <xs:complexContent>
+         <xs:extension base="tns:PNRAirSegment">
+            <xs:sequence>
+               <xs:element name="SegmentBeginTimestamp" type="xs:dateTime"/>
+               <xs:element name="SegmentEndTimestamp" type="xs:dateTime"/>
+               <xs:element name="AircraftTypeCode" type="xs:string" minOccurs="0"/>
+               <xs:element name="FlightBooked" type="tns:Flight"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRTicket -->
+   <xs:element name="PNRTicket" type="tns:PNRTicket"/>
+   <xs:complexType name="PNRTicket">
+      <xs:sequence>
+         <xs:element name="TicketSequenceIdentifier" type="xs:int"/>
+         <xs:element name="TicketStatusCode" type="xs:string" minOccurs="0"/>
+         <xs:element name="TicketStatusDate" type="xs:date" minOccurs="0"/>
+         <xs:element name="PNRTicketText" type="xs:string"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRTicketTransactionHistory -->
+   <xs:element name="PNRTicketTransactionHistory" type="tns:PNRTicketTransactionHistory"/>
+   <xs:complexType name="PNRTicketTransactionHistory">
+      <xs:sequence>
+         <xs:element name="TicketTransactionBookingActivityCode" type="xs:string"/>
+         <xs:element name="PNRTicket" type="tns:PNRTicket" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRTransactionBookingActivity -->
+   <xs:element name="PNRTransactionBookingActivity" type="tns:PNRTransactionBookingActivity"/>
+   <xs:complexType name="PNRTransactionBookingActivity">
+      <xs:sequence>
+         <xs:element name="TransactionSequenceIdentifier" type="xs:int"/>
+         <xs:element name="TransactionText" type="xs:string" minOccurs="0"/>
+         <xs:element name="DutyAuthorizationLevelUpdateCode" type="xs:string" minOccurs="0"/>
+         <xs:element name="TransactionEndTimestamp" type="xs:dateTime"/>
+         <xs:element name="AgentOverridePseudoCityCode" type="xs:string" minOccurs="0"/>
+         <xs:element name="AgentHomePseudoCityCode" type="xs:string" minOccurs="0"/>
+         <xs:element name="PNRTravelSegmentTransactionHistory" type="tns:PNRTravelSegmentTransactionHistory" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="PNRPassengerTransactionHistory" type="tns:PNRPassengerTransactionHistory" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="PNRPassengerSeatTransactionHistory" type="tns:PNRPassengerSeatTransactionHistory" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="PNRLoyaltyMemberTransactionHistory" type="tns:PNRLoyaltyMemberTransactionHistory" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="PNRSpecialServiceRqstTransactionHistory" type="tns:PNRSpecialServiceRqstTransactionHistory" minOccurs="0" maxOccurs="unbounded"/>
+         <xs:element name="PNRTicketTransactionHistory" type="tns:PNRTicketTransactionHistory" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRTravelSegment -->
+   <xs:element name="PNRTravelSegment" type="tns:PNRTravelSegment" abstract="true"/>
+   <xs:complexType name="PNRTravelSegment" abstract="true">
+      <xs:sequence>
+         <xs:element name="SegmentSequenceIdentifier" type="xs:int"/>
+         <xs:element name="SegmentTypeCode" type="tns:SegmentTypeCodeEnum"/>
+         <xs:element name="SegmentPassengerQuantity" type="xs:int"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRTravelSegmentTransactionHistory -->
+   <xs:element name="PNRTravelSegmentTransactionHistory" type="tns:PNRTravelSegmentTransactionHistory"/>
+   <xs:complexType name="PNRTravelSegmentTransactionHistory">
+      <xs:sequence>
+         <xs:element name="SegmentTransactionBookingActivityCode" type="xs:string"/>
+         <xs:element name="PNRTravelSegment" type="tns:PNRTravelSegment" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PNRTypeCodeEnum -->
+   <xs:simpleType name="PNRTypeCodeEnum">
+      <xs:restriction base="xs:int">
+         <xs:enumeration value="0"/>
+         <xs:enumeration value="1"/>
+         <xs:enumeration value="2"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <!-- The type: customerpnrv2.PNRUnkownSegment -->
+   <xs:element name="PNRUnkownSegment" type="tns:PNRUnkownSegment"/>
+   <xs:complexType name="PNRUnkownSegment">
+      <xs:complexContent>
+         <xs:extension base="tns:PNRTravelSegment">
+            <xs:sequence/>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.PassengerTypeCodeEnum -->
+   <xs:simpleType name="PassengerTypeCodeEnum">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="A"/>
+         <xs:enumeration value="I"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <!-- The type: customerpnrv2.RequestHeaderType -->
+   <xs:element name="RequestHeaderType" type="tns:RequestHeaderType"/>
+   <xs:complexType name="RequestHeaderType">
+      <xs:sequence>
+         <!-- <xs:element name="ClientID" type="xs:string"/>
+         <xs:element name="WsdlVersion" type="xs:string"/>
+         <xs:element name="ServiceType" type="xs:string"/>
+         <xs:element name="ApplicationID" type="xs:string"/> -->
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.ResponseHeaderType -->
+   <xs:element name="ResponseHeaderType" type="tns:ResponseHeaderType"/>
+   <xs:complexType name="ResponseHeaderType">
+      <xs:sequence>
+         <xs:element name="ResponseStatus" type="tns:ListResponseHdrStatusType"/>
+         <xs:element name="ServiceInfo" type="tns:ServiceInfoType"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.ResponseStatusCodeEnum -->
+   <xs:simpleType name="ResponseStatusCodeEnum">
+      <xs:restriction base="xs:int">
+         <xs:enumeration value="0"/>
+         <xs:enumeration value="11"/>
+         <xs:enumeration value="99"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <!-- The type: customerpnrv2.ResponseStatusMessageEnum -->
+   <xs:simpleType name="ResponseStatusMessageEnum">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="No Results"/>
+         <xs:enumeration value="Success"/>
+         <xs:enumeration value="Unknown Error"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <!-- The type: customerpnrv2.ResponseStatusType -->
+   <xs:element name="ResponseStatusType" type="tns:ResponseStatusType"/>
+   <xs:complexType name="ResponseStatusType">
+      <xs:sequence>
+         <xs:element name="Code" type="tns:ListResponseHdrStatusCodeType"/>
+         <xs:element name="Message" type="tns:ListResponseHdrStatusMessageType"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.RetrieveCustomerPNRDetailsByNameAndFlightRequest -->
+   <xs:element name="RetrieveCustomerPNRDetailsByNameAndFlightRequest" type="tns:RetrieveCustomerPNRDetailsByNameAndFlightRequest"/>
+   <xs:complexType name="RetrieveCustomerPNRDetailsByNameAndFlightRequest">
+      <xs:complexContent>
+         <xs:extension base="tns:RequestHeaderType">
+            <xs:sequence>
+               <xs:element name="RequestItem" type="tns:RetrieveCustomerPNRDetailsByNameAndFlightRequestItem" maxOccurs="unbounded"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.RetrieveCustomerPNRDetailsByNameAndFlightRequestItem -->
+   <xs:element name="RetrieveCustomerPNRDetailsByNameAndFlightRequestItem" type="tns:RetrieveCustomerPNRDetailsByNameAndFlightRequestItem"/>
+   <xs:complexType name="RetrieveCustomerPNRDetailsByNameAndFlightRequestItem">
+      <xs:sequence>
+         <xs:element name="PassengerFirstName" type="xs:string"/>
+         <xs:element name="PassengerLastName" type="xs:string"/>
+         <xs:element name="ExactFirstNameMatch" type="xs:boolean"/>
+         <xs:element name="CarrierCode" type="xs:string"/>
+         <xs:element name="FlightNumber" type="xs:string"/>
+         <xs:element name="DepartureDate" type="xs:date"/>
+         <xs:element name="DepartureCityCode" type="xs:string" minOccurs="0"/>
+         <xs:element name="ArrivalCityCode" type="xs:string" minOccurs="0"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.RetrieveCustomerPNRDetailsByNameAndFlightResponse -->
+   <xs:element name="RetrieveCustomerPNRDetailsByNameAndFlightResponse" type="tns:RetrieveCustomerPNRDetailsByNameAndFlightResponse"/>
+   <xs:complexType name="RetrieveCustomerPNRDetailsByNameAndFlightResponse">
+      <xs:complexContent>
+         <xs:extension base="tns:ListResponseHeaderType">
+            <xs:sequence>
+               <xs:element name="Result" type="tns:RetrieveCustomerPNRDetailsByNameAndFlightResult" maxOccurs="unbounded"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.RetrieveCustomerPNRDetailsByNameAndFlightResponseStatus -->
+   <xs:element name="RetrieveCustomerPNRDetailsByNameAndFlightResponseStatus" type="tns:RetrieveCustomerPNRDetailsByNameAndFlightResponseStatus"/>
+   <xs:complexType name="RetrieveCustomerPNRDetailsByNameAndFlightResponseStatus">
+      <xs:sequence>
+         <xs:element name="Code" type="tns:ResponseStatusCodeEnum"/>
+         <xs:element name="Message" type="tns:ResponseStatusMessageEnum"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.RetrieveCustomerPNRDetailsByNameAndFlightResult -->
+   <xs:element name="RetrieveCustomerPNRDetailsByNameAndFlightResult" type="tns:RetrieveCustomerPNRDetailsByNameAndFlightResult"/>
+   <xs:complexType name="RetrieveCustomerPNRDetailsByNameAndFlightResult">
+      <xs:sequence>
+         <xs:element name="ResponseStatus" type="tns:RetrieveCustomerPNRDetailsByNameAndFlightResponseStatus"/>
+         <xs:element name="RequestItem" type="tns:RetrieveCustomerPNRDetailsByNameAndFlightRequestItem"/>
+         <xs:element name="PNR" type="tns:PNR" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.RetrieveCustomerPNRDetailsRequest -->
+   <xs:element name="RetrieveCustomerPNRDetailsRequest" type="tns:RetrieveCustomerPNRDetailsRequest"/>
+   <xs:complexType name="RetrieveCustomerPNRDetailsRequest">
+      <xs:complexContent>
+         <xs:extension base="tns:RequestHeaderType">
+            <xs:sequence>
+               <xs:element name="RetrieveCustomerPNRDetailsRequestItem" type="tns:RetrieveCustomerPNRDetailsRequestItem" maxOccurs="unbounded"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.RetrieveCustomerPNRDetailsRequestItem -->
+   <xs:element name="RetrieveCustomerPNRDetailsRequestItem" type="tns:RetrieveCustomerPNRDetailsRequestItem"/>
+   <xs:complexType name="RetrieveCustomerPNRDetailsRequestItem">
+      <xs:sequence>
+         <xs:element name="PNRID" >
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:minLength value="6"/>
+                  <xs:maxLength value="6"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.RetrieveCustomerPNRDetailsResponse -->
+   <xs:element name="RetrieveCustomerPNRDetailsResponse" type="tns:RetrieveCustomerPNRDetailsResponse"/>
+   <xs:complexType name="RetrieveCustomerPNRDetailsResponse">
+      <xs:complexContent>
+         <xs:extension base="tns:ListResponseHeaderType">
+            <xs:sequence>
+               <xs:element name="RetrieveCustomerPNRDetailsResult" type="tns:RetrieveCustomerPNRDetailsResult" maxOccurs="unbounded"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.RetrieveCustomerPNRDetailsResponseStatus -->
+   <xs:element name="RetrieveCustomerPNRDetailsResponseStatus" type="tns:RetrieveCustomerPNRDetailsResponseStatus"/>
+   <xs:complexType name="RetrieveCustomerPNRDetailsResponseStatus">
+      <xs:sequence>
+         <xs:element name="Code" type="tns:ResponseStatusCodeEnum"/>
+         <xs:element name="Message" type="tns:ResponseStatusMessageEnum"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.RetrieveCustomerPNRDetailsResult -->
+   <xs:element name="RetrieveCustomerPNRDetailsResult" type="tns:RetrieveCustomerPNRDetailsResult"/>
+   <xs:complexType name="RetrieveCustomerPNRDetailsResult">
+      <xs:sequence>
+         <xs:element name="ResponseStatus" type="tns:RetrieveCustomerPNRDetailsResponseStatus"/>
+         <xs:element name="RequestItem" type="tns:RetrieveCustomerPNRDetailsRequestItem"/>
+         <xs:element name="PNR" type="tns:PNR" minOccurs="0"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.RetrieveCustomerPNRHistoryRequest -->
+   <xs:element name="RetrieveCustomerPNRHistoryRequest" type="tns:RetrieveCustomerPNRHistoryRequest"/>
+   <xs:complexType name="RetrieveCustomerPNRHistoryRequest">
+      <xs:complexContent>
+         <xs:extension base="tns:RequestHeaderType">
+            <xs:sequence>
+               <xs:element name="PNRHistoryRetrieveList" type="tns:PNRHistoryRetrieveList" minOccurs="0" maxOccurs="unbounded"/>
+               <xs:element name="RetrieveCustomerPNRHistoryRequestItem" type="tns:RetrieveCustomerPNRHistoryRequestItem" maxOccurs="unbounded"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.RetrieveCustomerPNRHistoryRequestItem -->
+   <xs:element name="RetrieveCustomerPNRHistoryRequestItem" type="tns:RetrieveCustomerPNRHistoryRequestItem"/>
+   <xs:complexType name="RetrieveCustomerPNRHistoryRequestItem">
+      <xs:sequence>
+         <xs:element name="PNRIdentifier" >
+            <xs:simpleType>
+               <xs:restriction base="xs:string">
+                  <xs:minLength value="6"/>
+                  <xs:maxLength value="6"/>
+               </xs:restriction>
+            </xs:simpleType>
+         </xs:element>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.RetrieveCustomerPNRHistoryResponse -->
+   <xs:element name="RetrieveCustomerPNRHistoryResponse" type="tns:RetrieveCustomerPNRHistoryResponse"/>
+   <xs:complexType name="RetrieveCustomerPNRHistoryResponse">
+      <xs:complexContent>
+         <xs:extension base="tns:ListResponseHeaderType">
+            <xs:sequence>
+               <xs:element name="RetrieveCustomerPNRHistoryResult" type="tns:RetrieveCustomerPNRHistoryResult" maxOccurs="unbounded"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.RetrieveCustomerPNRHistoryResponseStatus -->
+   <xs:element name="RetrieveCustomerPNRHistoryResponseStatus" type="tns:RetrieveCustomerPNRHistoryResponseStatus"/>
+   <xs:complexType name="RetrieveCustomerPNRHistoryResponseStatus">
+      <xs:sequence>
+         <xs:element name="Code" type="tns:ResponseStatusCodeEnum"/>
+         <xs:element name="Message" type="tns:ResponseStatusMessageEnum"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.RetrieveCustomerPNRHistoryResult -->
+   <xs:element name="RetrieveCustomerPNRHistoryResult" type="tns:RetrieveCustomerPNRHistoryResult"/>
+   <xs:complexType name="RetrieveCustomerPNRHistoryResult">
+      <xs:sequence>
+         <xs:element name="RetrieveCustomerPNRHistoryRequestItem" type="tns:RetrieveCustomerPNRHistoryRequestItem"/>
+         <xs:element name="RetrieveCustomerPNRHistoryResponseStatus" type="tns:RetrieveCustomerPNRHistoryResponseStatus"/>
+         <xs:element name="PNRTransactionBookingActivity" type="tns:PNRTransactionBookingActivity" minOccurs="0" maxOccurs="unbounded"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.SegmentBasedLoyaltyMember -->
+   <xs:element name="SegmentBasedLoyaltyMember" type="tns:SegmentBasedLoyaltyMember"/>
+   <xs:complexType name="SegmentBasedLoyaltyMember">
+      <xs:complexContent>
+         <xs:extension base="tns:PNRLoyaltyMember">
+            <xs:sequence>
+               <xs:element name="LoyaltySegmentServiceBeginCode" type="tns:Station"/>
+               <xs:element name="LoyaltySegmentServiceEndCode" type="tns:Station"/>
+               <xs:element name="LoyaltySegmentBeginDate" type="xs:date"/>
+               <xs:element name="LoyaltyPNRAirlineBookedCode" type="tns:Flight"/>
+               <xs:element name="SegmentStatus" type="tns:SegmentStatus"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.SegmentBasedSpecialServiceRequest -->
+   <xs:element name="SegmentBasedSpecialServiceRequest" type="tns:SegmentBasedSpecialServiceRequest"/>
+   <xs:complexType name="SegmentBasedSpecialServiceRequest">
+      <xs:complexContent>
+         <xs:extension base="tns:PNRSpecialServiceRequest">
+            <xs:sequence>
+               <xs:element name="SegmentBeginDate" type="xs:date"/>
+               <xs:element name="ClassOfServiceSegmentBookedCode" type="xs:string"/>
+               <xs:element name="SegmentStatus" type="tns:SegmentStatus" minOccurs="0"/>
+               <xs:element name="Flight" type="tns:Flight"/>
+               <xs:element name="SegmentEndCode" type="tns:Station" minOccurs="0"/>
+               <xs:element name="SegmentBeginCode" type="tns:Station"/>
+            </xs:sequence>
+         </xs:extension>
+      </xs:complexContent>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.SegmentStatus -->
+   <xs:element name="SegmentStatus" type="tns:SegmentStatus"/>
+   <xs:complexType name="SegmentStatus">
+      <xs:sequence>
+         <xs:element name="SegmentStatusCode" type="xs:string"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.SegmentTypeCodeEnum -->
+   <xs:simpleType name="SegmentTypeCodeEnum">
+      <xs:restriction base="xs:string">
+         <xs:enumeration value="0"/>
+         <xs:enumeration value="2"/>
+         <xs:enumeration value="4"/>
+         <xs:enumeration value="9"/>
+      </xs:restriction>
+   </xs:simpleType>
+   <!-- The type: customerpnrv2.ServiceInfoType -->
+   <xs:element name="ServiceInfoType" type="tns:ServiceInfoType"/>
+   <xs:complexType name="ServiceInfoType">
+      <xs:sequence>
+         <!-- <xs:element name="ServiceName" type="xs:string"/>
+         <xs:element name="ServiceInstance" type="xs:string" default="ABC"/>
+         <xs:element name="WSDLVersion" type="xs:string" default="2.0"/>
+         <xs:element name="ImplematationVersion" type="xs:string" default="2.0"/> -->
+         <xs:element name="BuildDate" type="xs:date"/>
+      </xs:sequence>
+   </xs:complexType>
+   <!-- The type: customerpnrv2.Station -->
+   <xs:element name="Station" type="tns:Station"/>
+   <xs:complexType name="Station">
+      <xs:sequence>
+         <xs:element name="StationCode" type="xs:string"/>
+         <xs:element name="StationName" type="xs:string" minOccurs="0"/>
+      </xs:sequence>
+   </xs:complexType>
+   
+  <xs:element name="PingRequest" type="tns:PingRequest"/>
+
+  <xs:element name="PingResponse" type="tns:PingResponse"/>
+
+  <xs:complexType name="PingRequest">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="PingResponse">
+    <xs:sequence/>
+  </xs:complexType>
+   
+   
+</xs:schema>
+  </types>
+  <message name="CustomerPNRFault">
+    <part name="FaultType" element="tns:FaultType"/>
+  </message>
+  <message name="RetrieveCustomerPNRDetailsResponse">
+    <part name="RetrieveCustomerPNRDetailsReturn" element="tns:RetrieveCustomerPNRDetailsResponse"/>
+  </message>
+  <message name="CustomerPNRHistoryFault">
+    <part name="FaultType" element="tns:FaultType"/>
+  </message>
+  <message name="RetrieveCustomerPNRDetailsByNameAndFlightResponse">
+    <part name="RetrieveCustomerPNRDetailsByNameAndFlightReturn" element="tns:RetrieveCustomerPNRDetailsByNameAndFlightResponse"/>
+  </message>
+  <message name="RetrieveCustomerPNRDetailsRequest">
+    <part name="Request" element="tns:RetrieveCustomerPNRDetailsRequest"/>
+  </message>
+  <message name="RetrieveCustomerPNRDetailsByNameAndFlightRequest">
+    <part name="Request" element="tns:RetrieveCustomerPNRDetailsByNameAndFlightRequest"/>
+  </message>
+  <message name="RetrieveCustomerPNRTransactionHistoryResponse">
+    <part name="RetrieveCustomerPNRTransactionHistoryReturn" element="tns:RetrieveCustomerPNRHistoryResponse"/>
+  </message>
+  <message name="RetrieveCustomerPNRTransactionHistoryRequest">
+    <part name="request" element="tns:RetrieveCustomerPNRHistoryRequest"/>
+  </message>
+  
+  <message name="PingRequest">
+    <part name="Request" element="tns:PingRequest" />
+  </message>
+  <message name="PingResponse">
+    <part name="PingReturn" element="tns:PingResponse"/>
+  </message>
+  
+  <portType name="CustomerPNRV3PortType">
+    <operation name="RetrieveCustomerPNRDetails">
+      <input message="wsdltns:RetrieveCustomerPNRDetailsRequest"/>
+      <output message="wsdltns:RetrieveCustomerPNRDetailsResponse"/>
+      <fault name="Fault" message="wsdltns:CustomerPNRFault"/>
+    </operation>
+    <operation name="RetrieveCustomerPNRDetailsByNameAndFlight">
+      <input message="wsdltns:RetrieveCustomerPNRDetailsByNameAndFlightRequest"/>
+      <output message="wsdltns:RetrieveCustomerPNRDetailsByNameAndFlightResponse"/>
+      <fault name="Fault" message="wsdltns:CustomerPNRFault"/>
+    </operation>
+    <operation name="RetrieveCustomerPNRTransactionHistory">
+      <input message="wsdltns:RetrieveCustomerPNRTransactionHistoryRequest"/>
+      <output message="wsdltns:RetrieveCustomerPNRTransactionHistoryResponse"/>
+      <fault name="Fault" message="wsdltns:CustomerPNRHistoryFault"/>
+    </operation>
+    <operation name="Ping">
+      <input message="wsdltns:PingRequest"/>
+      <output message="wsdltns:PingResponse"/>
+    </operation>     
+    
+  </portType>
+  <binding name="CustomerPNRV3Binding" type="wsdltns:CustomerPNRV3PortType">
+    <SOAP:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="RetrieveCustomerPNRDetails">
+      <SOAP:operation soapAction="http://www.CustomerPNRV3.com/RetrieveCustomerPNRDetails"/>
+      <input>
+        <SOAP:body use="literal"/>
+      </input>
+      <output>
+        <SOAP:body use="literal"/>
+      </output>
+      <fault name="Fault">
+        <SOAP:fault name="Fault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="RetrieveCustomerPNRDetailsByNameAndFlight">
+      <SOAP:operation soapAction="http://www.CustomerPNRV3.com/RetrieveCustomerPNRDetailsByNameAndFlight"/>
+      <input>
+        <SOAP:body use="literal"/>
+      </input>
+      <output>
+        <SOAP:body use="literal"/>
+      </output>
+      <fault name="Fault">
+        <SOAP:fault name="Fault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="RetrieveCustomerPNRTransactionHistory">
+      <SOAP:operation soapAction="http://www.CustomerPNRV3.com/RetrieveCustomerPNRTransactionHistory"/>
+      <input>
+        <SOAP:body use="literal"/>
+      </input>
+      <output>
+        <SOAP:body use="literal"/>
+      </output>
+      <fault name="Fault">
+        <SOAP:fault name="Fault" use="literal"/>
+      </fault>
+    </operation>
+    <operation name="Ping">
+      <SOAP:operation soapAction="http://www.CustomerPNRV3.com/Ping"/>
+      <input>
+        <SOAP:body use="literal"/>
+      </input>
+      <output>
+        <SOAP:body use="literal"/>
+      </output>
+    </operation>    
+    
+  </binding>
+  <service name="CustomerPNRV3Service">
+    <port name="CustomerPNRV3Port" binding="wsdltns:CustomerPNRV3Binding">
+      <SOAP:address location="https://pmdppartner-s.qa.esoa.aa.com/CustHubDataServices/CustomerPNRV3_AwardWallet"/>
+    </port>
+  </service>
+</definitions>

@@ -1,0 +1,240 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions name="LoyaltyMemberReservationInfoServiceV2Service"
+	targetNamespace="http://cxfws.jee.customerservices.ecdb.americanairlines.com/"
+	xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://cxfws.jee.customerservices.ecdb.americanairlines.com/"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:pingOp="http://customerhub.aa.com/LoyaltyMemberReservationInfoPing">
+	<wsdl:types>
+		<xs:schema attributeFormDefault="unqualified"
+			elementFormDefault="unqualified"
+			targetNamespace="http://cxfws.jee.customerservices.ecdb.americanairlines.com/"
+			xmlns:tns="http://cxfws.jee.customerservices.ecdb.americanairlines.com/"
+			xmlns:xs="http://www.w3.org/2001/XMLSchema">
+			<xs:element name="RetrieveCustomerReservationList" type="tns:RetrieveCustomerReservationList" />
+			<xs:element name="RetrieveCustomerReservationListResponse"
+				type="tns:RetrieveCustomerReservationListResponse" />
+			<xs:complexType name="RetrieveCustomerReservationList">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="request"
+						type="tns:customerReservationListRequest" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="customerReservationListRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:ecdbAbstractRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="bookedAacomOrAasegmentOnly"
+								type="xs:boolean" />
+							<xs:element minOccurs="0" name="clientCode" type="xs:string" />
+							<xs:element minOccurs="0" name="loyaltyCompany" type="xs:string" />
+							<xs:element minOccurs="0" name="loyaltyNumber" type="xs:string" />
+							<xs:element minOccurs="0" name="PNRCreationDate" type="xs:dateTime" />
+							<xs:element minOccurs="0" name="pnrFromDate" type="xs:dateTime" />
+							<xs:element minOccurs="0" name="pnrToDate" type="xs:dateTime" />
+							<xs:element minOccurs="0" name="recordLocator" type="xs:string" />
+							<xs:element minOccurs="0" name="retrieveLimitedChangePnr"
+								type="xs:boolean" />
+							<xs:element minOccurs="0" name="requestedListCount"
+								type="xs:int" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="ecdbAbstractRequest">
+				<xs:complexContent>
+					<xs:extension base="tns:requestHeader">
+						<xs:sequence>
+							<xs:element name="asyncProcessMaxThreadCount" type="xs:long" />
+							<xs:element name="asyncTimeoutValue" type="xs:long" />
+							<xs:element minOccurs="0" name="auditId" type="xs:string" />
+							<xs:element minOccurs="0" name="authorizationId" type="xs:string" />
+							<xs:element minOccurs="0" name="authorizationPassword"
+								type="xs:string" />
+							<xs:element minOccurs="0" name="clientHostName" type="xs:string" />
+							<xs:element minOccurs="0" name="clientIPAddress" type="xs:string" />
+							<xs:element minOccurs="0" name="clientName" type="xs:string" />
+							<xs:element minOccurs="0" name="clientRelease" type="xs:string" />
+							<xs:element minOccurs="0" name="clientServiceName"
+								type="xs:string" />
+							<xs:element minOccurs="0" name="dutyCode" type="xs:string" />
+							<xs:element name="maxDurationOfThreadCountAtMax" type="xs:long" />
+							<xs:element minOccurs="0" name="partitionCode" type="xs:string" />
+							<xs:element name="performAsyncProcess" type="xs:boolean" />
+							<xs:element minOccurs="0" name="prNumber" type="xs:string" />
+							<xs:element minOccurs="0" name="resAuthorizationId"
+								type="xs:string" />
+							<xs:element minOccurs="0" name="resAuthorizationIdSuffix"
+								type="xs:string" />
+							<xs:element minOccurs="0" name="resAuthorizationPassword"
+								type="xs:string" />
+							<xs:element minOccurs="0" name="resEnvironment" type="tns:resEnvironment" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="requestHeader">
+				<xs:sequence>
+					<!-- <xs:element minOccurs="0" name="applicationID" type="xs:string" />
+					<xs:element minOccurs="0" name="clientID" type="xs:string" />
+					<xs:element minOccurs="0" name="serviceType" type="xs:string" />
+					<xs:element minOccurs="0" name="wsdlVersion" type="xs:string" /> -->
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="resEnvironment">
+				<xs:complexContent>
+					<xs:extension base="tns:ecdbAbstractAggregateRequest">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="resEnvironment" type="xs:string" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType abstract="true"
+				name="ecdbAbstractAggregateRequest">
+				<xs:sequence />
+			</xs:complexType>
+			<xs:complexType name="RetrieveCustomerReservationListResponse">
+				<xs:sequence>
+					<xs:element minOccurs="0" name="return"
+						type="tns:customerReservationListResponse" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="customerReservationListResponse">
+				<xs:complexContent>
+					<xs:extension base="tns:ecdbAbstractResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="contextInfo" type="xs:string" />
+							<xs:element maxOccurs="unbounded" minOccurs="0"
+								name="customerReservationSummaryTable" nillable="true"
+								type="tns:customerReservationSummary" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType abstract="true" name="ecdbAbstractResponse">
+				<xs:sequence>
+					<xs:element name="asyncProcessCurrentThreadCount" type="xs:long" />
+					<xs:element name="roundTripTime" type="xs:long" />
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="customerReservationSummary">
+				<xs:complexContent>
+					<xs:extension base="tns:ecdbAbstractResponse">
+						<xs:sequence>
+							<xs:element minOccurs="0" name="arrivalCityCode" type="xs:string" />
+							<xs:element minOccurs="0" name="departingCityCode"
+								type="xs:string" />
+							<xs:element minOccurs="0" name="departureDate" type="xs:dateTime" />
+							<xs:element minOccurs="0" name="PNRCreationDate" type="xs:dateTime" />
+							<xs:element minOccurs="0" name="recordLocator" type="xs:string" />
+							<xs:element minOccurs="0" name="reservationStatus"
+								type="xs:string" />
+							<xs:element minOccurs="0" name="reservationStatusDate"
+								type="xs:string" />
+						</xs:sequence>
+					</xs:extension>
+				</xs:complexContent>
+			</xs:complexType>
+			<xs:complexType name="ECDBServicesSystemException">
+				<xs:sequence />
+			</xs:complexType>
+			<xs:element name="ECDBServicesSystemException" type="tns:ECDBServicesSystemException" />
+		</xs:schema>
+		
+		<xs:schema targetNamespace="http://customerhub.aa.com/LoyaltyMemberReservationInfoPing"
+			version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://customerhub.aa.com/LoyaltyMemberReservationInfoPing">
+			  <xs:element name="Ping" type="tns:Ping"/>
+ 
+ 			 <xs:element name="PingResponse" type="tns:PingResponse"/>
+ 
+ 			 <xs:complexType name="Ping">
+   				 <xs:sequence/>
+ 			 </xs:complexType>
+ 
+ 			 <xs:complexType name="PingResponse">
+   				 <xs:sequence/>
+  			</xs:complexType>
+		</xs:schema>
+		
+	</wsdl:types>
+	<wsdl:message name="RetrieveCustomerReservationList">
+		<wsdl:part element="tns:RetrieveCustomerReservationList"
+			name="parameters">
+		</wsdl:part>		
+	</wsdl:message>
+	
+	<wsdl:message name="pingRequest">
+    	<wsdl:part name="in" element="pingOp:Ping"/>
+ 	 </wsdl:message>
+ 	 
+ 	 <wsdl:message name="pingResponse">
+    	<wsdl:part name="out" element="pingOp:PingResponse"/>
+ 	 </wsdl:message>
+ 	 
+	<wsdl:message name="RetrieveCustomerReservationListResponse">
+		<wsdl:part element="tns:RetrieveCustomerReservationListResponse"
+			name="parameters">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="ECDBServicesSystemException">
+		<wsdl:part element="tns:ECDBServicesSystemException" name="ECDBServicesSystemException">
+		</wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="LoyaltyMemberReservationInfoServiceV2">
+		<wsdl:operation name="RetrieveCustomerReservationList">
+			<wsdl:input message="tns:RetrieveCustomerReservationList"
+				name="RetrieveCustomerReservationList">
+			</wsdl:input>
+			<wsdl:output message="tns:RetrieveCustomerReservationListResponse"
+				name="RetrieveCustomerReservationListResponse">
+			</wsdl:output>
+			<wsdl:fault message="tns:ECDBServicesSystemException"
+				name="ECDBServicesSystemException">
+			</wsdl:fault>
+		</wsdl:operation>
+		
+		<wsdl:operation name="ping">			
+			<wsdl:input message="tns:pingRequest"></wsdl:input>		
+			<wsdl:output message="tns:pingResponse"></wsdl:output>			
+		</wsdl:operation>
+		
+		
+	</wsdl:portType>
+	<wsdl:binding name="LoyaltyMemberReservationInfoServiceV2ServiceSoapBinding"
+		type="tns:LoyaltyMemberReservationInfoServiceV2">
+		<soap:binding style="document"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="RetrieveCustomerReservationList">
+			<soap:operation soapAction="" style="document" />
+			<wsdl:input name="RetrieveCustomerReservationList">
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output name="RetrieveCustomerReservationListResponse">
+				<soap:body use="literal" />
+			</wsdl:output>
+			<wsdl:fault name="ECDBServicesSystemException">
+				<soap:fault name="ECDBServicesSystemException" use="literal" />
+			</wsdl:fault>
+		</wsdl:operation>
+		
+		<wsdl:operation name="ping">
+			<soap:operation soapAction="" />
+			<wsdl:input>
+				<soap:body use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body use="literal" />
+			</wsdl:output>			
+		</wsdl:operation>
+		
+	</wsdl:binding>
+	<wsdl:service name="LoyaltyMemberReservationInfoServiceV2Service">
+		<wsdl:port
+			binding="tns:LoyaltyMemberReservationInfoServiceV2ServiceSoapBinding"
+			name="LoyaltyMemberReservationInfoServiceV2Port">
+			<soap:address
+				location="http://10.62.71.84:9080/services1/CustHubDataServices/LoyaltyMemberReservationInfo/LoyaltyMemberReservationInfoServiceV2" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

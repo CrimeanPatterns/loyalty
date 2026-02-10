@@ -1,0 +1,75 @@
+<?php
+
+namespace AwardWallet\Engine\aeromexico\RewardAvailability;
+
+use AwardWallet\Common\Selenium\HotSession\KeepActiveHotConfig;
+
+class KeepHotConfig extends KeepActiveHotConfig
+{
+    use \SeleniumCheckerHelper;
+
+    public function isActive(): bool
+    {
+        return true;
+    }
+
+    public function getCountToKeep(): int
+    {
+        if (time() < strtotime('04:00') || time() > strtotime('20:00')) {
+            return 40;
+        }
+
+        return 20;
+    }
+
+    public function getInterval(): int
+    {
+        // refresh every N minutes
+        return 15;
+    }
+
+    public function getLimitLifeTime(): ?int
+    {
+        // close after N minutes
+        return 60;
+    }
+
+    public function getAfterDateTime(): ?int
+    {
+        // close before date (UTC)
+        return null;
+    }
+
+    public function run(): bool
+    {
+        $this->logger->debug('[currentUrl]: ' . $this->http->currentUrl());
+
+        if (strpos($this->http->currentUrl(), '.clubpremier.com') === false) {
+            $this->http->Log('unexpected page');
+
+            return false;
+        }
+        $this->logger->debug('[currentUrl]: ' . $this->http->currentUrl());
+
+        $this->http->GetURL("https://vuelaconpuntos.clubpremier.com/");
+        $this->waitFor(function () {
+            return !$this->waitForElement(\WebDriverBy::xpath("//div[contains(@class,'Loading__Wrapper')]"), 0);
+        }, 15);
+
+        if ($soloIda = $this->waitForElement(\WebDriverBy::xpath("//p[contains(normalize-space(),'lo ida')]/ancestor::div[1]"),
+            0)) {
+            $soloIda->click();
+        }
+        $this->logger->debug('[currentUrl]: ' . $this->http->currentUrl());
+        $this->saveResponse();
+
+        if (!$soloIda) {
+            $this->logger->debug('unexpected data on the page');
+
+            return false;
+        }
+        $this->keepSession(true);
+
+        return true;
+    }
+}

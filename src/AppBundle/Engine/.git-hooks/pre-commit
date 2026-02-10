@@ -1,0 +1,14 @@
+#!/bin/sh
+
+echo "php-cs-fixer pre commit hook start"
+
+FILES=$(git status --porcelain | awk '$0 ~ /^[MRA] / && ($2 ~ /\.php$/ || $4 ~ /\.php$/) {print $4 ? $4 : $2}' | grep -i '\.php$' | tr '\n' ' ')
+if [ -z "$FILES" ]
+then
+    echo "php files not found."
+else
+    docker-compose run --rm -T cs-fixer fix --config=.php-cs-fixer.dist.php --using-cache=no --allow-risky=no --verbose ${FILES}
+    git add ${FILES}
+fi
+
+echo "php-cs-fixer pre commit hook finish"

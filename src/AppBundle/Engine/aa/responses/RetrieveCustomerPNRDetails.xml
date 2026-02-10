@@ -1,0 +1,124 @@
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/">
+	<soapenv:Body>
+		<ns2:RetrieveCustomerPNRDetailsResponse xmlns:ns2="http://custhub.ct.aa.com/CustomerPNRV2">
+			<ResponseStatus>
+				<Code>0</Code>
+				<Message>Success</Message>
+			</ResponseStatus>
+			<ServiceInfo>
+				<ServiceName>CustomerPNRV2</ServiceName>
+				<ServiceInstance>CustomerPNRV2</ServiceInstance>
+				<WSDLVersion>2.0</WSDLVersion>
+				<ImplematationVersion>1.0</ImplematationVersion>
+			</ServiceInfo>
+			<RetrieveCustomerPNRDetailsResult>
+				<ResponseStatus>
+					<Code>0</Code>
+					<Message>Success</Message>
+				</ResponseStatus>
+				<RequestItem>
+					<PNRID>LMOFAY</PNRID>
+				</RequestItem>
+				<PNR xsi:type="ns2:NonGroupPNR" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+					<PNRIdentifier>LMOFAY</PNRIdentifier>
+					<PNRCreateTime>10:18:00.000-06:00</PNRCreateTime>
+					<PNRCreateDate>2014-01-27-06:00</PNRCreateDate>
+					<PNRTicket>
+						<TicketStatusCode>TICKETED</TicketStatusCode>
+					</PNRTicket>
+					<PNRTravelSegment xsi:type="ns2:OAOperatingAirSegment">
+						<ClassOfServiceBookedCode>Y</ClassOfServiceBookedCode>
+						<MealServiceIndicator>true</MealServiceIndicator>
+						<BaseCabinClassCode>Y</BaseCabinClassCode>
+						<AircraftTypeNumericCode>197</AircraftTypeNumericCode>
+						<SegmentServiceEndCode>
+							<StationCode>LAX</StationCode>
+						</SegmentServiceEndCode>
+						<SegmentServiceBeginCode>
+							<StationCode>DFW</StationCode>
+						</SegmentServiceBeginCode>
+						<SegmentBeginTimestamp>2014-03-01T07:15:00.000-06:00</SegmentBeginTimestamp>
+						<SegmentEndTimestamp>2014-03-01T08:40:00.000-06:00</SegmentEndTimestamp>
+						<AircraftTypeCode>738</AircraftTypeCode>
+					</PNRTravelSegment>
+					<PNRTravelSegment xsi:type="ns2:OAOperatingAirSegment">
+						<ClassOfServiceBookedCode>Y</ClassOfServiceBookedCode>
+						<MealServiceIndicator>true</MealServiceIndicator>
+						<BaseCabinClassCode>Y</BaseCabinClassCode>
+						<AircraftTypeNumericCode>2</AircraftTypeNumericCode>
+						<SegmentServiceEndCode>
+							<StationCode>DFW</StationCode>
+						</SegmentServiceEndCode>
+						<SegmentServiceBeginCode>
+							<StationCode>LAX</StationCode>
+						</SegmentServiceBeginCode>
+						<SegmentBeginTimestamp>2014-03-05T08:30:00.000-06:00</SegmentBeginTimestamp>
+						<SegmentEndTimestamp>2014-03-05T13:30:00.000-06:00</SegmentEndTimestamp>
+						<AircraftTypeCode>757</AircraftTypeCode>
+					</PNRTravelSegment>
+					<PNRPassenger>
+						<PNRFirstName>AMY MS</PNRFirstName>
+						<PNRLastName>MARCH</PNRLastName>
+						<PNRPassengerSeat>
+							<PassengerSeatSequenceIdentifier>1</PassengerSeatSequenceIdentifier>
+							<SeatRowIdentifier>23</SeatRowIdentifier>
+							<RowLetterIdentifier>A</RowLetterIdentifier>
+							<FlightLegBeginDate>2014-03-01-06:00</FlightLegBeginDate>
+							<FlightLegServiceEndCode>
+								<StationCode>LAX</StationCode>
+							</FlightLegServiceEndCode>
+							<FlightLegServiceBeginCode>
+								<StationCode>DFW</StationCode>
+							</FlightLegServiceBeginCode>
+							<SeatFlightBooked>
+								<Airline>
+									<AirlineCode>AA</AirlineCode>
+								</Airline>
+								<FlightNumber>2407</FlightNumber>
+							</SeatFlightBooked>
+							<SeatCharacteristicCode1> NW L</SeatCharacteristicCode1>
+							<SeatCharacteristicCode2> M V  I</SeatCharacteristicCode2>
+							<ClassOfServiceBookedCode>Y</ClassOfServiceBookedCode>
+							<SeatSegmentStatusCurrentCode>
+								<SegmentStatusCode>HK</SegmentStatusCode>
+							</SeatSegmentStatusCurrentCode>
+							<SeatSegmentStatusPreviousCode>
+								<SegmentStatusCode>SS</SegmentStatusCode>
+							</SeatSegmentStatusPreviousCode>
+						</PNRPassengerSeat>
+						<PNRPassengerSeat>
+							<PassengerSeatSequenceIdentifier>1</PassengerSeatSequenceIdentifier>
+							<SeatRowIdentifier>26</SeatRowIdentifier>
+							<RowLetterIdentifier>A</RowLetterIdentifier>
+							<FlightLegBeginDate>2014-03-05-06:00</FlightLegBeginDate>
+							<FlightLegServiceEndCode>
+								<StationCode>DFW</StationCode>
+							</FlightLegServiceEndCode>
+							<FlightLegServiceBeginCode>
+								<StationCode>LAX</StationCode>
+							</FlightLegServiceBeginCode>
+							<SeatFlightBooked>
+								<Airline>
+									<AirlineCode>AA</AirlineCode>
+								</Airline>
+								<FlightNumber>2430</FlightNumber>
+							</SeatFlightBooked>
+							<SeatCharacteristicCode1> NW L</SeatCharacteristicCode1>
+							<SeatCharacteristicCode2> M V  I</SeatCharacteristicCode2>
+							<ClassOfServiceBookedCode>Y</ClassOfServiceBookedCode>
+							<SeatSegmentStatusCurrentCode>
+								<SegmentStatusCode>HK</SegmentStatusCode>
+							</SeatSegmentStatusCurrentCode>
+							<SeatSegmentStatusPreviousCode>
+								<SegmentStatusCode>SS</SegmentStatusCode>
+							</SeatSegmentStatusPreviousCode>
+						</PNRPassengerSeat>
+						<PNRSpecialServiceRequest xsi:type="ns2:PNRBasedSpecialServiceRequest">
+							<Code>DOCS</Code>
+						</PNRSpecialServiceRequest>
+					</PNRPassenger>
+				</PNR>
+			</RetrieveCustomerPNRDetailsResult>
+		</ns2:RetrieveCustomerPNRDetailsResponse>
+	</soapenv:Body>
+</soapenv:Envelope>
